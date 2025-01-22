@@ -1,0 +1,52 @@
+.wp-block-details {
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: inherit;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::marker {
+      display: none;
+      content: "";
+    }
+
+    &::after {
+      content: "";
+      display: inline-block;
+      background: currentcolor;
+      position: absolute;
+      inset: 0 0 0 auto;
+      opacity: 1;
+      transition: transform .1s ease-in;
+
+
+      height: 1.5em;
+      width: 1.5em;
+      margin-right: -.333em;
+      transform: rotate(0deg);
+      mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 11.6 12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 11.6 12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>');
+      background: currentcolor;
+    }
+  }
+
+  &[open]:not(.closing) summary::after {
+    transform: rotate(180deg);
+  }
+
+  section:not([hidden]) {
+    display: block;
+  }
+}

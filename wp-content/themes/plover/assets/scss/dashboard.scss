@@ -1,0 +1,60 @@
+@import "admin/vars";
+@import "admin/button";
+@import "admin/get-start";
+@import "admin/dashboard";
+
+.plover-admin-page {
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .text-sm {
+    font-size: 12px !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: $heading;
+    line-height: 1.35;
+    text-transform: capitalize;
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+
+  h1 {
+    font-size: 36px
+  }
+
+  h2 {
+    font-size: 24px
+  }
+
+  h3 {
+    font-size: 20px
+  }
+
+  h3 {
+    font-size: 18px
+  }
+
+  h4, h5, h5 {
+    font-size: 16px
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  a:not(.plover-admin-button):not(.plover-admin-badge) {
+    color: $text;
+    text-decoration: underline;
+    outline-color: $primary-active;
+
+    &:focus {
+      box-shadow: 0 0 1px 0 $primary-active;
+    }
+
+    &:hover {
+      color: $primary-active;
+    }
+  }
+}

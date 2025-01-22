@@ -1,0 +1,1 @@
+a{transition:var(--wp--custom--transition, inherit);cursor:pointer;text-underline-offset:var(--wp--custom--elements--link--text-underline-offset, 0.35em)}a:hover,a:focus{text-underline-offset:var(--wp--custom--elements--link--hover--text-underline-offset, 0.35em)}[class*=has-text-decoration] a,[style*="text-decoration:"] a{text-decoration:inherit}

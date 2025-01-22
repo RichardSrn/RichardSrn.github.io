@@ -1,0 +1,95 @@
+@import "customize-settings";
+@import "modules";
+@import "sidebar";
+
+.plover-dashboard-wrap {
+  color: $text;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .plover-dashboard-body {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: $spacing;
+    display: flex;
+    flex-wrap: wrap;
+
+    .plover-dashboard-sidebar,
+    .plover-dashboard-main {
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .plover-dashboard-sidebar {
+      padding: $spacing-sm;
+    }
+  }
+
+  .plover-dashboard-main {
+    padding: $spacing-sm;
+
+    > * {
+      margin-bottom: $spacing;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-sm;
+
+      > * {
+        margin: 0;
+      }
+
+      a:not(.plover-admin-button):not(.plover-admin-badge) {
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        background-image: $primary-gradient;
+
+        &:hover {
+          background-image: $primary-gradient-invert;
+        }
+      }
+    }
+
+    .plover-dashboard-content {
+      background: $neutral-0;
+      padding: $spacing;
+      border: 1px solid $neutral-300;
+      border-radius: $border-radius;
+    }
+  }
+
+  // large screen
+  @media screen and (min-width: 1024px) {
+
+    .plover-dashboard-body {
+      .plover-dashboard-main {
+        width: 70%;
+      }
+
+      .plover-dashboard-sidebar {
+        width: 30%;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1366px) {
+    .plover-dashboard-body {
+      max-width: 1280px;
+    }
+  }
+}
