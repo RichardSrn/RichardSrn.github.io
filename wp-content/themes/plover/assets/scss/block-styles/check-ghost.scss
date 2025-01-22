@@ -1,0 +1,35 @@
+$mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new 0 0 1200 1200" viewBox="0 0 1200 1200"><circle cx="600" cy="600" r="600" style="opacity:.2"/><path d="M839.3 327.3 515.1 764.6 345.3 636 299 697.8l231.5 174.9L901 373.6l-61.7-46.3z"/></svg>');
+
+ol.is-style-check-ghost,
+ul.is-style-check-ghost {
+  list-style: none;
+
+  ul, ol {
+    list-style: none;
+  }
+
+  li {
+    width: 100%;
+    position: relative;
+    line-height: 1.5;
+
+    &::before {
+      content: "";
+      mask: $mask;
+      -webkit-mask: $mask;
+      width: 1.1em;
+      height: 1.1em;
+      display: inline-block !important;
+      background: var(--wp--preset--color--primary-color);
+      margin-left: -1.5em;
+      margin-top: 0.2em;
+      position: absolute;
+    }
+  }
+
+  &.has-text-color li::before,
+  .has-text-color li::before,
+  .has-text-color::before {
+    background: currentColor;
+  }
+}

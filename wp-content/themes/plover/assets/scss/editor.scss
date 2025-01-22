@@ -1,0 +1,15 @@
+//.plover-hide-on-light {
+//  display: none !important;
+//}
+
+.wp-block-search {
+  .wp-block-search__button {
+    border-radius: var(--wp--custom--elements--button--border-radius, var(--wp--custom--border-radius--rounded, 0.25rem));
+  }
+
+  &.wp-block-search__button-inside {
+    .wp-block-search__button {
+      border-radius: inherit;
+    }
+  }
+}

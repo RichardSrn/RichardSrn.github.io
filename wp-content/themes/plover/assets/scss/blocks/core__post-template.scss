@@ -1,0 +1,8 @@
+@import "../base-styles/breakpoints";
+
+@media (min-width: $break-small) and (max-width: $break-medium) {
+  // Temporary specificity bump until "wp-container" layout specificity is revisited.
+  .wp-block-post-template-is-layout-grid.wp-block-post-template-is-layout-grid.wp-block-post-template-is-layout-grid.wp-block-post-template-is-layout-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

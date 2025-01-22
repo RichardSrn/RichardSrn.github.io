@@ -1,0 +1,9 @@
+.wp-block-plover-docs-doc-list {
+  .current-doc-ancestor,
+  .current-menu-item {
+    > span,
+    > .plover-block-doc-list__item__link {
+      color: var(--wp--custom--color--primary, currentColor);
+    }
+  }
+}
