@@ -1,0 +1,124 @@
+form {
+  margin-block-end: 0;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  font-size: var(--wp--custom--elements--label--typography--font-size, inherit);
+  font-weight: var(--wp--custom--elements--label--typography--font-weight, var(--wp--custom--font-weight--medium, 500));
+  margin-bottom: var(--wp--custom--elements--label--typography--margin-bottom, 0.5em);
+  width: 100%;
+}
+
+input + label {
+  width: auto
+}
+
+fieldset {
+  margin: var(--wp--style--block-gap, 1em) 0;
+  padding: var(--wp--custom--elements--fieldset--padding, 0);
+  border: var(--wp--custom--elements--fieldset--border, 0);
+  border-radius: var(--wp--custom--border--radius);
+}
+
+fieldset p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: calc(var(--wp--style--block-gap, 1em) / 2);
+  width: 100%;
+}
+
+legend {
+  width: 100%;
+  margin: 0 0 var(--wp--style--block-gap, 1em);
+  padding: 0;
+  float: left;
+  font-family: var(--wp--custom--font-family--heading);
+  font-weight: var(--wp--custom--font-weight--bold);
+  color: var(--wp--custom--color--heading);
+}
+
+input,
+optgroup,
+select,
+textarea {
+  font: inherit;
+  transition: var(--wp--custom--transition, inherit);
+  background-color: var(--wp--custom--elements--input--background, transparent);
+  box-shadow: var(--wp--custom--elements--input--box-shadow, none);
+  line-height: var(--wp--custom--elements--input--line-height, inherit);
+  border-width: var(--wp--custom--elements--input--border-width, var(--wp--custom--border--width, 1px));
+  border-color: var(--wp--custom--elements--input--border-color, var(--wp--custom--border--color, currentColor));
+  border-radius: var(--wp--custom--elements--input--border-radius, var(--wp--custom--border-radius--rounded, inherit));
+  border-style: var(--wp--custom--elements--input--border-style, var(--wp--custom--border--style, solid));
+}
+
+input:focus:not([type="checkbox"], [type="submit"], [type="reset"], [type="button"], [type="radio"]),
+optgroup:focus,
+select:focus,
+textarea:focus {
+  background-color: var(--wp--custom--elements--input--focus--background, currentColor);
+  border-color: var(--wp--custom--elements--input--focus--border-color, currentColor);
+  box-shadow: var(--wp--custom--elements--input--focus--box-shadow, none);
+}
+
+select,
+textarea,
+input:not([type="checkbox"], [type="submit"], [type="reset"], [type="button"], [type="radio"]) {
+  margin: 0 0 var(--wp--style--block-gap, 1em);
+  padding-top: calc(var(--wp--custom--elements--input--padding--top, 1em) - 1px);
+  padding-right: calc(var(--wp--custom--elements--input--padding--right, 1.2em) - 1px);
+  padding-bottom: calc(var(--wp--custom--elements--input--padding--bottom, 1em) - 1px);
+  padding-left: calc(var(--wp--custom--elements--input--padding--left, 1.2em) - 1px);
+  font-size: var(--wp--custom--elements--input--font-size);
+  width: var(--wp--custom--elements--input--width, 100%);
+  color: inherit;
+  outline: none;
+}
+
+p input:not([type="checkbox"], [type="submit"], [type="button"], [type="radio"]) {
+  margin-bottom: 0;
+}
+
+textarea {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5em center;
+  background-size: 1em;
+}
+
+optgroup {
+  width: 100%;
+  padding: calc(var(--wp--custom--elements--input--padding-top, 1em) - 1px) var(--wp--custom--elements--input--padding-top, 1.2em);
+}
+
+[for="file"] + br {
+  display: none;
+}
+
+input[type="file"] {
+  padding: calc(var(--wp--custom--elements--input--padding-top, 1em) * 2);
+}
+
+::placeholder {
+  color: var(--wp--custom--elements--placeholder--color, inherit);
+  opacity: var(--wp--custom--elements--placeholder--opacity, 0.5);
+}
+
+::-webkit-input-placeholder {
+  color: var(--wp--custom--elements--placeholder--color, inherit);
+  opacity: var(--wp--custom--elements--placeholder--opacity, 0.5);
+}
+
+[disabled] {
+  opacity: var(--wp--custom--disabled--opacity, 0.5);
+  cursor: not-allowed;
+}

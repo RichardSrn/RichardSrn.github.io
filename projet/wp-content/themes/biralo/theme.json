@@ -1,0 +1,350 @@
+{
+	"settings": {
+		"appearanceTools": true,
+		"layout": {
+			"contentSize": "1024px",
+			"wideSize": "1200px"
+		},
+		"color": {
+			"palette": [
+				{
+					"color": "#f9f9f9",
+					"name": "Section Bg",
+					"slug": "section-bg"
+				},
+				{
+					"color": "#000000",
+					"name": "Primary",
+					"slug": "primary"
+				},
+				{
+					"color": "#666666",
+					"name": "Secondary",
+					"slug": "secondary"
+				},
+				{
+					"color": "#756AB6",
+					"name": "Hover Color",
+					"slug": "hovercolor"
+				}
+			]
+		},
+		"spacing": {
+			"units": [
+				"%",
+				"px",
+				"em",
+				"rem",
+				"vh",
+				"vw"
+			]
+		},
+		"typography": {
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
+					"name": "System Font",
+					"slug": "system-font",
+					"fontFace": []
+				},
+				{
+					"fontFamily": "Kanit",
+					"slug": "kanit",
+					"fontFace": [
+						{
+							"fontFamily": "Kanit",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/kanit_normal_400.ttf"
+							]
+						},
+						{
+							"fontFamily": "Kanit",
+							"fontStyle": "italic",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/kanit_italic_400.ttf"
+							]
+						},
+						{
+							"fontFamily": "Kanit",
+							"fontStyle": "normal",
+							"fontWeight": "500",
+							"src": [
+								"file:./assets/fonts/kanit_normal_500.ttf"
+							]
+						},
+						{
+							"fontFamily": "Kanit",
+							"fontStyle": "normal",
+							"fontWeight": "600",
+							"src": [
+								"file:./assets/fonts/kanit_normal_600.ttf"
+							]
+						},
+						{
+							"fontFamily": "Kanit",
+							"fontStyle": "normal",
+							"fontWeight": "700",
+							"src": [
+								"file:./assets/fonts/kanit_normal_700.ttf"
+							]
+						}
+					]
+				},
+				{
+					"fontFamily": "Average Sans",
+					"slug": "average-sans",
+					"fontFace": [
+						{
+							"fontFamily": "Average Sans",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/average-sans_normal_400.ttf"
+							]
+						}
+					]
+				},
+				{
+					"fontFamily": "Castoro",
+					"slug": "castoro",
+					"fontFace": [
+						{
+							"fontFamily": "Castoro",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/castoro_normal_400.ttf"
+							]
+						}
+					]
+				},
+				{
+					"fontFamily": "Raleway",
+					"slug": "raleway",
+					"fontFace": [
+						{
+							"fontFamily": "Raleway",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/raleway_normal_400.ttf"
+							]
+						},
+						{
+							"fontFamily": "Raleway",
+							"fontStyle": "normal",
+							"fontWeight": "500",
+							"src": [
+								"file:./assets/fonts/raleway_normal_500.ttf"
+							]
+						},
+						{
+							"fontFamily": "Raleway",
+							"fontStyle": "normal",
+							"fontWeight": "700",
+							"src": [
+								"file:./assets/fonts/raleway_normal_700.ttf"
+							]
+						},
+						{
+							"fontFamily": "Raleway",
+							"fontStyle": "italic",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/raleway_italic_400.ttf"
+							]
+						}
+					]
+				},
+				{
+					"fontFamily": "Nunito",
+					"slug": "nunito",
+					"fontFace": [
+						{
+							"fontFamily": "Nunito",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/nunito_normal_400.ttf"
+							]
+						},
+						{
+							"fontFamily": "Nunito",
+							"fontStyle": "normal",
+							"fontWeight": "500",
+							"src": [
+								"file:./assets/fonts/nunito_normal_500.ttf"
+							]
+						},
+						{
+							"fontFamily": "Nunito",
+							"fontStyle": "normal",
+							"fontWeight": "600",
+							"src": [
+								"file:./assets/fonts/nunito_normal_600.ttf"
+							]
+						},
+						{
+							"fontFamily": "Nunito",
+							"fontStyle": "normal",
+							"fontWeight": "700",
+							"src": [
+								"file:./assets/fonts/nunito_normal_700.ttf"
+							]
+						},
+						{
+							"fontFamily": "Nunito",
+							"fontStyle": "italic",
+							"fontWeight": "400",
+							"src": [
+								"file:./assets/fonts/nunito_italic_400.ttf"
+							]
+						}
+					]
+				}
+			]
+		},
+		"useRootPaddingAwareAlignments": true
+	},
+	"styles": {
+		"blocks": {
+			"core/heading": {
+				"color": {
+					"text": "var(--wp--preset--color--primary)"
+				},
+				"elements": {
+					"link": {
+						":hover": {
+							"color": {
+								"text": "var(--wp--preset--color--secondary)"
+							}
+						},
+						"color": {
+							"text": "var(--wp--preset--color--primary)"
+						}
+					}
+				},
+				"typography": {
+					"textDecoration": "none"
+				}
+			},
+			"core/post-excerpt": {
+				"typography": {
+					"fontSize": "18px"
+				}
+			},
+			"core/post-content": {
+				"elements": {
+					"link": {
+						"typography": {
+							"textDecoration": "underline"
+						}
+					}
+				}
+			},
+			"core/query-pagination-numbers": {
+				"typography": {
+					"letterSpacing": "5px"
+				}
+			},
+			"core/navigation": {
+				"elements": {
+					"link": {
+						"typography": {
+							"fontWeight": "500"
+						}
+					}
+				}
+			},
+			"core/site-title": {
+				"elements": {
+					"link": {
+						":hover": {
+							"color": {
+								"text": "#ffffff"
+							}
+						},
+						"color": {
+							"text": "#ffffff"
+						}
+					}
+				},
+				"typography": {
+					"fontSize": "4.8em",
+					"letterSpacing": "5px",
+					"fontFamily": "var(--wp--preset--font-family--kanit)",
+					"fontWeight": "600"
+				}
+			}
+		},
+		"color": {
+			"background": "#ffffff",
+			"text": "#333333"
+		},
+		"elements": {
+			"heading": {
+				"color": {
+					"text": "var(--wp--preset--color--primary)"
+				}
+			},
+			"h1": {
+				"typography": {
+					"fontSize": "3.5em"
+				}
+			},
+			"h2": {
+				"typography": {
+					"fontSize": "2.5em"
+				}
+			},
+			"h3": {
+				"typography": {
+					"fontSize": "1.3em"
+				}
+			},
+			"link": {
+				":hover": {
+					"color": {
+						"text": "var(--wp--preset--color--hovercolor)"
+					}
+				},
+				"color": {
+					"text": "var(--wp--preset--color--primary)"
+				},
+				"typography": {
+					"textDecoration": "none"
+				}
+			}
+		},
+		"spacing": {
+			"padding": {
+				"bottom": "0px",
+				"left": "10px",
+				"right": "10px",
+				"top": "0px"
+			}
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--raleway)",
+			"fontStyle": "normal",
+			"fontSize": "18px",
+			"lineHeight": "1.4"
+		}
+	},
+	"templateParts": [
+		{
+			"area": "header",
+			"name": "header"
+		},
+		{
+			"area": "footer",
+			"name": "footer"
+		}
+	],
+	"version": 2,
+	"$schema": "https://schemas.wp.org/wp/6.4/theme.json"
+}

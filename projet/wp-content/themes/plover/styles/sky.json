@@ -1,0 +1,98 @@
+{
+    "$schema": "https://schemas.wp.org/wp/6.5/theme.json",
+    "version": 2,
+    "title": "Blue",
+    "settings": {
+        "color": {
+            "palette": [
+                {
+                    "color": "#0ea5e9",
+                    "name": "Primary / Active",
+                    "slug": "primary-active"
+                },
+                {
+                    "color": "#0284c7",
+                    "name": "Primary",
+                    "slug": "primary-color"
+                },
+                {
+                    "color": "#09090b",
+                    "name": "Neutral / 950",
+                    "slug": "neutral-950"
+                },
+                {
+                    "color": "#27272a",
+                    "name": "Neutral / 800",
+                    "slug": "neutral-800"
+                },
+                {
+                    "color": "#61616a",
+                    "name": "Neutral / 600",
+                    "slug": "neutral-600"
+                },
+                {
+                    "color": "#ceced5",
+                    "name": "Neutral / 400",
+                    "slug": "neutral-400"
+                },
+                {
+                    "color": "#f4f4f5",
+                    "name": "Neutral / 200",
+                    "slug": "neutral-200"
+                },
+                {
+                    "color": "#ffffff",
+                    "name": "Neutral / 0",
+                    "slug": "neutral-0"
+                },
+                {
+                    "name": "Transparent",
+                    "slug": "transparent",
+                    "color": "transparent"
+                },
+                {
+                    "name": "Current",
+                    "slug": "current",
+                    "color": "currentcolor"
+                },
+                {
+                    "name": "Inherit",
+                    "slug": "inherit",
+                    "color": "inherit"
+                }
+            ],
+            "gradients": [
+                {
+                  "gradient": "linear-gradient(135deg, #0ea5e9 0%, #0846da 100%)",
+                  "name": "Primary",
+                  "slug": "primary"
+                },
+                {
+                  "gradient": "linear-gradient(135deg, #0846da 0%, #0ea5e9 100%)",
+                  "name": "Primary Invert",
+                  "slug": "primary-invert"
+                },
+                {
+                  "gradient": "linear-gradient(0deg,var(--wp--custom--body--background) 50%,transparent 50%)",
+                  "name": "Background/Transparent",
+                  "slug": "background-transparent"
+                },
+                {
+                  "gradient": "linear-gradient(180deg,var(--wp--custom--body--background) 50%,transparent 50%)",
+                  "name": "Transparent/Background",
+                  "slug": "transparent-background"
+                },
+                {
+                  "gradient": "repeating-conic-gradient(var(--wp--preset--color--neutral-200) 0% 25%, transparent 0% 50%) 50% / 16px 16px",
+                  "name": "Checkerboard",
+                  "slug": "checkerboard"
+                },
+                {
+                  "gradient": "conic-gradient(from 90deg at 1px 1px,transparent 90deg,var(--wp--custom--gradient-grid--color,var(--wp--preset--color--neutral-200)) 0) -1px -1px / var(--wp--custom--gradient-grid--size,40px) var(--wp--custom--gradient-grid--size,40px)",
+                  "name": "Grid",
+                  "slug": "grid"
+                }
+            ]
+        }
+    }
+}

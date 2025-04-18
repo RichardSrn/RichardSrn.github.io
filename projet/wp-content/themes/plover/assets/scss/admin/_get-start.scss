@@ -1,0 +1,71 @@
+.plover-theme-notice {
+  position: relative;
+  padding: $spacing-lg $spacing;
+  border: 1px solid $neutral-100;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+
+  &:after {
+    display: block;
+    content: ' ';
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(135deg, rgb(74, 234, 220) 0%, rgb(151, 120, 209) 20%, rgb(207, 42, 186) 40%, rgb(238, 44, 130) 60%, rgb(251, 105, 98) 80%, rgb(254, 248, 76) 100%);
+  }
+
+  .plover-admin-screenshot {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    max-height: 256px;
+    margin: 0;
+    box-shadow: $shadow-sm;
+    border: 1px solid $neutral-100;
+    display: none;
+  }
+
+  .notice-dismiss {
+    display: none;
+  }
+
+  .plover-notice-dismiss {
+    position: absolute;
+    right: 20px;
+    top: 4px;
+    z-index: 9;
+  }
+
+  .plover-admin-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .panel-body {
+    > * {
+      margin-top: 24px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    p {
+      max-width: 600px;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .plover-theme-notice {
+    .plover-admin-screenshot {
+      display: inline-block;
+    }
+
+    .panel-body {
+      padding-right: 380px;
+    }
+  }
+}

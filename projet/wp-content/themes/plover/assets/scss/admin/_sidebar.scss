@@ -1,0 +1,40 @@
+.plover-dashboard-wrap {
+
+  .dashboard-widgets-area {
+    background: $neutral-0;
+    border: 1px solid $neutral-300;
+    border-radius: $border-radius;
+
+    .dashboard-widget {
+      padding: $spacing;
+      border-bottom: 1px solid $neutral-300;
+
+      &, p {
+        font-size: 15px;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .widget-title {
+        margin-top: 0;
+      }
+
+      .links {
+        .link-item {
+          display: flex;
+          align-items: center;
+          padding: 4px 0;
+
+          svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+          }
+        }
+      }
+    }
+  }
+
+}
