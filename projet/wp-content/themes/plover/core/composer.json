@@ -1,0 +1,17 @@
+{
+  "name": "plover/plover-core",
+  "autoload": {
+    "psr-4": {
+      "Plover\\Core\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "require": {
+    "ext-dom": "*",
+    "ext-libxml": "*",
+    "ext-json": "*",
+    "enshrined/svg-sanitize": "^0.18.0"
+  }
+}

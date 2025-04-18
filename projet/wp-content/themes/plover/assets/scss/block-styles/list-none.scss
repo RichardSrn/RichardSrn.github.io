@@ -1,0 +1,9 @@
+ol.is-style-list-none,
+ul.is-style-list-none {
+  list-style: none;
+  padding-left: 0;
+
+  ul, ol {
+    list-style: none;
+  }
+}

@@ -1,0 +1,913 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-01-04T11:59:03+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: plover\n"
+
+#: src/Blocks/Code.php:26
+msgid "No Wrap"
+msgstr ""
+
+#: src/Extensions/Display.php:21
+msgid "CSS Display"
+msgstr ""
+
+#: src/Extensions/Display.php:22
+msgid "You can set display, visibility, order, overflow and box-sizing css properties for blocks, responsive!"
+msgstr ""
+
+#: src/Extensions/EventHandler.php:22
+msgid "Block event handler"
+msgstr ""
+
+#: src/Extensions/EventHandler.php:23
+msgid "Adding event handler to blocks to execute custom JavaScript snippets."
+msgstr ""
+
+#: src/Extensions/EventHandler.php:29
+msgid "Allowed roles"
+msgstr ""
+
+#: src/Extensions/EventHandler.php:30
+msgid "Only users who are granted the allowed roles can add event handlers."
+msgstr ""
+
+#: src/Extensions/EventHandler.php:41
+msgid "Allowed events"
+msgstr ""
+
+#: src/Extensions/EventHandler.php:60
+msgid "on click event"
+msgstr ""
+
+#: src/Extensions/EventHandler.php:61
+msgid "on db click event"
+msgstr ""
+
+#: src/Extensions/EventHandler.php:62
+msgid "on mouse over event"
+msgstr ""
+
+#: src/Extensions/Highlight.php:40
+msgid "Code highlight"
+msgstr ""
+
+#: src/Extensions/Highlight.php:41
+msgid "Add out-of-the-box code highlighting features for core/code block."
+msgstr ""
+
+#: src/Extensions/Highlight.php:47
+msgid "Enabled by default"
+msgstr ""
+
+#: src/Extensions/Highlight.php:52
+msgid "Yes"
+msgstr ""
+
+#: src/Extensions/Highlight.php:53
+msgid "No"
+msgstr ""
+
+#: src/Extensions/Highlight.php:58
+msgid "Default theme"
+msgstr ""
+
+#: src/Extensions/Highlight.php:66
+msgid "Default language"
+msgstr ""
+
+#: src/Extensions/Icon.php:38
+msgid "Icon Button"
+msgstr ""
+
+#: src/Extensions/Icon.php:39
+msgid "Add icon to boring buttons! 2000+ free icons available!"
+msgstr ""
+
+#: src/Extensions/Icon.php:46
+msgid "Icon Block"
+msgstr ""
+
+#: src/Extensions/Icon.php:47
+msgid "Introduce an Icon block that allows you to add icons to your design! 2000+ free icons available!"
+msgstr ""
+
+#: src/Extensions/Icon.php:106
+msgid "Plover"
+msgstr ""
+
+#: src/Extensions/Icon.php:110
+msgid "star"
+msgstr ""
+
+#: src/Extensions/Icon.php:116
+msgid "star-solid"
+msgstr ""
+
+#: src/Extensions/Icon.php:122
+msgid "moon"
+msgstr ""
+
+#: src/Extensions/Icon.php:128
+msgid "sun"
+msgstr ""
+
+#: src/Extensions/Icon.php:134
+msgid "search"
+msgstr ""
+
+#: src/Extensions/Icon.php:140
+msgid "arrow-down-left"
+msgstr ""
+
+#: src/Extensions/Icon.php:146
+msgid "arrow-down-right"
+msgstr ""
+
+#: src/Extensions/Icon.php:152
+msgid "arrow-down"
+msgstr ""
+
+#: src/Extensions/Icon.php:158
+msgid "arrow-left"
+msgstr ""
+
+#: src/Extensions/Icon.php:164
+msgid "arrow-right"
+msgstr ""
+
+#: src/Extensions/Icon.php:170
+msgid "arrow-up-left"
+msgstr ""
+
+#: src/Extensions/Icon.php:176
+msgid "arrow-up-right"
+msgstr ""
+
+#: src/Extensions/Icon.php:182
+msgid "arrow-up"
+msgstr ""
+
+#: src/Extensions/Icon.php:188
+msgid "alert-circle"
+msgstr ""
+
+#: src/Extensions/Icon.php:194
+msgid "alert-triangle"
+msgstr ""
+
+#: src/Extensions/Icon.php:200
+msgid "check-circle"
+msgstr ""
+
+#: src/Extensions/Icon.php:206
+msgid "check-square"
+msgstr ""
+
+#: src/Extensions/Icon.php:212
+msgid "check"
+msgstr ""
+
+#: src/Extensions/Icon.php:218
+msgid "chevron-down"
+msgstr ""
+
+#: src/Extensions/Icon.php:224
+msgid "chevron-left"
+msgstr ""
+
+#: src/Extensions/Icon.php:230
+msgid "chevron-right"
+msgstr ""
+
+#: src/Extensions/Icon.php:236
+msgid "chevron-up"
+msgstr ""
+
+#: src/Extensions/Icon.php:242
+msgid "heart"
+msgstr ""
+
+#: src/Extensions/Icon.php:248
+msgid "help-circle"
+msgstr ""
+
+#: src/Extensions/Icon.php:254
+msgid "map-pin"
+msgstr ""
+
+#: src/Extensions/Icon.php:260
+msgid "plus"
+msgstr ""
+
+#: src/Extensions/Icon.php:266
+msgid "shopping-cart"
+msgstr ""
+
+#: src/Extensions/Icon.php:272
+msgid "download-cloud"
+msgstr ""
+
+#: src/Extensions/Icon.php:278
+msgid "download"
+msgstr ""
+
+#: src/Extensions/Icon.php:477
+msgid "No such icon library."
+msgstr ""
+
+#: src/Extensions/Particles.php:22
+msgid "Particles Effect"
+msgstr ""
+
+#: src/Extensions/Particles.php:23
+msgid "Add cool particle effects to your designs!"
+msgstr ""
+
+#: src/Extensions/Particles.php:179
+msgid "Basic"
+msgstr ""
+
+#: src/Extensions/Particles.php:183
+msgid "Snow"
+msgstr ""
+
+#: src/Extensions/Particles.php:187
+msgid "NASA"
+msgstr ""
+
+#: src/Extensions/Particles.php:191
+msgid "Colorful Bubbles"
+msgstr ""
+
+#: src/Extensions/Position.php:24
+msgid "CSS Position"
+msgstr ""
+
+#: src/Extensions/Position.php:25
+msgid "You can set position and z-index css properties for blocks, responsive!"
+msgstr ""
+
+#: src/Extensions/Shadow.php:27
+msgid "Block shadow"
+msgstr ""
+
+#: src/Extensions/Shadow.php:28
+msgid "Extra text-shadow, drop-shadow, and box-shadow support for core blocks."
+msgstr ""
+
+#: src/Extensions/ShapeDivider.php:24
+msgid "Shape Divider"
+msgstr ""
+
+#: src/Extensions/ShapeDivider.php:25
+msgid "Shape divider is used to create visual separation between different sections of content."
+msgstr ""
+
+#: src/Extensions/ShapeDivider.php:180
+msgctxt "Shapes name"
+msgid "None"
+msgstr ""
+
+#: src/Extensions/ShapeDivider.php:184
+msgctxt "Shapes name"
+msgid "Tilt"
+msgstr ""
+
+#: src/Extensions/ShapeDivider.php:188
+msgctxt "Shapes name"
+msgid "Triangle"
+msgstr ""
+
+#: src/Extensions/Sticky.php:20
+msgid "Block Sticky"
+msgstr ""
+
+#: src/Extensions/Sticky.php:21
+msgid "Make your content in the page visible at all times, making it permanently visible while scrolling."
+msgstr ""
+
+#: src/Router/Auth.php:19
+#: src/Router/Auth.php:35
+msgid "Forbidden"
+msgstr ""
+
+#: src/Services/Blocks/BlocksServiceProvider.php:100
+msgid "Plover Blocks"
+msgstr ""
+
+#: src/Services/Blocks/BlocksServiceProvider.php:104
+msgid "Plover WooCommerce Blocks"
+msgstr ""
+
+#: src/Services/Settings/Modules.php:45
+#: static/packages/components/color-popover/index.jsx:145
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:39
+msgid "Theme"
+msgstr ""
+
+#: src/Services/Settings/Modules.php:46
+msgid "Extensions provided by the active theme."
+msgstr ""
+
+#: src/Services/Settings/Modules.php:49
+msgid "Modules"
+msgstr ""
+
+#: src/Services/Settings/Modules.php:50
+msgid "Standalone feature, similar to a WordPress plugin."
+msgstr ""
+
+#: src/Services/Settings/Modules.php:53
+msgid "Blocks"
+msgstr ""
+
+#: src/Services/Settings/Modules.php:54
+msgid "Blocks or block variations provided by this plugin."
+msgstr ""
+
+#: src/Services/Settings/Modules.php:57
+msgid "Block Extensions"
+msgstr ""
+
+#: src/Services/Settings/Modules.php:58
+msgid "Extensions to specific core blocks."
+msgstr ""
+
+#: src/Services/Settings/Modules.php:61
+msgid "Block Supports"
+msgstr ""
+
+#: src/Services/Settings/Modules.php:62
+msgid "Features that can be shared by multiple block types."
+msgstr ""
+
+#: src/Toolkits/Plugin.php:72
+msgid "The installation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr ""
+
+#: src/Toolkits/Plugin.php:83
+msgid "Upgrading %s ..."
+msgstr ""
+
+#: src/Toolkits/Plugin.php:89
+msgid "Installing %s ..."
+msgstr ""
+
+#: src/Toolkits/Plugin.php:96
+msgid "Activating %s ..."
+msgstr ""
+
+#: src/Toolkits/Plugin.php:100
+msgid "%s installed successfully"
+msgstr ""
+
+#: src/Toolkits/Plugin.php:104
+msgid "Could not install the %s plugin."
+msgstr ""
+
+#: src/Toolkits/Plugin.php:112
+msgid "All Done!"
+msgstr ""
+
+#: src/Toolkits/Plugin.php:114
+msgid "Return To Theme Page"
+msgstr ""
+
+#. translators: %s is the type of color property, e.g., "background"
+#: static/packages/components/color-popover/index.jsx:112
+msgid "Color %s styles"
+msgstr ""
+
+#: static/packages/components/color-popover/index.jsx:161
+msgid "Default"
+msgstr ""
+
+#: static/packages/components/color-popover/index.jsx:177
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:41
+#: static/scripts/block-supports/shadow/utils.js:24
+msgid "Custom"
+msgstr ""
+
+#: static/packages/components/color-popover/index.jsx:192
+#: static/scripts/block-supports/shadow/DropShadowControls.jsx:139
+#: static/scripts/block-supports/shadow/TextShadowControls.jsx:113
+msgid "Clear"
+msgstr ""
+
+#: static/packages/components/responsive-control/index.js:59
+msgid "Desktop mode"
+msgstr ""
+
+#: static/packages/components/responsive-control/index.js:68
+msgid "Tablet mode"
+msgstr ""
+
+#: static/packages/components/responsive-control/index.js:77
+msgid "Mobile mode"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:27
+msgid "Style"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:33
+msgid "Highlight"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:34
+#: static/scripts/block-extensions/icon/IconControls.jsx:180
+#: static/scripts/block-extensions/icon/IconControls.jsx:181
+#: static/scripts/block-extensions/shape-divider/ShapesSelect.jsx:43
+#: static/scripts/block-supports/display/DisplayPanel.jsx:48
+msgid "None"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:46
+msgid "Language"
+msgstr ""
+
+#. translators: %s is the premium text and link.
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:73
+#: static/scripts/block-supports/display/DisplayPanel.jsx:129
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:133
+msgid "Upgrade to %s to access these features:"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:74
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:74
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:141
+#: static/scripts/block-extensions/shape-divider/ShapeDividerControls.jsx:42
+#: static/scripts/block-supports/display/DisplayPanel.jsx:130
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:134
+msgid "Premium"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:81
+msgid "Show line numbers by default"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:86
+msgid "Show languages by default"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:91
+msgid "Show copy button by default"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:96
+msgid "More highlight themes"
+msgstr ""
+
+#: static/scripts/block-extensions/highlight/HighlightControls.jsx:102
+#: static/scripts/block-extensions/shape-divider/ShapeDividerControls.jsx:47
+msgid "Upgrade Now ↗"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:59
+msgid "Filter"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:114
+msgid "No icons"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:156
+msgid "Icon library"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:172
+msgid "Select icon"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:206
+msgid "Icon"
+msgstr ""
+
+#. translators: %s is the plover kit plugin name
+#: static/scripts/block-extensions/icon/IconControls.jsx:219
+msgid "Use the %s plugin to get more icons from the Icon Library."
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:220
+msgid "Plover Kit"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:224
+#: static/scripts/block-supports/display/DisplayPanel.jsx:158
+#: static/scripts/block-supports/event-handler/EventHandlerPanel.js:81
+#: static/scripts/block-supports/position/PositionPanel.jsx:104
+#: static/scripts/block-supports/shadow/ShadowPanel.jsx:86
+msgid "Documentation ↗"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:232
+msgid "Icon position"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:240
+msgid "Left"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:241
+msgid "Right"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:246
+msgid "Icon Size"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/IconControls.jsx:264
+msgid "Clear icon"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/index.jsx:157
+msgid "Plover: Icon"
+msgstr ""
+
+#: static/scripts/block-extensions/icon/index.jsx:159
+msgid "Insert a SVG icon."
+msgstr ""
+
+#: static/scripts/block-extensions/particles/controls/colors.jsx:71
+msgid "Reset"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/controls/colors.jsx:75
+msgid "Add color"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/controls/colors.jsx:100
+msgid "Remove this color"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/index.jsx:142
+msgid "Plover: Particles"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/index.jsx:143
+msgid "A cover block with particles effect."
+msgstr ""
+
+#: static/scripts/block-extensions/particles/override/color.jsx:29
+#: static/scripts/block-extensions/particles/override/color.jsx:44
+msgid "Particles color"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/override/color.jsx:72
+#: static/scripts/block-extensions/particles/override/color.jsx:88
+msgid "Links color"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/OverrideControls.jsx:67
+msgid "Particle options"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:34
+msgid "Particle source"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:40
+msgid "Preset"
+msgstr ""
+
+#. translators: %s is the premium text and link.
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:73
+msgid "Upgrade to %s version to access more presets or create custom particles using the online editor."
+msgstr ""
+
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:80
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:147
+#: static/scripts/block-supports/display/DisplayPanel.jsx:152
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:143
+msgid "Learn More ↗"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:94
+msgid "Particle Preset"
+msgstr ""
+
+#. translators: %s is the premium text and link.
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:140
+msgid "Upgrade to %s version to access more particle presets and particle options."
+msgstr ""
+
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:163
+msgid "Plover: Particles Effect"
+msgstr ""
+
+#: static/scripts/block-extensions/particles/ParticlesControl.jsx:165
+msgid "Enable"
+msgstr ""
+
+#: static/scripts/block-extensions/search/SearchControls.jsx:39
+msgid "All"
+msgstr ""
+
+#: static/scripts/block-extensions/search/SearchControls.jsx:48
+#: static/scripts/block-extensions/search/SearchControls.jsx:63
+msgid "Post Type"
+msgstr ""
+
+#: static/scripts/block-extensions/search/SearchControls.jsx:86
+msgid "Filters"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeDividerControls.jsx:25
+msgid "Plover: Shape Divider"
+msgstr ""
+
+#. translators: %s is the premium text and link.
+#: static/scripts/block-extensions/shape-divider/ShapeDividerControls.jsx:41
+msgid "Upgrade to %s to unlock 25+ premium shapes."
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:59
+msgid "Shape options"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:64
+msgid "Flip shape"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:71
+msgid "Enable flip"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:84
+msgid "Invert shape"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:91
+msgid "Enable invert"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:103
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:111
+msgid "Shape color"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:125
+msgid "Shape position"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:135
+#: static/scripts/block-supports/position/PositionPanel.jsx:41
+msgid "Position"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:141
+msgid "Top"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:142
+msgid "Bottom"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:148
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:155
+msgid "Shape width"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:171
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:178
+msgid "Shape height"
+msgstr ""
+
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:193
+#: static/scripts/block-extensions/shape-divider/ShapeOptions.jsx:200
+msgid "Shape Z-Index"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:34
+msgid "Display"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:49
+msgid "Block"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:50
+msgid "Flex"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:51
+msgid "Inline"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:52
+msgid "Inline Block"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:53
+msgid "Inline Flex"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:76
+msgid "Order"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:110
+msgid "Plover: Display"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:112
+#: static/scripts/block-supports/position/PositionPanel.jsx:36
+msgid "Those properties may break your layout, use them only if you're 100% sure what you're doing."
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:137
+msgid "CSS visibility support"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:142
+msgid "CSS overflow support"
+msgstr ""
+
+#: static/scripts/block-supports/display/DisplayPanel.jsx:147
+msgid "CSS box-sizing support"
+msgstr ""
+
+#: static/scripts/block-supports/event-handler/EventHandlerPanel.js:33
+msgid "Code gose here..."
+msgstr ""
+
+#: static/scripts/block-supports/event-handler/EventHandlerPanel.js:73
+msgid "Plover: JavaScript Event Handler"
+msgstr ""
+
+#: static/scripts/block-supports/event-handler/EventHandlerPanel.js:78
+msgid "Add custom JavaScript snippet to the event handlers in this block."
+msgstr ""
+
+#: static/scripts/block-supports/event-handler/EventHandlerPanel.js:94
+msgid "Edit"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:34
+msgid "Plover: Position"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:55
+msgid "Static (Default)"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:56
+msgid "Relative"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:57
+msgid "Absolute"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:58
+msgid "Sticky"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:59
+msgid "Fixed"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:69
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:60
+msgid "Z-Index"
+msgstr ""
+
+#: static/scripts/block-supports/position/PositionPanel.jsx:96
+msgid "Positioned value"
+msgstr ""
+
+#. translators: %s is the name of shadow, e.g., "custom/solid"
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:71
+#: static/scripts/block-supports/shadow/DropShadowControls.jsx:80
+#: static/scripts/block-supports/shadow/TextShadowControls.jsx:61
+msgid "Preview / %s"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:101
+msgid "Inset"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:109
+#: static/scripts/block-supports/shadow/GenericShadowEditor.jsx:28
+msgid "Horizontal Offset"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:116
+#: static/scripts/block-supports/shadow/GenericShadowEditor.jsx:35
+msgid "Vertical Offset"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:123
+#: static/scripts/block-supports/shadow/GenericShadowEditor.jsx:42
+msgid "Blur"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:131
+msgid "Spread"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:145
+#: static/scripts/block-supports/shadow/DropShadowControls.jsx:98
+#: static/scripts/block-supports/shadow/TextShadowControls.jsx:74
+msgid "Presets"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:156
+#: static/scripts/block-supports/shadow/DropShadowControls.jsx:109
+#: static/scripts/block-supports/shadow/TextShadowControls.jsx:85
+#: static/scripts/block-supports/shadow/utils.js:22
+msgid "Unset"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/BoxShadowControls.jsx:210
+msgid "Box shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/DropShadowControls.jsx:151
+msgid "Drop shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/ShadowPanel.jsx:40
+msgid "Plover: Shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/ShadowPanel.jsx:44
+msgid "Text Shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/ShadowPanel.jsx:58
+msgid "Drop Shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/ShadowPanel.jsx:72
+msgid "Box Shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/ShadowValues.jsx:70
+msgid "Shadow"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/ShadowValues.jsx:160
+msgid "Add layer"
+msgstr ""
+
+#: static/scripts/block-supports/shadow/TextShadowControls.jsx:124
+msgid "Text shadow"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:27
+msgid "Parent Element"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:28
+msgid "Document"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:38
+msgid "Sticky this block while scrolling"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:50
+msgid "Offset top"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:61
+msgid "If your sticky block is covered by other elements, try increasing the z-index value"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:74
+msgid "Sticky container"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:76
+msgid "Set custom container"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:139
+msgid "Disable Sticky effect based on screen size"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:140
+msgid "Customize the Sticky style using CSS"
+msgstr ""
+
+#: static/scripts/block-supports/sticky/StickyPanel.jsx:153
+msgid "Plover: Sticky"
+msgstr ""
+
+#: static/scripts/block-variations/group-grid/index.js:11
+msgid "Plover: Grid"
+msgstr ""
+
+#: static/scripts/block-variations/group-grid/index.js:13
+msgid "Arrange blocks in a grid."
+msgstr ""

@@ -1,0 +1,70 @@
+@import "../base-styles/mixins";
+
+.wp-block-navigation {
+  &:where(:not([class*=has-text-decoration])) a {
+    text-decoration: none;
+  }
+
+  &:where(:not([class*=has-text-decoration])) a:hover {
+    text-decoration: var(--wp--custom--elements--link--hover--text-decoration, none);
+  }
+
+  .current-menu-item > .wp-block-navigation-item__content,
+  .wp-block-navigation-item__content:hover,
+  .wp-block-navigation-item__content:focus {
+    color: var(--wp--custom--color--primary, currentColor);
+  }
+
+  .wp-block-navigation-item {
+    background: inherit !important;
+    border-radius: inherit;
+    justify-content: center;
+  }
+
+  .wp-block-navigation-item:not(.has-background) {
+    background: transparent
+  }
+
+  &:not(.has-background) .wp-block-navigation__submenu-container {
+    color: var(--wp--custom--navigation--submenu--color--text, inherit);
+    background-color: var(--wp--custom--navigation--submenu--color--background, var(--wp--custom--color--body));
+    border-color: var(--wp--custom--navigation--submenu--border-color, var(--wp--custom--border--color, currentColor));
+    border-width: var(--wp--custom--navigation--submenu--border-width, var(--wp--custom--border--width, 1px));
+    border-style: var(--wp--custom--navigation--submenu--border-style, var(--wp--custom--border--style, 1px));
+    border-radius: var(--wp--custom--navigation--submenu--border-radius, var(--wp--custom--border-radius--rounded));
+  }
+}
+
+// Button to open the menu.
+.wp-block-navigation__responsive-container-open {
+
+  &:not(.always-shown) {
+    @include break-small {
+      display: flex;
+    }
+  }
+
+  &:not(.always-shown) {
+    @include break-medium {
+      display: none;
+    }
+  }
+}
+
+.wp-block-navigation__responsive-container {
+  @include break-small() {
+    &:not(.hidden-by-default) {
+      &:not(.is-menu-open) {
+        display: none;
+      }
+    }
+  }
+
+  @include break-medium() {
+    &:not(.hidden-by-default) {
+      &:not(.is-menu-open) {
+        display: block;
+      }
+    }
+  }
+}
