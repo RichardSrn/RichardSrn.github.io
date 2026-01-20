@@ -1,1 +1,0 @@
-<?php return array('dependencies' => array('plover-components', 'plover-data', 'plover-utils', 'react', 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-hooks', 'wp-i18n'), 'version' => 'cd377faa8a1c19736de3');
