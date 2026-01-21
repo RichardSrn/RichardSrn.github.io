@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container" id="mainContainer">
+        <a href="../../index.html" class="back-link">← Back</a>
+        <div class="controls-container hide-in-fullscreen">
+            <div class="input-container">
+                <input type="time" id="endTimeInput" required>
+                <button class="ok-btn" id="okBtn">OK</button>
+            </div>
+
+            <div class="color-container">
+                <div class="color-group">
+                    <span class="color-label">Primary Color</span>
+                    <input type="color" id="primaryColorPicker" value="#BB86FC">
+                </div>
+                <div class="color-group">
+                    <span class="color-label">Secondary Color</span>
+                    <input type="color" id="secondaryColorPicker" value="#03DAC6">
+                </div>
+            </div>
+
+            <button class="maximize-btn" id="maximizeBtn">Maximize</button>
+        </div>
+
+        <div class="time-display hidden" id="timeDisplay">
+            <div class="time-block">
+                <div class="time-value" id="currentTimeValue"></div>
+                <div class="time-label">CURRENT</div>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="time-block">
+                <div class="time-value" id="remainingTimeValue"></div>
+                <div class="time-label">REMAINING</div>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="time-block">
+                <div class="time-value" id="endTimeValue"></div>
+                <div class="time-label">END</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exit-button" id="exitButton">×</div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

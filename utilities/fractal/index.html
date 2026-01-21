@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Interactive Fractal Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="fractalCanvas"></canvas>
+
+    <a href="../../index.html"
+        style="position:fixed; top:20px; left:20px; color:black; text-decoration:none; font-weight:bold; z-index:100; background:rgba(255,255,255,0.8); padding:5px 10px; border-radius:4px; box-shadow:0 0 5px rgba(0,0,0,0.2);">←
+        Back</a>
+
+    <div id="controlPanel">
+        <h2>Fractal Controls</h2>
+
+        <div class="control-group">
+            <label for="fractalType">Fractal Type:</label>
+            <select id="fractalType">
+                <option value="mandelbrot">Mandelbrot Set</option>
+                <option value="julia">Julia Set</option>
+                <option value="burningShip">Burning Ship</option>
+                <option value="tricorn">Tricorn</option>
+            </select>
+        </div>
+
+        <div class="control-group" id="juliaParams">
+            <label>Julia Set Parameters:</label>
+            <label for="juliaReal">Real: <span id="juliaRealValue">-0.7</span></label>
+            <input type="range" id="juliaReal" min="-2" max="2" step="0.01" value="-0.7">
+
+            <label for="juliaImag">Imaginary: <span id="juliaImagValue">0.27015</span></label>
+            <input type="range" id="juliaImag" min="-2" max="2" step="0.01" value="0.27015">
+        </div>
+
+        <div class="control-group">
+            <label for="maxIterations">Max Iterations: <span id="maxIterationsValue">100</span></label>
+            <input type="range" id="maxIterations" min="10" max="1000" step="10" value="100">
+        </div>
+
+        <div class="control-group">
+            <label for="resolution">Resolution: <span id="resolutionValue">1</span></label>
+            <input type="range" id="resolution" min="0.25" max="2" step="0.25" value="1">
+        </div>
+
+        <div class="control-group">
+            <label>Color Scheme:</label>
+            <select id="colorScheme">
+                <option value="rainbow">Rainbow</option>
+                <option value="blueOrange">Blue-Orange</option>
+                <option value="grayscale">Grayscale</option>
+                <option value="custom">Custom</option>
+            </select>
+
+            <div id="customColorGroup">
+                <label for="customColor1">Color 1:
+                    <input type="color" id="customColor1" value="#000000">
+                </label>
+                <label for="customColor2">Color 2:
+                    <input type="color" id="customColor2" value="#ffffff">
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <button id="resetView">Reset View</button>
+            <button id="downloadImage">Download</button>
+        </div>
+
+        <div class="control-group">
+            <p><small>Zoom: Use mouse wheel or pinch gesture<br>
+                    Pan: Click and drag</small></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
