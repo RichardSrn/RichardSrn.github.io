@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Studio - Generate & Scan</title>
+    <link rel="stylesheet" href="../../style.css"> <!-- Global Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔳</text></svg>">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../../index.html" class="back-link">← Back</a>
+
+        <header>
+            <h1>QR Code Studio</h1>
+            <p>Generate styled QR codes or scan existing ones.</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'generate')">Generate</button>
+            <button class="tab-btn" onclick="switchTab(event, 'scan')">Scan</button>
+        </div>
+
+        <main id="generateTab" class="tab-content active">
+            <div class="editor-layout">
+                <div class="controls-panel">
+                    <div class="control-group">
+                        <label for="qrText">Content (URL or Text)</label>
+                        <textarea id="qrText"
+                            placeholder="https://example.com or Hello World">https://www.youtube.com/watch?v=dQw4w9WgXcQ</textarea>
+                    </div>
+
+                    <div class="accordion">
+                        <!-- Background & Border -->
+                        <div class="accordion-item">
+                            <button class="accordion-header">Background & Margin</button>
+                            <div class="accordion-content">
+                                <div class="control-group">
+                                    <label><input type="checkbox" id="transparentBg"> Transparent Background</label>
+                                </div>
+                                <div class="control-group">
+                                    <label>Margins: <input type="range" id="qrMargin" min="0" max="100"
+                                            value="40"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colors -->
+                        <div class="accordion-item">
+                            <button class="accordion-header">Colors & Look</button>
+                            <div class="accordion-content">
+                                <div class="color-picker-row">
+                                    <label>Foreground: <input type="color" id="colorDark" value="#000000"></label>
+                                    <label>Background: <input type="color" id="colorLight" value="#ffffff"></label>
+                                </div>
+                                <p id="contrastWarning" class="warning-text" style="display:none;">⚠️ Low contrast may
+                                    be unreadable!</p>
+                            </div>
+                        </div>
+
+                        <!-- Logo/Emoji -->
+                        <div class="accordion-item">
+                            <button class="accordion-header">Logo / Image Center</button>
+                            <div class="accordion-content">
+                                <div class="control-group">
+                                    <label>Type:</label>
+                                    <select id="logoType">
+                                        <option value="emoji">Emoji</option>
+                                        <option value="image">Custom Image</option>
+                                        <option value="none">None</option>
+                                    </select>
+                                </div>
+                                <div id="emojiGroup" class="control-group">
+                                    <label>Emoji Center:</label>
+                                    <div class="emoji-picker-wrapper">
+                                        <input type="text" id="emojiInput" value="😎" maxlength="2">
+                                        <button id="emojiPickerBtn" class="btn small">Picker</button>
+                                        <div id="emojiPicker" class="emoji-grid" style="display:none;">
+                                            <!-- Emojis will be injected here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="imageGroup" class="control-group" style="display:none;">
+                                    <label>Upload Logo: <input type="file" id="logoUpload" accept="image/*"></label>
+                                </div>
+                                <div class="control-group">
+                                    <label>Logo Shape:</label>
+                                    <select id="logoShape">
+                                        <option value="squircle">Squircle</option>
+                                        <option value="circle">Circle</option>
+                                        <option value="square">Square</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label>Logobg Color Match QR Background <input type="checkbox" id="matchBgColor"
+                                            checked></label>
+                                    <input type="color" id="logoBgColor" value="#ffffff" style="display:none;">
+                                </div>
+                                <div class="control-group">
+                                    <label>Backdrop Opacity: <input type="range" id="logoBgOpacity" min="0" max="100"
+                                            value="100"></label>
+                                </div>
+                                <div class="control-group">
+                                    <label>Backdrop Feather (Blur): <input type="range" id="logoBgBlur" min="0" max="50"
+                                            value="10"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Text Overlay -->
+                        <div class="accordion-item">
+                            <button class="accordion-header">Text Labels</button>
+                            <div class="accordion-content">
+                                <div class="control-group">
+                                    <label>Top Text:</label>
+                                    <input type="text" id="topText" placeholder="Text above QR code">
+                                </div>
+                                <div class="control-group">
+                                    <label>Bottom Text:</label>
+                                    <input type="text" id="bottomText" placeholder="Text below QR code">
+                                </div>
+                                <div class="control-group">
+                                    <label>Font Family:</label>
+                                    <select id="fontFamily">
+                                        <option value="sans-serif">Modern Sans</option>
+                                        <option value="'Comic Sans MS', cursive">Comix Sans MS</option>
+                                        <option value="'Courier New', monospace">Typewriter</option>
+                                        <option value="'Georgia', serif">Classic Serif</option>
+                                        <option value="'Impact', sans-serif">Bold Impact</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label>Font Size: <input type="range" id="textSize" min="10" max="40"
+                                            value="20"></label>
+                                </div>
+                                <div class="control-group">
+                                    <label>Text Color: <input type="color" id="textColor" value="#000000"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-panel">
+                    <div id="canvasContainer">
+                        <!-- Canvas will be injected here -->
+                    </div>
+
+                    <div class="actions-row">
+                        <button id="testBtn" class="btn secondary">Test Readability</button>
+                        <div class="download-group">
+                            <select id="downloadFormat">
+                                <option value="png">PNG</option>
+                                <option value="jpg">JPG</option>
+                                <option value="svg">SVG</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                            <select id="downloadSize">
+                                <option value="512">512px</option>
+                                <option value="1024">1024px</option>
+                                <option value="2048">2048px</option>
+                            </select>
+                            <button id="downloadBtn" class="btn primary">Download</button>
+                        </div>
+                    </div>
+                    <div id="testResult" class="test-result"></div>
+                </div>
+            </div>
+        </main>
+
+        <main id="scanTab" class="tab-content">
+            <div class="scan-area" id="dropZone">
+                <p>Drag & Drop QR Image here or <strong>Paste (Ctrl+V)</strong></p>
+                <input type="file" id="fileInput" accept="image/*">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">Upload Image</button>
+            </div>
+            <div id="scanResult" class="scan-result" style="display:none;">
+                <h3>Scanned Content:</h3>
+                <p id="scanContent" class="code-box"></p>
+                <button class="btn secondary" onclick="copyToClipboard()">Copy Text</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Libraries -->
+    <script src="lib/qrcode.js"></script>
+    <script src="lib/jsQR.js"></script>
+    <script src="lib/jspdf.umd.min.js"></script>
+    <!-- App Logic -->
+    <script src="script.js"></script>
+</body>
+
+</html>

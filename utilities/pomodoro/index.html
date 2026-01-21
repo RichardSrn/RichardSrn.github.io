@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <a href="../../index.html"
+        style="position:fixed; top:20px; left:20px; color:#333; text-decoration:none; font-weight:bold; z-index:100; background:rgba(255,255,255,0.8); padding:5px 10px; border-radius:4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">←
+        Back</a>
+
+    <div class="pomodoro-timer">
+        <h1>Pomodoro Timer</h1>
+
+        <div class="mode-selector">
+            <button id="mode-work" class="active">Work</button>
+            <button id="mode-shortBreak">Short Break</button>
+            <button id="mode-longBreak">Long Break</button>
+        </div>
+
+        <div class="timer-display" id="timer-display">25:00</div>
+
+        <div class="controls">
+            <button id="btn-start" class="start-pause-btn">Start</button>
+            <button id="btn-reset" class="reset-btn">Reset</button>
+        </div>
+
+        <button id="btn-settings" class="settings-toggle" title="Settings">⚙️</button>
+
+        <div id="settings-modal" class="settings-modal" style="display: none;">
+            <h3>Timer Settings (minutes)</h3>
+            <div class="settings-grid">
+                <label htmlFor="settings-work">Work:</label>
+                <input type="number" id="settings-work" value="25" min="1">
+
+                <label htmlFor="settings-shortBreak">Short Break:</label>
+                <input type="number" id="settings-shortBreak" value="5" min="1">
+
+                <label htmlFor="settings-longBreak">Long Break:</label>
+                <input type="number" id="settings-longBreak" value="15" min="1">
+
+                <label htmlFor="settings-longBreakInterval">Long Break After:</label>
+                <input type="number" id="settings-longBreakInterval" value="4" min="1">
+                <span>sessions</span>
+            </div>
+
+            <div
+                style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <span>Theme:</span>
+                <button id="btn-theme-toggle"
+                    style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; background-color: #eee; color: #333; transition: background-color 0.2s ease, color 0.2s ease;">
+                    Switch to Dark
+                </button>
+            </div>
+
+            <button id="btn-close-settings" class="close-settings">Close Settings</button>
+        </div>
+
+        <p>Completed Pomodoros this cycle: <span id="pomodoro-count">0</span></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
