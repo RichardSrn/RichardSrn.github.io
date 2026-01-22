@@ -1,0 +1,1 @@
+kdeconnect-app & kdeconnect-indicator & kdeconnect-settings &

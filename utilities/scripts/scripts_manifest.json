@@ -1,0 +1,142 @@
+[
+  {
+    "name": "update_ankama_laucher.sh",
+    "path": "repository/update_ankama_laucher.sh",
+    "size": 613,
+    "extension": ".sh",
+    "help_text": null
+  },
+  {
+    "name": "udev_listener_script.sh",
+    "path": "repository/udev_listener_script.sh",
+    "size": 90,
+    "extension": ".sh",
+    "help_text": ""
+  },
+  {
+    "name": "discord_update_and_launch.sh",
+    "path": "repository/discord_update_and_launch.sh",
+    "size": 2422,
+    "extension": ".sh",
+    "help_text": "--- Configuration ---\nThe official download URL that redirects to the specific .deb version"
+  },
+  {
+    "name": "check_proxy.sh",
+    "path": "repository/check_proxy.sh",
+    "size": 365,
+    "extension": ".sh",
+    "help_text": ""
+  },
+  {
+    "name": "search_all.sh",
+    "path": "repository/search_all.sh",
+    "size": 109,
+    "extension": ".sh",
+    "help_text": null
+  },
+  {
+    "name": "click.py",
+    "path": "repository/click.py",
+    "size": 3767,
+    "extension": ".py",
+    "help_text": "Premi\u00e8re utilisation : indiquer l'emplacement des runes dans les variables xs et ys \u00e0 l'aide par example de la commande \n```\nxdotool getmouselocation --shell\n```\n\nUtilisation :\nActiver le \"mode avanc\u00e9\" dans l'atelier.\nVoir le 'tableau' des runes comme une matrice. Par exemple :\n\n\nEFFET                       Pa      Ra\n------------------------------------\nintelligence        11      12      13\nforce               21      22      23\nsagesse             31      32      33\n...             ...     ...     ...   \n\n\nPour utiliser uniquement les runes \"rune ine\" (11) et \"rune Pa fo\" (22), lancer le script avec la commande :\n```\npython3 click.py 11 22\n```\nPour les runes \"rune ine\", \"rune fo\", \"rune Pa sa\", utiliser la commande :\n```\npython3 click.py 11 21 32\n```\netc.\n\nSi la commande \n```\npython3 click.py\n```\net lanc\u00e9e sans param\u00e8tres, toutes les runes sont disponibles."
+  },
+  {
+    "name": "change-gdm-background",
+    "path": "repository/change-gdm-background",
+    "size": 6281,
+    "extension": "",
+    "help_text": null
+  },
+  {
+    "name": "shtdwn.sh",
+    "path": "repository/shtdwn.sh",
+    "size": 30,
+    "extension": ".sh",
+    "help_text": ""
+  },
+  {
+    "name": "token_counter.py",
+    "path": "repository/token_counter.py",
+    "size": 4223,
+    "extension": ".py",
+    "help_text": ""
+  },
+  {
+    "name": "shutdown_random.sh",
+    "path": "repository/shutdown_random.sh",
+    "size": 746,
+    "extension": ".sh",
+    "help_text": "Generate a random number between 420 and 720 seconds (7 to 12 minutes)"
+  },
+  {
+    "name": "rename_files.sh",
+    "path": "repository/rename_files.sh",
+    "size": 381,
+    "extension": ".sh",
+    "help_text": ""
+  },
+  {
+    "name": "kdeconnect_all.sh",
+    "path": "repository/kdeconnect_all.sh",
+    "size": 61,
+    "extension": ".sh",
+    "help_text": null
+  },
+  {
+    "name": "swap-selection-clipboard.sh",
+    "path": "repository/swap-selection-clipboard.sh",
+    "size": 847,
+    "extension": ".sh",
+    "help_text": "swap-selection-clipboard.sh\nBehavior:\n- clipboard -> temporary\n- primary selection (selected text) -> clipboard (removes selection)\n- paste temporary (old clipboard) at cursor"
+  },
+  {
+    "name": "print_codebase.sh",
+    "path": "repository/print_codebase.sh",
+    "size": 2479,
+    "extension": ".sh",
+    "help_text": "Default values"
+  },
+  {
+    "name": "test_script.py",
+    "path": "repository/test_script.py",
+    "size": 79,
+    "extension": ".py",
+    "help_text": null
+  },
+  {
+    "name": "center_active_window.py",
+    "path": "repository/center_window/center_active_window.py",
+    "size": 1404,
+    "extension": ".py",
+    "help_text": "Author: Serg Kolo\nDate: Oct 3rd, 2016\nDescription: Script for aligning the center of\nuser's active window with the center of the monitor\nTested on: Ubuntu 16.04\nWritten for: http://askubuntu.com/q/832720/295286"
+  },
+  {
+    "name": "center_active_window.sh",
+    "path": "repository/center_window/center_active_window.sh",
+    "size": 182,
+    "extension": ".sh",
+    "help_text": ""
+  },
+  {
+    "name": "center.py",
+    "path": "repository/center_window/center.py",
+    "size": 3205,
+    "extension": ".py",
+    "help_text": ""
+  },
+  {
+    "name": "proxyon_script.sh",
+    "path": "repository/proxy_tweaks/proxyon_script.sh",
+    "size": 250,
+    "extension": ".sh",
+    "help_text": null
+  },
+  {
+    "name": "proxyoff_script.sh",
+    "path": "repository/proxy_tweaks/proxyoff_script.sh",
+    "size": 249,
+    "extension": ".sh",
+    "help_text": null
+  }
+]
