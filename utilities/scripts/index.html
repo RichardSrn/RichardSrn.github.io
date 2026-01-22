@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripts Repository | Richard's Utilities</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Syntax Highlighting (PrismJS) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+        rel="stylesheet" />
+
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="main-sidebar">
+            <div class="sidebar-header">
+                <a href="../../index.html" class="back-link">← Back</a>
+                <h1>Scripts Repo</h1>
+                <div class="search-bar">
+                    <input type="text" id="script-search" placeholder="Search scripts...">
+                </div>
+                <div class="controls">
+                    <div class="sort-controls">
+                        <select id="sort-select">
+                            <option value="name">Name</option>
+                            <option value="size">Size</option>
+                            <option value="ext">Type</option>
+                        </select>
+                        <button id="btn-sort-dir" class="btn-icon-only" title="Toggle Sort Direction">
+                            <span id="sort-icon">↓</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="file-tree-container" id="file-tree">
+                <div class="loading-spinner">Loading scripts...</div>
+            </div>
+        </aside>
+
+        <!-- Resizer Handle -->
+        <div class="resizer" id="sidebar-resizer"></div>
+
+        <!-- Main Content (Viewer) -->
+        <main class="main-content">
+            <!-- Tooltip for hover previews -->
+            <div id="hover-preview" class="hover-preview hidden"></div>
+
+            <div id="welcome-message" class="empty-state">
+                <div class="empty-content">
+                    <span class="icon">📜</span>
+                    <h2>Select a script to view</h2>
+                    <p>Browse the repository on the left to view, edit, and download scripts.</p>
+                </div>
+            </div>
+
+            <div id="script-viewer" class="script-viewer hidden">
+                <header class="viewer-header">
+                    <div class="file-info">
+                        <h2 id="file-name">script.py</h2>
+                        <span id="file-meta" class="file-meta">Python · 2KB</span>
+                    </div>
+                    <div class="viewer-actions">
+                        <button id="btn-toggle-help" class="btn secondary" title="Show Help/Docstring">
+                            <span class="btn-icon">ℹ️</span> Help
+                        </button>
+                        <button id="btn-edit" class="btn secondary">
+                            <span class="btn-icon">✏️</span> Edit
+                        </button>
+                        <button id="btn-download" class="btn primary">
+                            <span class="btn-icon">⬇️</span> Download
+                        </button>
+                    </div>
+                </header>
+
+                <div id="help-panel" class="help-panel hidden">
+                    <h3>Help / Documentation</h3>
+                    <pre id="help-content"></pre>
+                </div>
+
+                <div class="code-container">
+                    <pre><code id="code-content" class="language-python line-numbers"></code></pre>
+                    <textarea id="code-editor" class="code-editor hidden" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
