@@ -6,17 +6,64 @@
     <title>Fractal Dream — Infinite Animation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="stylesheet" href="style.css">
+    <!-- MathJax for nice equation rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
     <canvas id="gl"></canvas>
-    <div class="top">Fractal Dream</div>
-    <a href="../../index.html"
-        style="position: fixed; left: 12px; top: 12px; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.12); padding: 8px 12px; border-radius: 8px; font-size: 12px; color: #bde2ff; backdrop-filter: blur(6px); text-decoration: none;">←
-        Back</a>
-    <div class="hint">
-        • Drag to influence the fractal’s shape<br />
-        • Click/tap to shift colors • Space to pause • Press <b>S</b> to save PNG
+
+    <!-- Header / Back Link -->
+    <div class="top-ui">
+        <a href="../../index.html" class="back-link">← Back</a>
+        <div class="title">Fractal Dream</div>
+        <button id="toggleControlsBtn" class="icon-btn" title="Toggle Controls">⚙️</button>
+    </div>
+
+    <!-- Main Control Panel -->
+    <div id="controlPanel" class="control-panel visible">
+        <div class="panel-header">
+            <h3>Controls</h3>
+            <button id="closePanelBtn">×</button>
+        </div>
+
+        <div class="control-group">
+            <label>Speed <span id="speedVal">1x</span></label>
+            <input type="range" id="speedRaw" min="0" max="200" value="40">
+        </div>
+
+        <div class="control-group">
+            <label>Zoom <span id="zoomVal">1.5</span></label>
+            <input type="range" id="zoomRaw" min="0" max="1000" value="300">
+        </div>
+
+        <div class="control-group row">
+            <label class="checkbox-label">
+                <input type="checkbox" id="autoRotate"> Rotate
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="showEq" checked> Equation
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="mouseInfluence"> Influence
+            </label>
+        </div>
+
+        <div class="control-group buttons">
+            <button id="shiftPaletteBtn">Shift Colors</button>
+            <button id="resetBtn">Reset</button>
+            <button id="fullscreenBtn">⛶</button>
+        </div>
+
+        <div class="hint-text">
+            Drag to Pan • Wheel to Zoom • Space to Pause • S to Save
+        </div>
+    </div>
+
+    <!-- Equation Display -->
+    <div id="equationDisplay" class="equation mb-visible">
+        $$ z_{n+1} = z_n^2 + c $$
     </div>
 
     <script src="script.js"></script>
