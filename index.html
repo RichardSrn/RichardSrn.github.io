@@ -13,17 +13,26 @@
 
 <body>
 
+    <div class="language-switcher">
+        <select id="language-select">
+            <option value="fr">FR</option>
+            <option value="en">EN</option>
+        </select>
+    </div>
+
     <header class="hero">
         <div class="hero-content">
-            <h1>Hi, I'm <span class="accent-text">Richard</span>.</h1>
-            <p class="subtitle">ML PhD Student · Python & Math Enthusiast</p>
-            <p class="intro">Welcome to my collection of interactive web utilities and simulations.</p>
+            <h1><span data-i18n="hero_greeting_prefix">Hi, I'm </span><span class="accent-text">Richard</span><span
+                    data-i18n="hero_greeting_suffix">.</span></h1>
+            <p class="subtitle" data-i18n="hero_subtitle">ML PhD Student · Python & Math Enthusiast</p>
+            <p class="intro" data-i18n="hero_intro">Welcome to my collection of interactive web utilities and
+                simulations.</p>
 
             <div class="ai-disclaimer">
                 <span class="icon">🤖</span>
-                <span class="text">Transparency Note: I am not a web developer. This website and its utilities were
-                    mostly coded by generative AI, and curated, directed and refined by me. However, the utilities are
-                    still useful and/or fun, and I hope you find a use for them!</span>
+                <span class="text" data-i18n="disclaimer_text">Transparency Note: I am not a web developer. This website
+                    and its utilities were mostly coded by generative AI, and curated, directed and refined by me.
+                    However, the utilities are still useful and/or fun, and I hope you find a use for them!</span>
             </div>
         </div>
         <div class="hero-background"></div>
@@ -32,15 +41,15 @@
     <main class="container">
         <!-- Tools Section -->
         <section class="category-section">
-            <h2 class="category-title"><span class="icon">🛠️</span> Tools</h2>
+            <h2 class="category-title" data-i18n="nav_tools"><span class="icon">🛠️</span> Tools</h2>
             <div class="utility-grid">
                 <!-- Clock -->
                 <a href="utilities/clock/" class="card">
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/clock.png');">
                     </div>
                     <div class="card-content">
-                        <h3>Clock</h3>
-                        <p>A sleek, digital clock timer, very useful for exams.</p>
+                        <h3 data-i18n="clock_title">Clock</h3>
+                        <p data-i18n="clock_desc">A sleek, digital clock timer, very useful for exams.</p>
                     </div>
                 </a>
 
@@ -49,8 +58,9 @@
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/pomodoro.png');">
                     </div>
                     <div class="card-content">
-                        <h3>Pomodoro Timer</h3>
-                        <p>Focus timer with customizable work/break intervals and a clean interface.</p>
+                        <h3 data-i18n="pomodoro_title">Pomodoro Timer</h3>
+                        <p data-i18n="pomodoro_desc">Focus timer with customizable work/break intervals and a clean
+                            interface.</p>
                     </div>
                 </a>
 
@@ -58,8 +68,9 @@
                 <a href="utilities/qrcode/" class="card">
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/qrcode.png');"></div>
                     <div class="card-content">
-                        <h3>QR Code Studio</h3>
-                        <p>Generate and customize QR codes with logos, colors, and styling options.</p>
+                        <h3 data-i18n="qrcode_title">QR Code Studio</h3>
+                        <p data-i18n="qrcode_desc">Generate and customize QR codes with logos, colors, and styling
+                            options.</p>
                     </div>
                 </a>
                 <!-- Scripts Repository -->
@@ -67,8 +78,8 @@
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/scripts.png');">
                     </div>
                     <div class="card-content">
-                        <h3>Scripts Repo</h3>
-                        <p>Browse, view, edit, and download a collection of useful scripts.</p>
+                        <h3 data-i18n="scripts_title">Scripts Repo</h3>
+                        <p data-i18n="scripts_desc">Browse, view, edit, and download a collection of useful scripts.</p>
                     </div>
                 </a>
             </div>
@@ -76,14 +87,15 @@
 
         <!-- Simulations Section -->
         <section class="category-section">
-            <h2 class="category-title"><span class="icon">✨</span> Simulations</h2>
+            <h2 class="category-title" data-i18n="nav_simulations"><span class="icon">✨</span> Simulations</h2>
             <div class="utility-grid">
                 <!-- Boids -->
                 <a href="utilities/boids/" class="card">
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/boids.png');"></div>
                     <div class="card-content">
-                        <h3>Boids Simulation</h3>
-                        <p>Flocking simulation demonstrating separation, alignment, and cohesion behaviors.</p>
+                        <h3 data-i18n="boids_title">Boids Simulation</h3>
+                        <p data-i18n="boids_desc">Flocking simulation demonstrating separation, alignment, and cohesion
+                            behaviors.</p>
                     </div>
                 </a>
 
@@ -92,8 +104,9 @@
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/fractal.png');">
                     </div>
                     <div class="card-content">
-                        <h3>Fractal Explorer</h3>
-                        <p>Interactive Mandelbrot and Julia set viewer with deep zoom capabilities.</p>
+                        <h3 data-i18n="fractal_title">Fractal Explorer</h3>
+                        <p data-i18n="fractal_desc">Interactive Mandelbrot and Julia set viewer with deep zoom
+                            capabilities.</p>
                     </div>
                 </a>
 
@@ -102,8 +115,8 @@
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/fractal_v2.png');">
                     </div>
                     <div class="card-content">
-                        <h3>Fractal Dream</h3>
-                        <p>Animated, GPU-accelerated fractal voyage using WebGL.</p>
+                        <h3 data-i18n="fractal_v2_title">Fractal Dream</h3>
+                        <p data-i18n="fractal_v2_desc">Animated, GPU-accelerated fractal voyage using WebGL.</p>
                     </div>
                 </a>
 
@@ -112,8 +125,9 @@
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/galaxy.png');">
                     </div>
                     <div class="card-content">
-                        <h3>Galaxy Sim</h3>
-                        <p>Interactive spiral galaxy simulation with adjustable physics and rendering.</p>
+                        <h3 data-i18n="galaxy_title">Galaxy Sim</h3>
+                        <p data-i18n="galaxy_desc">Interactive spiral galaxy simulation with adjustable physics and
+                            rendering.</p>
                     </div>
                 </a>
             </div>
@@ -121,14 +135,15 @@
 
         <!-- Games Section -->
         <section class="category-section">
-            <h2 class="category-title"><span class="icon">🎮</span> Games</h2>
+            <h2 class="category-title" data-i18n="nav_games"><span class="icon">🎮</span> Games</h2>
             <div class="utility-grid">
                 <!-- Game0 -->
                 <a href="utilities/game0/" class="card">
                     <div class="card-image" style="background-image: url('assets/images/thumbnails/game0.png');"></div>
                     <div class="card-content">
-                        <h3>Phantom Phase Serpent</h3>
-                        <p>A unique twist on Snake with phase-shifting mechanics and avoiding phantoms.</p>
+                        <h3 data-i18n="game0_title">Phantom Phase Serpent</h3>
+                        <p data-i18n="game0_desc">A unique twist on Snake with phase-shifting mechanics and avoiding
+                            phantoms.</p>
                     </div>
                 </a>
             </div>
@@ -136,10 +151,11 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Richard Serrano. Hosted on GitHub Pages.</p>
+        <p data-i18n="footer_text">&copy; 2026 Richard Serrano. Hosted on GitHub Pages.</p>
     </footer>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/i18n.js"></script>
 </body>
 
 </html>
