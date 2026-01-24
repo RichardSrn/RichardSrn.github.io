@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conway's Game of Life</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <canvas id="lifeCanvas"></canvas>
+
+    <a href="../../" class="back-link glass-panel" title="Back to Home">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+        </svg>
+    </a>
+
+    <!-- Toolbar (Left) -->
+    <aside class="toolbar glass-panel">
+        <button id="toolMove" class="tool-btn active" title="Move & Toggle (Space + Drag to Pan)">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor"
+                    d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z" />
+            </svg>
+        </button>
+        <button id="toolBrush" class="tool-btn" title="Paint Brush">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor"
+                    d="M20.71 5.63l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-3.12 3.12-1.93-1.91-1.41 1.41 1.42 1.42L3 19.59V21h1.41l12.19-12.19 1.45 1.45 1.41-1.41-1.45-1.45 3.12-3.12c.39-.39.39-1.02 0-1.41z" />
+            </svg>
+        </button>
+        <button id="toolEraser" class="tool-btn" title="Eraser">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor"
+                    d="M16.24 3.56l4.95 4.94c.78.79.78 2.05 0 2.84L12 20.53a4.008 4.008 0 0 1-5.66 0L2.81 17c-.78-.79-.78-2.05 0-2.84l10.6-10.6c.79-.78 2.05-.78 2.83 0zM4.22 15.58l3.54 3.53c.78.79 2.04.79 2.83 0l8.48-8.48-3.54-3.54-11.31 8.49z" />
+            </svg>
+        </button>
+    </aside>
+
+    <!-- Theme Panel (Hidden) -->
+    <aside class="theme-panel glass-panel hidden">
+        <header class="panel-header">
+            <h2>Customize Theme</h2>
+            <button id="closeTheme" class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="currentColor"
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg></button>
+        </header>
+        <div class="panel-content">
+            <div class="input-wrapper">
+                <label class="label">Background</label>
+                <input type="color" id="bgColorPicker" value="#0d0f14" class="color-picker">
+            </div>
+            <div class="input-wrapper">
+                <label class="label">Grid Lines</label>
+                <input type="color" id="gridColorPicker" value="#1e293b" class="color-picker">
+            </div>
+            <div class="input-wrapper">
+                <label class="label">Live Cells</label>
+                <input type="color" id="cellColorPicker" value="#10b981" class="color-picker">
+            </div>
+            <button id="resetTheme" class="btn secondary">Reset Defaults</button>
+        </div>
+    </aside>
+
+    <!-- Settings Panel (Top Right) -->
+    <aside class="settings glass-panel">
+        <header class="panel-header">
+            <h2>Game of Life</h2>
+            <div class="header-actions">
+                <button id="toggleGrid" class="icon-btn active" title="Toggle Grid">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20V4h4v16H8zm6 0V4h4v16h-4zM4 4h2v16H4V4zm16 16h-2V4h2v16z" />
+                    </svg>
+                </button>
+                <button id="toggleTheme" class="icon-btn" title="Edit Theme">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M12 3a9 9 0 0 0 0 18c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm-2.07-5.18c-.41 0-.75.34-.75.75s.34.75.75.75.75-.34.75-.75-.33-.75-.75-.75zm4.14 0c-.41 0-.75.34-.75.75s.34.75.75.75.75-.34.75-.75-.33-.75-.75-.75zm-6.21-1.35c-.41 0-.75.34-.75.75s.34.75.75.75.75-.34.75-.75-.33-.75-.75-.75zm8.28 0c-.41 0-.75.34-.75.75s.34.75.75.75.75-.34.75-.75-.33-.75-.75-.75z" />
+                    </svg>
+                </button>
+                <button id="toggleSettings" class="icon-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="panel-content">
+            <div class="control-group">
+                <div class="input-wrapper">
+                    <label class="label">Simulation</label>
+                    <div class="btn-group">
+                        <button id="startBtn" class="btn primary">Play</button>
+                        <button id="pauseBtn" class="btn secondary" disabled>Pause</button>
+                    </div>
+                    <div class="btn-group">
+                        <button id="nextBtn" class="btn secondary">Step</button>
+                        <button id="clearBtn" class="btn danger">Clear</button>
+                    </div>
+                </div>
+
+                <div class="input-wrapper">
+                    <label for="speedRange" class="label">Speed</label>
+                    <input type="range" id="speedRange" min="1" max="60" value="30" class="range">
+                </div>
+
+                <div class="input-wrapper">
+                    <label for="zoomRange" class="label">Zoom</label>
+                    <input type="range" id="zoomRange" min="2" max="50" value="10" class="range">
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="control-group">
+                <div class="input-wrapper">
+                    <label class="label">Brush Settings</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <select id="patternSelect" class="select" style="flex: 1;">
+                            <option value="none" selected>Single Cell (Draw)</option>
+                            <option value="glider">Glider</option>
+                            <option value="lwss">LWSS (Spaceship)</option>
+                            <option value="pulsar">Pulsar (Oscillator)</option>
+                            <option value="toad">Toad (Oscillator)</option>
+                            <option value="beacon">Beacon (Oscillator)</option>
+                            <option value="gosper">Gosper Gun</option>
+                            <option value="diehard">Diehard (Methuselah)</option>
+                            <option value="acorn">Acorn (Methuselah)</option>
+                        </select>
+                        <button id="rotatePattern" class="btn secondary" style="width: 40px; padding: 0;"
+                            title="Rotate Pattern">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor"
+                                    d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label class="label">Brush Shape</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="shapeCircle" class="btn secondary active" style="flex: 1;"
+                            title="Circle Brush">Circle</button>
+                        <button id="shapeSquare" class="btn secondary" style="flex: 1;"
+                            title="Square Brush">Square</button>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label for="brushSize" class="label">Brush Size: <span id="brushSizeVal">1</span></label>
+                    <input type="range" id="brushSize" min="1" max="10" value="1" class="range">
+                </div>
+            </div>
+
+            <div class="stats">
+                <span class="stat-item">Gen: <span id="genCount" class="value">0</span></span>
+                <span class="stat-item">Pop: <span id="popCount" class="value">0</span></span>
+            </div>
+
+            <div class="hint">
+                <p>Space + Drag to Pan</p>
+                <p>Scroll to Zoom</p>
+            </div>
+        </div>
+    </aside>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
