@@ -32,6 +32,8 @@ const translations = {
         "fractal_v2_desc": "Animated, GPU-accelerated fractal voyage using WebGL.",
         "galaxy_title": "Galaxy Sim",
         "galaxy_desc": "Interactive spiral galaxy simulation with adjustable physics and rendering.",
+        "life_title": "Game of Life",
+        "life_desc": "Conway's classic cellular automaton with an infinite grid and interactive tools.",
 
         "game0_title": "Phantom Phase Serpent",
         "game0_desc": "A unique twist on Snake with phase-shifting mechanics and avoiding phantoms.",
@@ -42,8 +44,8 @@ const translations = {
         "hero_greeting_prefix": "Bonjour, je suis ",
         "hero_greeting_suffix": ".",
         "hero_subtitle": "Doctorant en ML · Passionné de Python & Math",
-        "hero_intro": "Bienvenue sur ma collection d'utilitaires web interactifs et de simulations.",
-        "disclaimer_text": "Note de transparence : Je ne suis pas développeur web. Ce site et ses utilitaires ont été principalement codés par une IA générative, puis curatés, dirigés et affinés par moi. Cependant, les utilitaires restent utiles et/ou amusants, et j'espère que vous leur trouverez une utilité !",
+        "hero_intro": "Bienvenue sur ma collection d'utilitaires et de simulations.",
+        "disclaimer_text": "Note de transparence : Je ne suis pas développeur web. Ce site et ses utilitaires ont été principalement codés par une IA générative, puis etaffinés par mes soins. Cependant, les projets présentés ici restent utiles et/ou amusants, et j'espère que vous leur trouverez une utilité !",
         "nav_tools": "<span class=\"icon\">🛠️</span> Outils",
         "nav_simulations": "<span class=\"icon\">✨</span> Simulations",
         "nav_games": "<span class=\"icon\">🎮</span> Jeux",
@@ -66,6 +68,8 @@ const translations = {
         "fractal_v2_desc": "Voyage fractal animé et accéléré par GPU utilisant WebGL.",
         "galaxy_title": "Sim Galactique",
         "galaxy_desc": "Simulation interactive de galaxie spirale avec physique et rendu ajustables.",
+        "life_title": "Jeu de la Vie",
+        "life_desc": "L'automate cellulaire classique de Conway avec une grille infinie et des outils interactifs.",
 
         "game0_title": "Serpent de Phase Fantôme", // Literal translation, sounds a bit cool/gamey
         "game0_desc": "Une variante unique du Snake avec mécaniques de déphasage et évitement de fantômes.",
