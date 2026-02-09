@@ -13,8 +13,11 @@ const translations = {
         "nav_tools": "<span class=\"icon\">🛠️</span> Tools",
         "nav_simulations": "<span class=\"icon\">✨</span> Simulations",
         "nav_games": "<span class=\"icon\">🎮</span> Games",
+        "nav_phd": "<span class=\"icon\">🎓</span> PhD Related",
 
         // Utilities
+        "graphs_title": "Graph Visualization",
+        "graphs_desc": "Interactive exploration of graph datasets used in my research.",
         "clock_title": "Clock",
         "clock_desc": "A sleek, digital clock timer, very useful for exams.",
         "pomodoro_title": "Pomodoro Timer",
@@ -49,8 +52,11 @@ const translations = {
         "nav_tools": "<span class=\"icon\">🛠️</span> Outils",
         "nav_simulations": "<span class=\"icon\">✨</span> Simulations",
         "nav_games": "<span class=\"icon\">🎮</span> Jeux",
+        "nav_phd": "<span class=\"icon\">🎓</span> Thèse",
 
         // Utilities
+        "graphs_title": "Visualisation de Graphes",
+        "graphs_desc": "Exploration interactive des jeux de données de graphes utilisés dans mes recherches.",
         "clock_title": "Horloge",
         "clock_desc": "Un minuteur numérique élégant, très utile pour les examens.",
         "pomodoro_title": "Minuteur Pomodoro",
