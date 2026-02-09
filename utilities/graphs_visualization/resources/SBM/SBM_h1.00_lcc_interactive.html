@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Graph: SBM_h1.00_lcc</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --container-bg: white;
+            --text-color: #333;
+            --control-bg: white;
+            --link-color: #999;
+            --panel-bg: white;
+            --border-color: #ddd;
+        }
+        body.dark {
+            --bg-color: #1a1a2e;
+            --container-bg: #16213e;
+            --text-color: #eee;
+            --control-bg: #0f3460;
+            --link-color: #555;
+            --panel-bg: #0f3460;
+            --border-color: #444;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg-color); display: flex; flex-direction: column; height: 100vh; overflow: hidden; transition: background 0.3s; color: var(--text-color); }
+        
+        #top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--control-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
+        h2 { margin: 0; font-size: 18px; }
+        
+        #main-area { display: flex; flex: 1; overflow: hidden; position: relative; }
+        
+        #graph-container { flex: 1; background: var(--container-bg); position: relative; overflow: hidden; }
+        
+        /* Floating Controls */
+        #controls { 
+            position: absolute; top: 20px; left: 20px; width: 220px;
+            background: var(--control-bg); padding: 15px; border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+            max-height: 80vh; overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 5;
+        }
+        #controls.hidden { transform: translateX(-260px); }
+        
+        .control-group { display: flex; flex-direction: column; margin-bottom: 12px; }
+        .control-group label { font-size: 11px; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .control-group input[type=range] { width: 100%; }
+        .control-row { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+        .val-input { width: 50px; font-size: 11px; padding: 2px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); border-radius: 3px; }
+        
+        /* Side Panel */
+        #side-panel {
+            width: 350px; background: var(--panel-bg); border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column;
+            transition: transform 0.3s ease;
+            z-index: 20;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+        #side-panel.hidden { transform: translateX(100%); width: 0; border: none; }
+        
+        .panel-header { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--control-bg); }
+        .panel-header h3 { margin: 0; font-size: 16px; }
+        .close-btn { cursor: pointer; font-size: 18px; opacity: 0.6; }
+        .close-btn:hover { opacity: 1; }
+
+        .panel-content { flex: 1; overflow-y: auto; padding: 15px; }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border-color); }
+        tr:hover { background: rgba(0,0,0,0.05); }
+        
+        /* Buttons */
+        .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn-primary { background: #4CAF50; color: white; }
+        .btn-secondary { background: #607D8B; color: white; }
+        .btn-danger { background: #f44336; color: white; }
+        .btn-dark { background: #333; color: white; }
+        
+        /* Toggles */
+        .toggle-btn { cursor: pointer; background: none; border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 8px; }
+        .toggle-btn.active { background: #e0e0e0; color: black; }
+        
+        /* Graph Elements */
+        svg { width: 100%; height: 100%; }
+        .node { stroke: #fff; stroke-width: 1.5px; cursor: pointer; transition: stroke-width 0.1s; }
+        .node:hover { stroke: #000; stroke-width: 2.5px; }
+        .link { stroke: var(--link-color); stroke-opacity: 0.6; }
+        
+        .tooltip { position: absolute; background: rgba(0,0,0,0.8); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; pointer-events: none; z-index: 100; max-width: 300px; }
+        
+        /* Info Overlay */
+        #info-overlay { 
+            position: absolute; bottom: 20px; left: 20px; 
+            background: rgba(255,255,255,0.9); padding: 10px; border-radius: 8px; 
+            backdrop-filter: blur(4px); border: 1px solid rgba(0,0,0,0.1);
+            font-size: 11px; color: #333; pointer-events: none; opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        body.dark #info-overlay { background: rgba(20,20,40,0.9); color: #ccc; }
+        
+    </style>
+</head>
+<body>
+    <div id="top-bar">
+        <h2>SBM_h1.00_lcc</h2>
+        <div style="display: flex; gap: 10px;">
+            <button class="toggle-btn" id="toggleControls" title="Toggle Controls">⚙️ Params</button>
+            <button class="toggle-btn active" id="toggleInfo" title="Toggle Graph Info">ℹ️ Info</button>
+            <button class="toggle-btn" id="toggleFeatures" title="Toggle Features Panel">📊 Features</button>
+            
+            <div style="width: 1px; background: #ccc; margin: 0 5px;"></div>
+            
+            <button class="btn btn-secondary" id="resetBtn">Reset View</button>
+            <button class="btn btn-dark" id="darkBtn">Dark Mode</button>
+            <button class="btn btn-primary" id="savePng">Save PNG</button>
+            <button class="btn btn-primary" id="saveSvg">Save SVG</button>
+        </div>
+    </div>
+
+    <div id="main-area">
+        <!-- CONTROLS -->
+        <div id="controls">
+            <h4 style="margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Rendering Params</h4>
+            
+            <div class="control-group">
+                <label title="Controls the repulsion force between nodes. More negative = stronger repulsion.">Repulsion (Charge)</label>
+                <div class="control-row">
+                    <input type="range" id="charge" min="-3000" max="-10" value="-300">
+                    <input type="number" id="charge-val" class="val-input" value="-300">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label title="Preferred distance between connected nodes.">Link Distance</label>
+                <div class="control-row">
+                    <input type="range" id="linkDist" min="10" max="300" value="50">
+                    <input type="number" id="linkDist-val" class="val-input" value="50">
+                </div>
+            </div>
+            
+
+            
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 10px 0;">
+            
+            <div class="control-group">
+                <label title="Base size for all nodes.">Node Size</label>
+                <div class="control-row">
+                    <input type="range" id="nodeSize" min="1" max="50" value="6">
+                    <input type="number" id="nodeSize-val" class="val-input" value="6">
+                </div>
+            </div>
+            
+             <div class="control-group" style="flex-direction: row; align-items: center;">
+                <input type="checkbox" id="degreeSize" style="margin-right: 5px;" title="Scale node size based on degree (number of connections)">
+                <label for="degreeSize" style="margin: 0; font-size: 11px;">Size proportional to Degree</label>
+            </div>
+
+            <div class="control-group">
+                <label title="Thickness of edges/links between nodes.">Edge Width</label>
+                <div class="control-row">
+                    <input type="range" id="linkWidth" min="0.1" max="10" step="0.1" value="1">
+                    <input type="number" id="linkWidth-val" class="val-input" value="1" step="0.1">
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- GRAPH -->
+        <div id="graph-container">
+            <div id="info-overlay">
+                <b>Graph Info:</b><br>
+                Nodes: 75<br>
+                Edges: 364<br>
+                Avg Degree: 9.71<br>
+                Density: 0.1312<br>
+                Clustering: 0.1326<br>
+                Adj. Homophily: 1.0000<br>
+                Inertia (DB): N/A
+            </div>
+        </div>
+        
+        <!-- SIDE PANEL -->
+        <div id="side-panel" class="hidden">
+            <div class="panel-header">
+                <h3>Feature Inspector</h3>
+                <span class="close-btn" onclick="toggleFeatures()">×</span>
+            </div>
+            <div class="panel-content">
+                <div id="panel-placeholder" style="color: #888; text-align: center; margin-top: 20px;">
+                    Click a node to view details.<br>
+                    <br>
+                    Running Feature Mode: <b>FULL</b>
+                </div>
+                
+                <div id="node-details" style="display: none;">
+                    <h4 id="node-title">Node X</h4>
+                    <p><b>Group/Class:</b> <span id="node-group">-</span></p>
+                    <p><b>Degree:</b> <span id="node-degree">-</span></p>
+                    
+                    <h5 style="margin-bottom: 5px;">Feature Distribution</h5>
+                    <div style="height: 150px; width: 100%;">
+                        <canvas id="featureChart"></canvas>
+                    </div>
+                    
+                    <h5 style="margin-bottom: 5px; margin-top: 15px;">Feature Values</h5>
+                    <div style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color);">
+                        <table id="feature-table">
+                            <thead><tr><th>Feature</th><th>Value</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip" id="tooltip" style="display: none;"></div>
+    
+    <script>
+        // DATA INJECTION
+        const nodesData = [{"id": "0", "label": "Node 0 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.8068598508834839, "Feat 1": 1.493255376815796, "Feat 2": -0.6030317544937134, "Feat 3": 1.5304750204086304, "Feat 4": 0.5420609712600708, "Feat 5": -0.809551477432251, "Feat 6": -0.41235172748565674, "Feat 7": -0.019260380417108536, "Feat 8": -0.22939074039459229, "Feat 9": -1.0589076280593872}}, {"id": "1", "label": "Node 1 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": -0.09146866947412491, "Feat 1": 0.49706655740737915, "Feat 2": 0.6284886002540588, "Feat 3": 0.20523688197135925, "Feat 4": 1.055410623550415, "Feat 5": 0.9776982665061951, "Feat 6": -0.7921720147132874, "Feat 7": -0.2628908157348633, "Feat 8": -0.043476950377225876, "Feat 9": 1.4816633462905884}}, {"id": "2", "label": "Node 2 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.11139911413192749, "Feat 1": 0.51286780834198, "Feat 2": -0.7947202920913696, "Feat 3": 1.0137568712234497, "Feat 4": 1.0533052682876587, "Feat 5": 0.3613320291042328, "Feat 6": -0.8389297723770142, "Feat 7": 0.022465892136096954, "Feat 8": -1.5311075448989868, "Feat 9": 1.9625872373580933}}, {"id": "3", "label": "Node 3 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": 0.254337877035141, "Feat 1": 0.8476370573043823, "Feat 2": -0.6698395013809204, "Feat 3": 1.1302402019500732, "Feat 4": 0.3293067514896393, "Feat 5": 0.13420870900154114, "Feat 6": -0.3133779764175415, "Feat 7": 0.547119140625, "Feat 8": 0.5142547488212585, "Feat 9": 0.0036956719122827053}}, {"id": "4", "label": "Node 4 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": -0.5413588285446167, "Feat 1": 0.7228987812995911, "Feat 2": 0.19778461754322052, "Feat 3": 0.8327978253364563, "Feat 4": 1.0811734199523926, "Feat 5": 0.15559962391853333, "Feat 6": -0.9009324908256531, "Feat 7": -1.1808128356933594, "Feat 8": 0.5720574259757996, "Feat 9": 1.0114630460739136}}, {"id": "5", "label": "Node 5 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.513504683971405, "Feat 1": 1.1822925806045532, "Feat 2": -0.3981598913669586, "Feat 3": 0.723651111125946, "Feat 4": 0.39949852228164673, "Feat 5": 0.5096085071563721, "Feat 6": -1.589361310005188, "Feat 7": 1.1143217086791992, "Feat 8": -0.06219101697206497, "Feat 9": 1.3414759635925293}}, {"id": "6", "label": "Node 6 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.5366098284721375, "Feat 1": 0.4552314579486847, "Feat 2": -0.5848667025566101, "Feat 3": 0.7445053458213806, "Feat 4": 1.589509129524231, "Feat 5": 0.8172597289085388, "Feat 6": -0.928859531879425, "Feat 7": 0.7153813242912292, "Feat 8": 1.1243534088134766, "Feat 9": -0.7424842119216919}}, {"id": "7", "label": "Node 7 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 14, "features": {"Feat 0": -0.7129611968994141, "Feat 1": 1.191396951675415, "Feat 2": -0.4722388684749603, "Feat 3": 1.0133036375045776, "Feat 4": 0.26562562584877014, "Feat 5": -0.10550107806921005, "Feat 6": -0.6382261514663696, "Feat 7": 0.7181857228279114, "Feat 8": -0.33407723903656006, "Feat 9": -0.4853058457374573}}, {"id": "8", "label": "Node 8 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": -1.5571942329406738, "Feat 1": 0.597213089466095, "Feat 2": -0.5681752562522888, "Feat 3": 0.021004557609558105, "Feat 4": 0.7994613647460938, "Feat 5": 0.6721538305282593, "Feat 6": 0.27591368556022644, "Feat 7": 0.43847572803497314, "Feat 8": 0.5646059513092041, "Feat 9": 1.2308745384216309}}, {"id": "9", "label": "Node 9 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": 0.22426508367061615, "Feat 1": 1.143812894821167, "Feat 2": -1.2631744146347046, "Feat 3": 1.4084914922714233, "Feat 4": 0.2887137830257416, "Feat 5": 0.8656089901924133, "Feat 6": -0.7302542924880981, "Feat 7": 0.019616657868027687, "Feat 8": -1.0196642875671387, "Feat 9": 1.685014247894287}}, {"id": "10", "label": "Node 10 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": 0.15730278193950653, "Feat 1": 0.5813052654266357, "Feat 2": -1.364019751548767, "Feat 3": 0.6859180927276611, "Feat 4": 1.7910704612731934, "Feat 5": 1.508132815361023, "Feat 6": -0.22882351279258728, "Feat 7": 0.6728612184524536, "Feat 8": -0.023552151396870613, "Feat 9": 0.5628808736801147}}, {"id": "11", "label": "Node 11 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 5, "features": {"Feat 0": -1.0128577947616577, "Feat 1": 0.41027817130088806, "Feat 2": 0.25011685490608215, "Feat 3": 0.9898853302001953, "Feat 4": 0.06081213429570198, "Feat 5": 0.03888484463095665, "Feat 6": -0.5689396858215332, "Feat 7": 0.5918141603469849, "Feat 8": -0.17435425519943237, "Feat 9": -0.8798143267631531}}, {"id": "12", "label": "Node 12 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.4649427831172943, "Feat 1": 1.6729843616485596, "Feat 2": -0.6013554930686951, "Feat 3": 1.1095350980758667, "Feat 4": 0.9419040083885193, "Feat 5": 0.40242382884025574, "Feat 6": 0.1284170150756836, "Feat 7": -0.3540407121181488, "Feat 8": 0.22530792653560638, "Feat 9": 1.9870611429214478}}, {"id": "13", "label": "Node 13 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 7, "features": {"Feat 0": -0.6221231818199158, "Feat 1": 1.249439001083374, "Feat 2": -0.6432494521141052, "Feat 3": 0.6630812883377075, "Feat 4": 0.31226739287376404, "Feat 5": 0.7080613970756531, "Feat 6": 0.09376263618469238, "Feat 7": -0.5736017823219299, "Feat 8": -0.3695269227027893, "Feat 9": -0.5309708714485168}}, {"id": "14", "label": "Node 14 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": -0.6025916337966919, "Feat 1": -0.1791970431804657, "Feat 2": -0.738411009311676, "Feat 3": 0.8604648113250732, "Feat 4": 0.5026687979698181, "Feat 5": 1.1509345769882202, "Feat 6": 0.1033019945025444, "Feat 7": 0.1018562987446785, "Feat 8": -0.1314726024866104, "Feat 9": -0.3351377844810486}}, {"id": "15", "label": "Node 15 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 17, "features": {"Feat 0": -1.3207300901412964, "Feat 1": 0.4934387505054474, "Feat 2": -0.3027605712413788, "Feat 3": -0.09163611382246017, "Feat 4": 0.9064915180206299, "Feat 5": 0.42511799931526184, "Feat 6": -1.3517773151397705, "Feat 7": 1.5490201711654663, "Feat 8": 0.8260471820831299, "Feat 9": 0.34233784675598145}}, {"id": "16", "label": "Node 16 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": -0.5656572580337524, "Feat 1": 1.3192869424819946, "Feat 2": 0.5760483741760254, "Feat 3": 1.2920458316802979, "Feat 4": 1.2920148372650146, "Feat 5": 1.1765506267547607, "Feat 6": -0.3814235329627991, "Feat 7": -1.2391071319580078, "Feat 8": -0.4367642402648926, "Feat 9": 1.554160475730896}}, {"id": "17", "label": "Node 17 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 13, "features": {"Feat 0": 0.04794047027826309, "Feat 1": 0.11849527060985565, "Feat 2": -0.43132084608078003, "Feat 3": 1.466018557548523, "Feat 4": 1.491420865058899, "Feat 5": -0.39145123958587646, "Feat 6": -0.10531625896692276, "Feat 7": -1.4675252437591553, "Feat 8": -1.6065771579742432, "Feat 9": 0.8539759516716003}}, {"id": "18", "label": "Node 18 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": 1.0288242101669312, "Feat 1": 1.102164626121521, "Feat 2": -0.9873406291007996, "Feat 3": 0.07548723369836807, "Feat 4": -0.08875137567520142, "Feat 5": -0.04944416880607605, "Feat 6": -0.2940162718296051, "Feat 7": 0.16476084291934967, "Feat 8": 1.7495839595794678, "Feat 9": 0.41486549377441406}}, {"id": "19", "label": "Node 19 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": -0.053803250193595886, "Feat 1": 1.0503535270690918, "Feat 2": -0.7599976062774658, "Feat 3": 0.7227375507354736, "Feat 4": 0.8135982155799866, "Feat 5": 0.7515521049499512, "Feat 6": -0.16648739576339722, "Feat 7": 0.05088770017027855, "Feat 8": 1.3814541101455688, "Feat 9": 0.4632885158061981}}, {"id": "20", "label": "Node 20 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 7, "features": {"Feat 0": -0.18981018662452698, "Feat 1": 0.3672522008419037, "Feat 2": -0.15779896080493927, "Feat 3": 0.31104931235313416, "Feat 4": 1.4094693660736084, "Feat 5": -0.1281823217868805, "Feat 6": -0.455610066652298, "Feat 7": 0.17334166169166565, "Feat 8": -1.2922626733779907, "Feat 9": 0.0435146689414978}}, {"id": "21", "label": "Node 21 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.5086376070976257, "Feat 1": 0.7124170064926147, "Feat 2": -0.9846975207328796, "Feat 3": 0.8371138572692871, "Feat 4": -0.1629328578710556, "Feat 5": -0.01000533439218998, "Feat 6": -0.8571776747703552, "Feat 7": 0.24395319819450378, "Feat 8": 0.6897078156471252, "Feat 9": 0.5581395030021667}}, {"id": "22", "label": "Node 22 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.5510466694831848, "Feat 1": -0.3281833827495575, "Feat 2": -0.2671739459037781, "Feat 3": 1.2503021955490112, "Feat 4": 0.8369143605232239, "Feat 5": 0.31334149837493896, "Feat 6": -1.33333420753479, "Feat 7": -0.22320225834846497, "Feat 8": -0.5029747486114502, "Feat 9": -2.529560089111328}}, {"id": "23", "label": "Node 23 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": 0.222800150513649, "Feat 1": 1.602041244506836, "Feat 2": -1.853665828704834, "Feat 3": 1.4196385145187378, "Feat 4": 0.6786807179450989, "Feat 5": 0.9629494547843933, "Feat 6": -0.8075702786445618, "Feat 7": 1.489863395690918, "Feat 8": 0.26348721981048584, "Feat 9": -0.29660746455192566}}, {"id": "24", "label": "Node 24 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.10540276020765305, "Feat 1": 0.562279224395752, "Feat 2": -0.8082369565963745, "Feat 3": 1.4869105815887451, "Feat 4": 0.8869935274124146, "Feat 5": -0.3707524836063385, "Feat 6": 0.8542693853378296, "Feat 7": -1.6009039878845215, "Feat 8": 0.2942241430282593, "Feat 9": 0.24132193624973297}}, {"id": "25", "label": "Node 25 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": -0.5686996579170227, "Feat 1": 1.11873197555542, "Feat 2": -0.3792271912097931, "Feat 3": 1.5812559127807617, "Feat 4": 0.2935706079006195, "Feat 5": 0.6623790860176086, "Feat 6": -0.7276111245155334, "Feat 7": -0.828497052192688, "Feat 8": -0.23440779745578766, "Feat 9": -1.1510140895843506}}, {"id": "26", "label": "Node 26 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": -0.7616958618164062, "Feat 1": 1.023746132850647, "Feat 2": -0.05823441967368126, "Feat 3": 0.8147776126861572, "Feat 4": -0.03808680921792984, "Feat 5": 1.0937118530273438, "Feat 6": -1.4644806385040283, "Feat 7": -0.1032547578215599, "Feat 8": -0.7837656736373901, "Feat 9": 0.38632330298423767}}, {"id": "27", "label": "Node 27 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": -0.33179745078086853, "Feat 1": 1.3957659006118774, "Feat 2": -1.102534294128418, "Feat 3": 0.352504700422287, "Feat 4": -0.27683061361312866, "Feat 5": 0.4797573387622833, "Feat 6": -0.11846087872982025, "Feat 7": -1.6431888341903687, "Feat 8": -0.6905410289764404, "Feat 9": -0.20447121560573578}}, {"id": "28", "label": "Node 28 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": -0.5177441835403442, "Feat 1": 0.500173807144165, "Feat 2": -1.4446797370910645, "Feat 3": 0.8686888813972473, "Feat 4": 1.167914628982544, "Feat 5": 0.3928148150444031, "Feat 6": -0.057055555284023285, "Feat 7": -0.1758543998003006, "Feat 8": -0.9161919355392456, "Feat 9": 1.755475640296936}}, {"id": "29", "label": "Node 29 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.2536836862564087, "Feat 1": 0.8187368512153625, "Feat 2": -0.8236647844314575, "Feat 3": 1.2426177263259888, "Feat 4": 1.2317471504211426, "Feat 5": 0.7781155705451965, "Feat 6": 0.15887664258480072, "Feat 7": 1.6614701747894287, "Feat 8": -0.8318222165107727, "Feat 9": 1.5730197429656982}}, {"id": "30", "label": "Node 30 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.36564499139785767, "Feat 1": 0.996380090713501, "Feat 2": -1.2560067176818848, "Feat 3": 0.31235411763191223, "Feat 4": 0.83106529712677, "Feat 5": 0.48117440938949585, "Feat 6": -0.24929630756378174, "Feat 7": 0.020886488258838654, "Feat 8": -0.06717828661203384, "Feat 9": -0.4658055603504181}}, {"id": "31", "label": "Node 31 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.05624530464410782, "Feat 1": 1.153096318244934, "Feat 2": -0.7678155303001404, "Feat 3": 1.7560524940490723, "Feat 4": 0.41264843940734863, "Feat 5": 1.272479772567749, "Feat 6": -0.06198480352759361, "Feat 7": 0.23070091009140015, "Feat 8": -0.7157599925994873, "Feat 9": -0.150837704539299}}, {"id": "32", "label": "Node 32 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 13, "features": {"Feat 0": -0.8834792971611023, "Feat 1": 1.294002652168274, "Feat 2": -0.6966239213943481, "Feat 3": 1.3749282360076904, "Feat 4": -0.1318003386259079, "Feat 5": 0.021523423492908478, "Feat 6": 0.43532299995422363, "Feat 7": -1.260164737701416, "Feat 8": 0.6820520758628845, "Feat 9": -0.07394756376743317}}, {"id": "33", "label": "Node 33 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": 0.2950763702392578, "Feat 1": 0.4781346321105957, "Feat 2": -1.3528697490692139, "Feat 3": 0.8227004408836365, "Feat 4": 0.9613953232765198, "Feat 5": 0.5514078736305237, "Feat 6": -0.8575223088264465, "Feat 7": -0.6163613796234131, "Feat 8": 1.4872461557388306, "Feat 9": -0.4516594707965851}}, {"id": "34", "label": "Node 34 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": 1.1382367610931396, "Feat 1": 0.38471177220344543, "Feat 2": -0.2910776436328888, "Feat 3": 0.5705480575561523, "Feat 4": 0.12933295965194702, "Feat 5": 0.6800731420516968, "Feat 6": -0.956710934638977, "Feat 7": -0.3751963675022125, "Feat 8": -0.5800532698631287, "Feat 9": 0.1950249820947647}}, {"id": "35", "label": "Node 35 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 4, "features": {"Feat 0": 0.3459000885486603, "Feat 1": 1.3968812227249146, "Feat 2": -0.7719041109085083, "Feat 3": 0.5914234519004822, "Feat 4": 0.32407328486442566, "Feat 5": 0.3880029022693634, "Feat 6": -1.0320788621902466, "Feat 7": -0.3177151083946228, "Feat 8": 0.23940449953079224, "Feat 9": -0.7582820653915405}}, {"id": "36", "label": "Node 36 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": -0.1416006088256836, "Feat 1": -0.3017124533653259, "Feat 2": -0.15306726098060608, "Feat 3": 0.9630871415138245, "Feat 4": 0.38644057512283325, "Feat 5": -0.858411431312561, "Feat 6": -0.6176703572273254, "Feat 7": 1.2816437482833862, "Feat 8": 0.4996851086616516, "Feat 9": -1.1306153535842896}}, {"id": "37", "label": "Node 37 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": 0.1899607628583908, "Feat 1": 1.50184166431427, "Feat 2": -1.6157498359680176, "Feat 3": 0.8112826943397522, "Feat 4": 0.5809549689292908, "Feat 5": 0.4967774748802185, "Feat 6": 0.23192565143108368, "Feat 7": 0.5576910376548767, "Feat 8": 0.4720022678375244, "Feat 9": 0.6227112412452698}}, {"id": "38", "label": "Node 38 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 16, "features": {"Feat 0": -0.7554624080657959, "Feat 1": 0.5656633973121643, "Feat 2": -1.2018933296203613, "Feat 3": 1.4012353420257568, "Feat 4": 0.3002023696899414, "Feat 5": 1.0273184776306152, "Feat 6": -0.22075137495994568, "Feat 7": -1.1114579439163208, "Feat 8": 0.07595526427030563, "Feat 9": 0.629529595375061}}, {"id": "39", "label": "Node 39 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 15, "features": {"Feat 0": -1.0425668954849243, "Feat 1": 0.7145441174507141, "Feat 2": -0.43496254086494446, "Feat 3": 0.7544960975646973, "Feat 4": 0.6964519619941711, "Feat 5": 0.9662845134735107, "Feat 6": -0.24043957889080048, "Feat 7": 0.2465047836303711, "Feat 8": 0.7426823973655701, "Feat 9": -0.8043157458305359}}, {"id": "40", "label": "Node 40 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": 0.13593044877052307, "Feat 1": 0.3756541907787323, "Feat 2": -1.0928524732589722, "Feat 3": 1.1787348985671997, "Feat 4": 0.3688134551048279, "Feat 5": 0.7546191811561584, "Feat 6": -1.3944395780563354, "Feat 7": 0.498221755027771, "Feat 8": 0.4822489619255066, "Feat 9": 0.8953554034233093}}, {"id": "41", "label": "Node 41 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 13, "features": {"Feat 0": -0.5199905633926392, "Feat 1": 0.6927277445793152, "Feat 2": -0.7755650281906128, "Feat 3": 0.9115215539932251, "Feat 4": 1.0304090976715088, "Feat 5": 0.028298750519752502, "Feat 6": -0.8313789963722229, "Feat 7": 1.1401489973068237, "Feat 8": -1.237662434577942, "Feat 9": -0.631577730178833}}, {"id": "42", "label": "Node 42 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": -0.924258828163147, "Feat 1": 1.3523945808410645, "Feat 2": -0.6929476261138916, "Feat 3": 1.0608186721801758, "Feat 4": 1.1952540874481201, "Feat 5": 0.7748846411705017, "Feat 6": -1.4026143550872803, "Feat 7": 1.580540657043457, "Feat 8": 0.8691560626029968, "Feat 9": 0.25316524505615234}}, {"id": "43", "label": "Node 43 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.6912153959274292, "Feat 1": 1.1022570133209229, "Feat 2": -0.614169180393219, "Feat 3": 0.8109557628631592, "Feat 4": 0.7339939475059509, "Feat 5": 0.29051101207733154, "Feat 6": 0.1008373349905014, "Feat 7": -1.0150941610336304, "Feat 8": 0.8872908353805542, "Feat 9": 0.8203440308570862}}, {"id": "44", "label": "Node 44 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.8161959052085876, "Feat 1": 0.963168740272522, "Feat 2": -1.0320802927017212, "Feat 3": 1.2798417806625366, "Feat 4": 0.9110357761383057, "Feat 5": 0.7539713978767395, "Feat 6": 0.3080376982688904, "Feat 7": -0.8108575344085693, "Feat 8": -0.7632861137390137, "Feat 9": -0.03361256420612335}}, {"id": "45", "label": "Node 45 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.18370531499385834, "Feat 1": 0.7612619996070862, "Feat 2": -0.6186538934707642, "Feat 3": 1.2872540950775146, "Feat 4": 1.7386505603790283, "Feat 5": 0.6379824280738831, "Feat 6": -0.0950021967291832, "Feat 7": -1.257577896118164, "Feat 8": 0.03793783485889435, "Feat 9": 0.4547409117221832}}, {"id": "46", "label": "Node 46 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 7, "features": {"Feat 0": 0.04014163464307785, "Feat 1": -0.005979482550173998, "Feat 2": -1.0845690965652466, "Feat 3": 1.155948519706726, "Feat 4": 0.09342097491025925, "Feat 5": 0.0890422910451889, "Feat 6": -0.9781785607337952, "Feat 7": -0.23401986062526703, "Feat 8": 0.6833289861679077, "Feat 9": -0.5164296627044678}}, {"id": "47", "label": "Node 47 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": 0.19295446574687958, "Feat 1": 0.29475703835487366, "Feat 2": -0.35615694522857666, "Feat 3": 1.2297412157058716, "Feat 4": 0.06298855692148209, "Feat 5": 0.1310020089149475, "Feat 6": 0.25622567534446716, "Feat 7": 0.46635836362838745, "Feat 8": -0.20931382477283478, "Feat 9": -0.1964665800333023}}, {"id": "48", "label": "Node 48 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": 0.19624640047550201, "Feat 1": 0.5452249050140381, "Feat 2": -0.7507191896438599, "Feat 3": 0.45379960536956787, "Feat 4": 1.0272215604782104, "Feat 5": 0.7547411322593689, "Feat 6": -0.6114130020141602, "Feat 7": 0.9873344898223877, "Feat 8": 1.0729780197143555, "Feat 9": -0.20585943758487701}}, {"id": "49", "label": "Node 49 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": 0.1265791356563568, "Feat 1": 0.9456637501716614, "Feat 2": -0.6157788634300232, "Feat 3": 1.0876069068908691, "Feat 4": 1.6529940366744995, "Feat 5": 0.4666733741760254, "Feat 6": -1.0920151472091675, "Feat 7": -0.07595102488994598, "Feat 8": 2.363872528076172, "Feat 9": -0.7465783357620239}}, {"id": "50", "label": "Node 50 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": -0.35450270771980286, "Feat 1": 0.7516518235206604, "Feat 2": 0.5916662216186523, "Feat 3": 1.5505849123001099, "Feat 4": 0.5494733452796936, "Feat 5": 0.1570892184972763, "Feat 6": -0.966987669467926, "Feat 7": -0.3198475241661072, "Feat 8": -0.7859860062599182, "Feat 9": -0.17677415907382965}}, {"id": "51", "label": "Node 51 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.5626584887504578, "Feat 1": 1.2085776329040527, "Feat 2": -1.2468494176864624, "Feat 3": 1.1716862916946411, "Feat 4": 1.5431395769119263, "Feat 5": 0.11581483483314514, "Feat 6": -0.699863851070404, "Feat 7": 0.15175798535346985, "Feat 8": -1.381044626235962, "Feat 9": -1.5486183166503906}}, {"id": "52", "label": "Node 52 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 13, "features": {"Feat 0": -1.004996418952942, "Feat 1": 0.9536392092704773, "Feat 2": 0.0009939407464116812, "Feat 3": 0.41062524914741516, "Feat 4": 0.7279394865036011, "Feat 5": 0.4253145158290863, "Feat 6": -0.4599963128566742, "Feat 7": -0.8351429104804993, "Feat 8": 0.30381858348846436, "Feat 9": -0.491153746843338}}, {"id": "53", "label": "Node 53 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 15, "features": {"Feat 0": 0.2989037334918976, "Feat 1": 0.7440007925033569, "Feat 2": -2.022972822189331, "Feat 3": 0.901100754737854, "Feat 4": 0.3392789661884308, "Feat 5": 1.3612823486328125, "Feat 6": -0.5654576420783997, "Feat 7": 2.089538812637329, "Feat 8": 0.7215625047683716, "Feat 9": -0.2848754823207855}}, {"id": "54", "label": "Node 54 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 15, "features": {"Feat 0": -0.3397858142852783, "Feat 1": 1.8547061681747437, "Feat 2": -1.7324855327606201, "Feat 3": 1.1134729385375977, "Feat 4": 0.18437641859054565, "Feat 5": 0.31419092416763306, "Feat 6": -1.1911197900772095, "Feat 7": -1.6076610088348389, "Feat 8": -0.23086637258529663, "Feat 9": -0.2561797499656677}}, {"id": "55", "label": "Node 55 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.45611143112182617, "Feat 1": 0.919938862323761, "Feat 2": -1.31361722946167, "Feat 3": 0.5472842454910278, "Feat 4": 0.9944294095039368, "Feat 5": 0.5702201724052429, "Feat 6": 0.12187264859676361, "Feat 7": 0.1847405731678009, "Feat 8": 1.4532606601715088, "Feat 9": -0.2414974421262741}}, {"id": "56", "label": "Node 56 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": 0.3389384150505066, "Feat 1": 0.5008544325828552, "Feat 2": -1.2820613384246826, "Feat 3": 0.24684840440750122, "Feat 4": 0.222243070602417, "Feat 5": 0.6280520558357239, "Feat 6": -0.5600885152816772, "Feat 7": 2.023606300354004, "Feat 8": -1.3386057615280151, "Feat 9": -0.061764199286699295}}, {"id": "57", "label": "Node 57 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 13, "features": {"Feat 0": -0.7000237107276917, "Feat 1": 1.6468089818954468, "Feat 2": -0.5914462804794312, "Feat 3": 0.7679350972175598, "Feat 4": 0.720361053943634, "Feat 5": 0.011716733686625957, "Feat 6": -0.8416624665260315, "Feat 7": 0.0067998445592820644, "Feat 8": 0.692918598651886, "Feat 9": 0.4794415235519409}}, {"id": "58", "label": "Node 58 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": 0.16647794842720032, "Feat 1": 1.3170312643051147, "Feat 2": -0.5483760833740234, "Feat 3": 0.5555678009986877, "Feat 4": 1.4714550971984863, "Feat 5": -0.30418631434440613, "Feat 6": 0.07036562263965607, "Feat 7": -0.1900390386581421, "Feat 8": -0.6058608293533325, "Feat 9": 0.8745170831680298}}, {"id": "59", "label": "Node 59 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": -0.10263907164335251, "Feat 1": 1.6248693466186523, "Feat 2": -0.8207078576087952, "Feat 3": 0.9188395142555237, "Feat 4": 0.526332437992096, "Feat 5": 0.06390956044197083, "Feat 6": -1.0764886140823364, "Feat 7": -0.3574454188346863, "Feat 8": 1.719377875328064, "Feat 9": -0.6497652530670166}}, {"id": "60", "label": "Node 60 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": -0.7698346972465515, "Feat 1": 0.6613595485687256, "Feat 2": -0.7682361602783203, "Feat 3": 0.13028168678283691, "Feat 4": 1.3367273807525635, "Feat 5": 0.7007685899734497, "Feat 6": -1.299230694770813, "Feat 7": -0.18039168417453766, "Feat 8": 1.9925153255462646, "Feat 9": -1.2032008171081543}}, {"id": "61", "label": "Node 61 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.28882163763046265, "Feat 1": 1.2049800157546997, "Feat 2": -0.4294148087501526, "Feat 3": 1.2083345651626587, "Feat 4": 0.07245086133480072, "Feat 5": 0.6208954453468323, "Feat 6": 0.15145815908908844, "Feat 7": 1.3728485107421875, "Feat 8": -0.7666565775871277, "Feat 9": -1.0420444011688232}}, {"id": "62", "label": "Node 62 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 9, "features": {"Feat 0": 0.2355620115995407, "Feat 1": -0.009599225595593452, "Feat 2": -0.27668526768684387, "Feat 3": 0.6086814999580383, "Feat 4": 0.41276806592941284, "Feat 5": 0.9284332394599915, "Feat 6": 0.46090835332870483, "Feat 7": -2.2118618488311768, "Feat 8": -0.5495571494102478, "Feat 9": -0.487202912569046}}, {"id": "63", "label": "Node 63 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": 0.1468779742717743, "Feat 1": 1.1088286638259888, "Feat 2": -1.3565666675567627, "Feat 3": 1.4238600730895996, "Feat 4": -0.023849407210946083, "Feat 5": 0.6256048679351807, "Feat 6": -0.7158335447311401, "Feat 7": 1.5334336757659912, "Feat 8": 0.8595879077911377, "Feat 9": -0.35192131996154785}}, {"id": "64", "label": "Node 64 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": 0.4967973530292511, "Feat 1": 0.6379635334014893, "Feat 2": -0.8742426633834839, "Feat 3": 0.7875345945358276, "Feat 4": 0.7162209749221802, "Feat 5": 0.5224552750587463, "Feat 6": -0.5077705383300781, "Feat 7": -1.423957109451294, "Feat 8": -0.38713064789772034, "Feat 9": -0.7699960470199585}}, {"id": "65", "label": "Node 65 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.08182913810014725, "Feat 1": 0.039296526461839676, "Feat 2": -0.7280921339988708, "Feat 3": 0.913289487361908, "Feat 4": 1.0697617530822754, "Feat 5": 0.2752237915992737, "Feat 6": -1.0581178665161133, "Feat 7": -0.26665231585502625, "Feat 8": -0.04541121795773506, "Feat 9": -1.2961167097091675}}, {"id": "66", "label": "Node 66 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 8, "features": {"Feat 0": 1.4352283477783203, "Feat 1": 1.2331256866455078, "Feat 2": -0.45063918828964233, "Feat 3": 0.8394665718078613, "Feat 4": 0.7173161506652832, "Feat 5": 1.0195332765579224, "Feat 6": -0.48203927278518677, "Feat 7": -0.42924442887306213, "Feat 8": 0.02538841962814331, "Feat 9": -0.4561208188533783}}, {"id": "67", "label": "Node 67 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 10, "features": {"Feat 0": -0.7111151814460754, "Feat 1": -0.1882401555776596, "Feat 2": -1.079630732536316, "Feat 3": 0.5819041728973389, "Feat 4": 1.2932475805282593, "Feat 5": 0.11763986200094223, "Feat 6": -0.7226381897926331, "Feat 7": 0.588553249835968, "Feat 8": -1.919673204421997, "Feat 9": 0.18142661452293396}}, {"id": "68", "label": "Node 68 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.4502389430999756, "Feat 1": -0.23952776193618774, "Feat 2": -0.7379077672958374, "Feat 3": 2.162123680114746, "Feat 4": 0.30513298511505127, "Feat 5": 0.022030171006917953, "Feat 6": -0.5358497500419617, "Feat 7": -1.598124384880066, "Feat 8": -0.01383774634450674, "Feat 9": 0.5950294733047485}}, {"id": "69", "label": "Node 69 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.28135180473327637, "Feat 1": 0.8980637192726135, "Feat 2": -0.6783053874969482, "Feat 3": 0.6780509352684021, "Feat 4": 0.7923939824104309, "Feat 5": 0.8607577085494995, "Feat 6": -0.28015637397766113, "Feat 7": 0.46217265725135803, "Feat 8": -0.689727783203125, "Feat 9": -0.5574230551719666}}, {"id": "70", "label": "Node 70 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 11, "features": {"Feat 0": -0.9602949619293213, "Feat 1": 1.0024992227554321, "Feat 2": -1.0455322265625, "Feat 3": 1.4377447366714478, "Feat 4": 0.41598793864250183, "Feat 5": -0.08934872597455978, "Feat 6": -1.033858299255371, "Feat 7": 2.0243096351623535, "Feat 8": -0.49312281608581543, "Feat 9": -0.4129978120326996}}, {"id": "71", "label": "Node 71 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": 0.27032604813575745, "Feat 1": 1.20208740234375, "Feat 2": -1.0574548244476318, "Feat 3": 0.3791695237159729, "Feat 4": 0.8605608940124512, "Feat 5": 1.7846254110336304, "Feat 6": -0.6656912565231323, "Feat 7": -1.3631739616394043, "Feat 8": 1.4436320066452026, "Feat 9": -0.9266983270645142}}, {"id": "72", "label": "Node 72 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 7, "features": {"Feat 0": 0.20084647834300995, "Feat 1": 1.087807059288025, "Feat 2": -0.6439242959022522, "Feat 3": 1.1120496988296509, "Feat 4": 0.9315906167030334, "Feat 5": 0.6172266006469727, "Feat 6": -1.38667631149292, "Feat 7": 0.18970616161823273, "Feat 8": -1.2565069198608398, "Feat 9": -0.031439170241355896}}, {"id": "73", "label": "Node 73 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 12, "features": {"Feat 0": -0.24141959846019745, "Feat 1": 1.4551547765731812, "Feat 2": -0.7584697604179382, "Feat 3": 1.1654200553894043, "Feat 4": 0.9709205627441406, "Feat 5": 0.7511829733848572, "Feat 6": -0.6622791886329651, "Feat 7": -0.6619821786880493, "Feat 8": 0.8132051825523376, "Feat 9": -0.8484286069869995}}, {"id": "74", "label": "Node 74 (Class 0)", "color": "#1f77b4", "group": 0, "degree": 6, "features": {"Feat 0": -0.518127977848053, "Feat 1": 1.0669469833374023, "Feat 2": -0.44305843114852905, "Feat 3": 0.9138955473899841, "Feat 4": 0.1444254368543625, "Feat 5": 0.17302002012729645, "Feat 6": -0.5315026044845581, "Feat 7": 0.42588719725608826, "Feat 8": -0.2789629399776459, "Feat 9": 0.573127806186676}}];
+        const linksData = [{"source": "0", "target": "2"}, {"source": "0", "target": "8"}, {"source": "0", "target": "10"}, {"source": "0", "target": "13"}, {"source": "0", "target": "20"}, {"source": "0", "target": "27"}, {"source": "0", "target": "28"}, {"source": "0", "target": "42"}, {"source": "0", "target": "45"}, {"source": "0", "target": "47"}, {"source": "0", "target": "68"}, {"source": "1", "target": "16"}, {"source": "1", "target": "17"}, {"source": "1", "target": "18"}, {"source": "1", "target": "22"}, {"source": "1", "target": "28"}, {"source": "1", "target": "34"}, {"source": "1", "target": "52"}, {"source": "1", "target": "54"}, {"source": "1", "target": "59"}, {"source": "1", "target": "62"}, {"source": "1", "target": "64"}, {"source": "1", "target": "67"}, {"source": "2", "target": "10"}, {"source": "2", "target": "16"}, {"source": "2", "target": "21"}, {"source": "2", "target": "25"}, {"source": "2", "target": "32"}, {"source": "2", "target": "39"}, {"source": "2", "target": "53"}, {"source": "2", "target": "63"}, {"source": "3", "target": "9"}, {"source": "3", "target": "15"}, {"source": "3", "target": "20"}, {"source": "3", "target": "37"}, {"source": "3", "target": "41"}, {"source": "3", "target": "54"}, {"source": "3", "target": "60"}, {"source": "3", "target": "61"}, {"source": "3", "target": "72"}, {"source": "4", "target": "5"}, {"source": "4", "target": "12"}, {"source": "4", "target": "13"}, {"source": "4", "target": "20"}, {"source": "4", "target": "28"}, {"source": "4", "target": "39"}, {"source": "4", "target": "48"}, {"source": "4", "target": "57"}, {"source": "4", "target": "68"}, {"source": "4", "target": "73"}, {"source": "5", "target": "14"}, {"source": "5", "target": "21"}, {"source": "5", "target": "32"}, {"source": "5", "target": "40"}, {"source": "5", "target": "52"}, {"source": "5", "target": "61"}, {"source": "5", "target": "65"}, {"source": "5", "target": "73"}, {"source": "6", "target": "8"}, {"source": "6", "target": "13"}, {"source": "6", "target": "38"}, {"source": "6", "target": "47"}, {"source": "6", "target": "59"}, {"source": "6", "target": "71"}, {"source": "7", "target": "10"}, {"source": "7", "target": "12"}, {"source": "7", "target": "15"}, {"source": "7", "target": "19"}, {"source": "7", "target": "28"}, {"source": "7", "target": "29"}, {"source": "7", "target": "39"}, {"source": "7", "target": "41"}, {"source": "7", "target": "50"}, {"source": "7", "target": "53"}, {"source": "7", "target": "54"}, {"source": "7", "target": "60"}, {"source": "7", "target": "63"}, {"source": "7", "target": "67"}, {"source": "8", "target": "11"}, {"source": "8", "target": "28"}, {"source": "8", "target": "34"}, {"source": "8", "target": "43"}, {"source": "8", "target": "45"}, {"source": "8", "target": "53"}, {"source": "8", "target": "66"}, {"source": "8", "target": "68"}, {"source": "9", "target": "13"}, {"source": "9", "target": "17"}, {"source": "9", "target": "23"}, {"source": "9", "target": "31"}, {"source": "9", "target": "36"}, {"source": "9", "target": "38"}, {"source": "9", "target": "43"}, {"source": "9", "target": "63"}, {"source": "9", "target": "64"}, {"source": "10", "target": "19"}, {"source": "10", "target": "25"}, {"source": "10", "target": "31"}, {"source": "10", "target": "32"}, {"source": "10", "target": "36"}, {"source": "10", "target": "44"}, {"source": "10", "target": "53"}, {"source": "11", "target": "21"}, {"source": "11", "target": "28"}, {"source": "11", "target": "32"}, {"source": "11", "target": "70"}, {"source": "12", "target": "17"}, {"source": "12", "target": "42"}, {"source": "12", "target": "43"}, {"source": "12", "target": "49"}, {"source": "12", "target": "55"}, {"source": "12", "target": "64"}, {"source": "12", "target": "73"}, {"source": "13", "target": "38"}, {"source": "13", "target": "59"}, {"source": "13", "target": "63"}, {"source": "14", "target": "15"}, {"source": "14", "target": "26"}, {"source": "14", "target": "34"}, {"source": "14", "target": "36"}, {"source": "14", "target": "41"}, {"source": "14", "target": "50"}, {"source": "14", "target": "61"}, {"source": "14", "target": "65"}, {"source": "14", "target": "70"}, {"source": "15", "target": "18"}, {"source": "15", "target": "24"}, {"source": "15", "target": "27"}, {"source": "15", "target": "29"}, {"source": "15", "target": "37"}, {"source": "15", "target": "40"}, {"source": "15", "target": "44"}, {"source": "15", "target": "45"}, {"source": "15", "target": "50"}, {"source": "15", "target": "57"}, {"source": "15", "target": "60"}, {"source": "15", "target": "66"}, {"source": "15", "target": "72"}, {"source": "15", "target": "73"}, {"source": "16", "target": "17"}, {"source": "16", "target": "26"}, {"source": "16", "target": "38"}, {"source": "16", "target": "44"}, {"source": "16", "target": "46"}, {"source": "16", "target": "47"}, {"source": "16", "target": "54"}, {"source": "16", "target": "67"}, {"source": "17", "target": "21"}, {"source": "17", "target": "29"}, {"source": "17", "target": "35"}, {"source": "17", "target": "44"}, {"source": "17", "target": "45"}, {"source": "17", "target": "55"}, {"source": "17", "target": "61"}, {"source": "17", "target": "64"}, {"source": "17", "target": "70"}, {"source": "18", "target": "22"}, {"source": "18", "target": "24"}, {"source": "18", "target": "25"}, {"source": "18", "target": "32"}, {"source": "18", "target": "33"}, {"source": "18", "target": "39"}, {"source": "18", "target": "50"}, {"source": "19", "target": "21"}, {"source": "19", "target": "25"}, {"source": "19", "target": "29"}, {"source": "19", "target": "31"}, {"source": "19", "target": "46"}, {"source": "19", "target": "47"}, {"source": "19", "target": "65"}, {"source": "19", "target": "66"}, {"source": "20", "target": "47"}, {"source": "20", "target": "49"}, {"source": "20", "target": "53"}, {"source": "20", "target": "56"}, {"source": "21", "target": "38"}, {"source": "21", "target": "51"}, {"source": "21", "target": "52"}, {"source": "21", "target": "57"}, {"source": "21", "target": "69"}, {"source": "21", "target": "70"}, {"source": "22", "target": "24"}, {"source": "22", "target": "27"}, {"source": "22", "target": "31"}, {"source": "22", "target": "34"}, {"source": "22", "target": "43"}, {"source": "22", "target": "45"}, {"source": "22", "target": "55"}, {"source": "22", "target": "63"}, {"source": "22", "target": "72"}, {"source": "23", "target": "25"}, {"source": "23", "target": "27"}, {"source": "23", "target": "39"}, {"source": "23", "target": "52"}, {"source": "23", "target": "57"}, {"source": "23", "target": "64"}, {"source": "23", "target": "71"}, {"source": "24", "target": "30"}, {"source": "24", "target": "31"}, {"source": "24", "target": "46"}, {"source": "24", "target": "58"}, {"source": "24", "target": "63"}, {"source": "24", "target": "68"}, {"source": "25", "target": "28"}, {"source": "25", "target": "32"}, {"source": "25", "target": "38"}, {"source": "25", "target": "45"}, {"source": "25", "target": "58"}, {"source": "25", "target": "59"}, {"source": "25", "target": "71"}, {"source": "26", "target": "36"}, {"source": "26", "target": "37"}, {"source": "26", "target": "52"}, {"source": "26", "target": "53"}, {"source": "26", "target": "63"}, {"source": "26", "target": "70"}, {"source": "27", "target": "38"}, {"source": "27", "target": "44"}, {"source": "27", "target": "60"}, {"source": "27", "target": "66"}, {"source": "28", "target": "30"}, {"source": "28", "target": "56"}, {"source": "28", "target": "70"}, {"source": "28", "target": "72"}, {"source": "28", "target": "73"}, {"source": "29", "target": "37"}, {"source": "29", "target": "67"}, {"source": "30", "target": "48"}, {"source": "30", "target": "51"}, {"source": "30", "target": "53"}, {"source": "30", "target": "65"}, {"source": "31", "target": "39"}, {"source": "31", "target": "41"}, {"source": "31", "target": "51"}, {"source": "31", "target": "65"}, {"source": "32", "target": "35"}, {"source": "32", "target": "38"}, {"source": "32", "target": "39"}, {"source": "32", "target": "46"}, {"source": "32", "target": "64"}, {"source": "32", "target": "67"}, {"source": "32", "target": "69"}, {"source": "33", "target": "35"}, {"source": "33", "target": "38"}, {"source": "33", "target": "44"}, {"source": "33", "target": "52"}, {"source": "33", "target": "54"}, {"source": "33", "target": "57"}, {"source": "33", "target": "59"}, {"source": "34", "target": "41"}, {"source": "34", "target": "42"}, {"source": "34", "target": "53"}, {"source": "34", "target": "58"}, {"source": "34", "target": "60"}, {"source": "34", "target": "61"}, {"source": "34", "target": "64"}, {"source": "34", "target": "70"}, {"source": "35", "target": "45"}, {"source": "36", "target": "38"}, {"source": "36", "target": "53"}, {"source": "36", "target": "56"}, {"source": "36", "target": "71"}, {"source": "37", "target": "68"}, {"source": "37", "target": "69"}, {"source": "38", "target": "42"}, {"source": "38", "target": "50"}, {"source": "38", "target": "52"}, {"source": "38", "target": "56"}, {"source": "38", "target": "61"}, {"source": "38", "target": "62"}, {"source": "39", "target": "44"}, {"source": "39", "target": "47"}, {"source": "39", "target": "48"}, {"source": "39", "target": "55"}, {"source": "39", "target": "57"}, {"source": "39", "target": "62"}, {"source": "39", "target": "63"}, {"source": "39", "target": "67"}, {"source": "40", "target": "41"}, {"source": "40", "target": "54"}, {"source": "40", "target": "62"}, {"source": "40", "target": "71"}, {"source": "41", "target": "42"}, {"source": "41", "target": "48"}, {"source": "41", "target": "49"}, {"source": "41", "target": "53"}, {"source": "41", "target": "58"}, {"source": "41", "target": "60"}, {"source": "41", "target": "66"}, {"source": "42", "target": "44"}, {"source": "42", "target": "48"}, {"source": "42", "target": "54"}, {"source": "43", "target": "49"}, {"source": "43", "target": "70"}, {"source": "44", "target": "53"}, {"source": "44", "target": "58"}, {"source": "44", "target": "65"}, {"source": "45", "target": "48"}, {"source": "45", "target": "49"}, {"source": "45", "target": "52"}, {"source": "45", "target": "65"}, {"source": "46", "target": "53"}, {"source": "46", "target": "62"}, {"source": "46", "target": "63"}, {"source": "47", "target": "55"}, {"source": "47", "target": "57"}, {"source": "48", "target": "49"}, {"source": "48", "target": "51"}, {"source": "48", "target": "61"}, {"source": "48", "target": "62"}, {"source": "48", "target": "72"}, {"source": "48", "target": "73"}, {"source": "49", "target": "53"}, {"source": "49", "target": "57"}, {"source": "50", "target": "54"}, {"source": "50", "target": "65"}, {"source": "50", "target": "71"}, {"source": "51", "target": "62"}, {"source": "51", "target": "69"}, {"source": "52", "target": "54"}, {"source": "52", "target": "67"}, {"source": "52", "target": "68"}, {"source": "52", "target": "71"}, {"source": "52", "target": "74"}, {"source": "53", "target": "57"}, {"source": "53", "target": "73"}, {"source": "54", "target": "55"}, {"source": "54", "target": "58"}, {"source": "54", "target": "63"}, {"source": "54", "target": "64"}, {"source": "54", "target": "67"}, {"source": "54", "target": "73"}, {"source": "55", "target": "58"}, {"source": "55", "target": "67"}, {"source": "55", "target": "68"}, {"source": "56", "target": "58"}, {"source": "56", "target": "71"}, {"source": "57", "target": "58"}, {"source": "57", "target": "65"}, {"source": "57", "target": "73"}, {"source": "57", "target": "74"}, {"source": "58", "target": "60"}, {"source": "58", "target": "61"}, {"source": "58", "target": "68"}, {"source": "59", "target": "66"}, {"source": "59", "target": "70"}, {"source": "59", "target": "71"}, {"source": "60", "target": "64"}, {"source": "60", "target": "73"}, {"source": "61", "target": "65"}, {"source": "61", "target": "68"}, {"source": "61", "target": "71"}, {"source": "62", "target": "66"}, {"source": "62", "target": "71"}, {"source": "64", "target": "66"}, {"source": "64", "target": "74"}, {"source": "65", "target": "71"}, {"source": "67", "target": "69"}, {"source": "68", "target": "70"}, {"source": "68", "target": "74"}, {"source": "69", "target": "73"}, {"source": "70", "target": "72"}, {"source": "72", "target": "74"}, {"source": "73", "target": "74"}];
+        const selfLoops = [];
+        
+        // CONFIG
+        let degreeSize = false;
+        const width = document.getElementById('graph-container').clientWidth;
+        const height = document.getElementById('graph-container').clientHeight;
+        
+        let chartInstance = null;
+
+        // D3 SETUP
+        const svg = d3.select('#graph-container')
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', '100%')
+            .on('click', (e) => {
+                if (e.target.tagName === 'svg') {
+                    resetSelection();
+                }
+            });
+        
+        const g = svg.append('g');
+        
+        // Enhanced Zoom
+        const zoom = d3.zoom()
+            .scaleExtent([0.01, 100]) // Increased range
+            .on('zoom', (event) => g.attr('transform', event.transform));
+        svg.call(zoom);
+
+        // Simulation
+        const simulation = d3.forceSimulation(nodesData)
+            .force('link', d3.forceLink(linksData).id(d => d.id).distance(50))
+            .force('charge', d3.forceManyBody().strength(-300))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collide', d3.forceCollide().radius(d => 5)); // dynamic radius
+
+        // Elements
+        const link = g.append('g')
+            .selectAll('line')
+            .data(linksData)
+            .join('line')
+            .attr('class', 'link')
+            .attr('stroke', 'var(--link-color)') // Explicit for save
+            .attr('stroke-width', 1);
+
+        const node = g.append('g')
+            .selectAll('circle')
+            .data(nodesData)
+            .join('circle')
+            .attr('class', 'node')
+            .attr('r', 6)
+            .attr('fill', d => d.color)
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 1.5)
+            .call(drag(simulation))
+            .on('click', (event, d) => {
+                event.stopPropagation();
+                selectNode(d);
+            });
+            
+        // Self loops
+        const selfLoopGroup = g.append('g');
+        function drawSelfLoops() {
+            selfLoopGroup.selectAll('path').remove();
+            selfLoopGroup.selectAll('path')
+                .data(selfLoops)
+                .join('path')
+                .attr('d', nodeId => {
+                    const n = nodesData.find(x => x.id === nodeId);
+                    if (!n) return '';
+                    const r = (parseFloat(n.r) || 6) + 10;
+                    return `M ${n.x},${n.y-5} A ${r},${r} 0 1,1 ${n.x+5},${n.y}`;
+                })
+                .attr('stroke', 'var(--link-color)')
+                .attr('stroke-width', 1)
+                .attr('fill', 'none');
+        }
+
+        // Tooltip
+        const tooltip = d3.select('#tooltip');
+        node.on('mouseover', (event, d) => {
+            tooltip.style('display', 'block')
+                .html(`<b>${d.label}</b><br>Deg: ${d.degree}`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 10) + 'px');
+        })
+        .on('mouseout', () => tooltip.style('display', 'none'));
+
+        // Tick
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+            node
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+            drawSelfLoops();
+        });
+
+        function drag(simulation) {
+            return d3.drag()
+                .on('start', (event, d) => {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                })
+                .on('drag', (event, d) => {
+                    d.fx = event.x;
+                    d.fy = event.y;
+                })
+                .on('end', (event, d) => {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                });
+        }
+
+        // --- NODES UI LOGIC ---
+        function updateNodeSizes() {
+            const sizeVal = parseFloat(document.getElementById('nodeSize').value);
+            const degreeMode = document.getElementById('degreeSize').checked;
+            
+            if (degreeMode) {
+                const maxDeg = Math.max(...nodesData.map(d => d.degree)) || 1;
+                node.attr('r', d => {
+                    // Square root scaling for better visibility of low degree nodes
+                    const scale = 3 + Math.sqrt(d.degree / maxDeg) * sizeVal * 2.5; 
+                    d.r = scale; // store for self-loops
+                    return scale;
+                });
+            } else {
+                node.attr('r', sizeVal);
+                nodesData.forEach(d => d.r = sizeVal);
+            }
+            simulation.force('collide', d3.forceCollide().radius(d => (d.r || sizeVal) + 2));
+            simulation.alpha(0.1).restart();
+        }
+
+        // --- INTERACTION LOGIC ---
+        function selectNode(d) {
+            // Highlight in graph
+            node.attr('stroke', '#fff').attr('stroke-width', 1.5);
+            const selected = node.filter(n => n.id === d.id);
+            selected.attr('stroke', '#000').attr('stroke-width', 3);
+            
+            // Open Panel
+            const panel = document.getElementById('side-panel');
+            panel.classList.remove('hidden');
+            document.getElementById('toggleFeatures').classList.add('active');
+            
+            // Fill Info
+            document.getElementById('panel-placeholder').style.display = 'none';
+            document.getElementById('node-details').style.display = 'block';
+            
+            document.getElementById('node-title').textContent = d.label;
+            document.getElementById('node-group').textContent = d.group;
+            document.getElementById('node-degree').textContent = d.degree;
+            
+            // Table
+            const tbody = document.querySelector('#feature-table tbody');
+            tbody.innerHTML = '';
+            const feats = d.features || {};
+            const keys = Object.keys(feats);
+            
+            // Sort by value desc if many
+            keys.sort((a,b) => Math.abs(feats[b]) - Math.abs(feats[a]));
+            
+            keys.forEach(k => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${k}</td><td>${feats[k].toFixed(4)}</td>`;
+                tbody.appendChild(tr);
+            });
+            
+            if (keys.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2">No features available</td></tr>';
+            }
+            
+            // Chart
+            renderChart(feats);
+        }
+        
+        function resetSelection() {
+            node.attr('stroke', '#fff').attr('stroke-width', 1.5);
+            // Don't close panel automatically, just reset view
+        }
+        
+        function renderChart(features) {
+            const ctx = document.getElementById('featureChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            
+            const labels = Object.keys(features).slice(0, 20); // Top 20
+            const data = labels.map(k => features[k]);
+            
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Value',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false } }
+                }
+            });
+        }
+
+        // --- UI HANDLERS ---
+        function setupSlider(id, callback) {
+            const slider = document.getElementById(id);
+            const input = document.getElementById(id + '-val');
+            
+            slider.addEventListener('input', () => {
+                input.value = slider.value;
+                callback(parseFloat(slider.value));
+            });
+            
+            input.addEventListener('change', () => {
+                slider.value = input.value;
+                callback(parseFloat(input.value));
+            });
+        }
+        
+        setupSlider('charge', (val) => {
+            simulation.force('charge', d3.forceManyBody().strength(val));
+            simulation.alpha(0.3).restart();
+        });
+        
+        setupSlider('linkDist', (val) => {
+            simulation.force('link').distance(val);
+            simulation.alpha(0.3).restart();
+        });
+        
+        setupSlider('nodeSize', updateNodeSizes);
+        
+        setupSlider('linkWidth', (val) => {
+            link.attr('stroke-width', val);
+        });
+        
+        document.getElementById('degreeSize').addEventListener('change', updateNodeSizes);
+        
+        // Toggles
+        document.getElementById('toggleControls').addEventListener('click', function() {
+            document.getElementById('controls').classList.toggle('hidden');
+            this.classList.toggle('active');
+        });
+        
+        document.getElementById('toggleFeatures').addEventListener('click', toggleFeatures);
+        
+        function toggleFeatures() {
+            const panel = document.getElementById('side-panel');
+            const btn = document.getElementById('toggleFeatures');
+            panel.classList.toggle('hidden');
+            btn.classList.toggle('active');
+        }
+        
+        document.getElementById('toggleInfo').addEventListener('click', function() {
+            const info = document.getElementById('info-overlay');
+            info.style.opacity = info.style.opacity === '0' ? '0.8' : '0';
+            this.classList.toggle('active');
+        });
+        
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+        });
+        
+        document.getElementById('darkBtn').addEventListener('click', function() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            this.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            
+            // Update node strokes
+            node.attr('stroke', isDark ? '#333' : '#fff');
+        });
+        
+        // Save Functions
+        document.getElementById('savePng').addEventListener('click', () => saveImage('png'));
+        document.getElementById('saveSvg').addEventListener('click', () => saveImage('svg'));
+        
+        function saveImage(format) {
+            const svgEl = document.querySelector('svg');
+            const bg = document.body.classList.contains('dark') ? '#1a1a2e' : 'white';
+            const isDark = document.body.classList.contains('dark');
+            
+            // Clone and sanitize
+            const clone = svgEl.cloneNode(true);
+            clone.style.background = bg;
+            
+            // Explicitly set styles for nodes
+            const nodes = clone.querySelectorAll('.node');
+            nodes.forEach(n => {
+                n.setAttribute('stroke', isDark ? '#333' : '#fff');
+                // Preserve fill color
+                const fill = n.getAttribute('fill');
+                if (fill) n.setAttribute('fill', fill);
+            });
+            
+            // Explicitly set styles for edges (CRITICAL FIX)
+            const links = clone.querySelectorAll('.link');
+            const linkColor = isDark ? '#555' : '#999';
+            links.forEach(l => {
+                l.setAttribute('stroke', linkColor);
+                l.setAttribute('stroke-opacity', '0.6');
+                // Preserve width
+                const width = l.getAttribute('stroke-width');
+                if (width) l.setAttribute('stroke-width', width);
+            });
+            
+            // Handle self-loops
+            const selfLoopPaths = clone.querySelectorAll('g path');
+            selfLoopPaths.forEach(p => {
+                if (p.getAttribute('stroke')) {
+                    p.setAttribute('stroke', linkColor);
+                    p.setAttribute('fill', 'none');
+                }
+            });
+            
+            const serializer = new XMLSerializer();
+            const source = serializer.serializeToString(clone);
+            
+            if (format === 'svg') {
+                 const blob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
+                 const url = URL.createObjectURL(blob);
+                 const a = document.createElement('a');
+                 a.download = `SBM_h1.00_lcc.svg`;
+                 a.href = url;
+                 a.click();
+            } else {
+                const img = new Image();
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(source)));
+                
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width * 2;
+                    canvas.height = height * 2;
+                    const ctx = canvas.getContext('2d');
+                    ctx.scale(2, 2);
+                    ctx.fillStyle = bg;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const a = document.createElement('a');
+                    a.download = `SBM_h1.00_lcc.png`;
+                    a.href = canvas.toDataURL('image/png');
+                    a.click();
+                };
+            }
+        }
+    </script>
+</body>
+</html>
+        
