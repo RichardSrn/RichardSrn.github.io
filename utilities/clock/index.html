@@ -12,8 +12,40 @@
     <div class="container" id="mainContainer">
         <a href="../../index.html" class="back-link">← Back</a>
         <div class="controls-container hide-in-fullscreen">
+            <div class="mode-selector">
+                <button class="mode-btn active" id="modeDuration">Duration</button>
+                <button class="mode-btn" id="modeEndTime">End Time</button>
+            </div>
             <div class="input-container">
-                <input type="time" id="endTimeInput" required>
+                <div class="field-with-icon">
+                    <input type="text" id="endTimeInput" placeholder="e.g. 1h 30m" required>
+                    <button class="icon-btn" id="timePickerBtn" title="Select time">🕒</button>
+                    <!-- Time Picker Popup Layer -->
+                    <div class="time-picker-popup" id="timePickerPopup">
+                        <div class="picker-group">
+                            <span class="picker-label">Hours</span>
+                            <div class="picker-controls">
+                                <button class="picker-ctrl" data-action="dec" data-target="hours">-</button>
+                                <input type="number" id="pickerHours" value="1" min="0" max="23">
+                                <button class="picker-ctrl" data-action="inc" data-target="hours">+</button>
+                            </div>
+                        </div>
+                        <div class="picker-group">
+                            <span class="picker-label">Minutes</span>
+                            <div class="picker-controls">
+                                <button class="picker-ctrl" data-action="dec" data-target="minutes">-</button>
+                                <input type="number" id="pickerMinutes" value="00" min="0" max="59">
+                                <button class="picker-ctrl" data-action="inc" data-target="minutes">+</button>
+                            </div>
+                        </div>
+                        <div class="presets">
+                            <button class="preset-btn" data-value="0:15">15m</button>
+                            <button class="preset-btn" data-value="0:30">30m</button>
+                            <button class="preset-btn" data-value="1:00">1h</button>
+                            <button class="preset-btn" data-value="2:00">2h</button>
+                        </div>
+                    </div>
+                </div>
                 <button class="ok-btn" id="okBtn">OK</button>
             </div>
 
@@ -25,6 +57,53 @@
                 <div class="color-group">
                     <span class="color-label">Secondary Color</span>
                     <input type="color" id="secondaryColorPicker" value="#03DAC6">
+                </div>
+            </div>
+
+            <div class="warnings-section">
+                <div class="warnings-header">
+                    <label class="master-warn-label">
+                        <input type="checkbox" id="masterWarningToggle" checked>
+                        <span>Warnings</span>
+                    </label>
+                    <div class="header-controls">
+                        <div class="config-btn" id="toggleConfig" title="Toggle configuration panel">⚙️ Config</div>
+                        <div class="test-box" id="testWarnings" title="Click to test the warning blink effect">TEST
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-config" id="warningConfigPanel">
+                    <div class="config-row">
+                        <span>Breath Duration:</span>
+                        <label><input type="number" id="breathDuration" value="1" min="0.1" max="10" step="0.1"
+                                class="mini-input"> s</label>
+                    </div>
+                    <div class="config-row">
+                        <span>Single Breath:</span>
+                        <label><input type="checkbox" id="warnLong" checked> <input type="number" id="warnLongMin"
+                                value="10" min="1" max="60" class="mini-input"></label>
+                        <label><input type="checkbox" id="warnHalfTime" checked> Half-Time</label>
+                    </div>
+                    <div class="config-row countdown-group">
+                        <div class="countdown-options">
+                            <span>Double Breath:</span>
+                            <label><input type="checkbox" id="warn5" checked> <input type="number" id="val5" value="5"
+                                    class="mini-input"></label>
+                            <label><input type="checkbox" id="warn4" checked> <input type="number" id="val4" value="4"
+                                    class="mini-input"></label>
+                            <label><input type="checkbox" id="warn3" checked> <input type="number" id="val3" value="3"
+                                    class="mini-input"></label>
+                            <label><input type="checkbox" id="warn2" checked> <input type="number" id="val2" value="2"
+                                    class="mini-input"></label>
+                            <label><input type="checkbox" id="warn1" checked> <input type="number" id="val1" value="1"
+                                    class="mini-input"></label>
+                        </div>
+                    </div>
+                    <div class="config-row">
+                        <span>Invert Theme at</span>
+                        <label><input type="checkbox" id="warnInvert" checked> 00:00</label>
+                    </div>
                 </div>
             </div>
 

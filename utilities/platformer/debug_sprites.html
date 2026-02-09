@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sprite Debugger</title>
+    <style>
+        body {
+            background: #333;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        canvas {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+            border: 1px solid red;
+        }
+
+        .grid {
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sprite Sheet Debugger</h1>
+    <div id="container"></div>
+    <script>
+        const sheets = ['mario_and_items.png', 'enemies.png', 'blocks.png'];
+        const container = document.getElementById('container');
+
+        sheets.forEach(name => {
+            const div = document.createElement('div');
+            div.className = 'grid';
+            div.innerHTML = `<h3>${name}</h3>`;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                // Draw 16x16 grid
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x <= img.width; x += 16) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, img.height); ctx.stroke();
+                }
+                for (let y = 0; y <= img.height; y += 16) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(img.width, y); ctx.stroke();
+                }
+            };
+            img.src = `assets/images/${name}`;
+            div.appendChild(canvas);
+            container.appendChild(div);
+        });
+    </script>
+</body>
+
+</html>
