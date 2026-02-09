@@ -7,7 +7,7 @@ const translations = {
     en: {
         "hero_greeting_prefix": "Hi, I'm ",
         "hero_greeting_suffix": ".",
-        "hero_subtitle": "ML PhD Student · Python & Math Enthusiast",
+        "hero_subtitle": "Machine Learning PhD Student · Python & Math Enthusiast",
         "hero_intro": "Welcome to my collection of interactive web utilities and simulations.",
         "disclaimer_text": "Transparency Note: I am not a web developer. This website and its utilities were mostly coded by generative AI, and curated, directed and refined by me. However, the utilities are still useful and/or fun, and I hope you find a use for them!",
         "nav_tools": "<span class=\"icon\">🛠️</span> Tools",
@@ -46,7 +46,7 @@ const translations = {
     fr: {
         "hero_greeting_prefix": "Bonjour, je suis ",
         "hero_greeting_suffix": ".",
-        "hero_subtitle": "Doctorant en ML · Passionné de Python & Math",
+        "hero_subtitle": "Doctorant en Machine Learning (Apprentissage Automatique) · Passionné de Python & de Mathématiques",
         "hero_intro": "Bienvenue sur ma collection d'utilitaires et de simulations.",
         "disclaimer_text": "Note de transparence : Je ne suis pas développeur web. Ce site et ses utilitaires ont été principalement codés par une IA générative, puis etaffinés par mes soins. Cependant, les projets présentés ici restent utiles et/ou amusants, et j'espère que vous leur trouverez une utilité !",
         "nav_tools": "<span class=\"icon\">🛠️</span> Outils",
