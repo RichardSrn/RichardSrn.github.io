@@ -1,0 +1,14 @@
+# Large files (> 50MB) and potentially large interactive visualizations
+utilities/graphs_visualization/resources/**/*_interactive.html
+
+# Allow small SBM visualizations if needed (optional)
+# !utilities/graphs_visualization/resources/SBM/*.html
+
+# Generic patterns
+*.log
+__pycache__/
+.DS_Store
+.gemini/
+large_files.txt
+all_large_files.txt
+sizes.txt

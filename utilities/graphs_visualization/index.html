@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Visualization - Richard's Utilities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="utility-nav">
+        <a href="../../index.html" class="back-link">
+            <span class="icon">←</span> Back to Home
+        </a>
+        <div class="theme-toggle" id="theme-toggle">
+            <span class="icon">🌙</span>
+        </div>
+    </nav>
+
+    <main class="visualization-container">
+        <header class="utility-header">
+            <h1>Graph Visualization</h1>
+            <p class="subtitle">Explore interactive visualizations of various graph datasets.</p>
+        </header>
+
+        <!-- Control Panel -->
+        <section class="controls-section">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="dataset-select">Dataset</label>
+                    <select id="dataset-select">
+                        <option value="" disabled selected>Select a dataset...</option>
+                    </select>
+                </div>
+
+                <!-- Variant Selector (Standard vs SBM variants) -->
+                <div class="control-group" id="variant-group" style="display: none;">
+                    <label for="variant-select">Variant</label>
+                    <select id="variant-select"></select>
+                </div>
+
+                <!-- SBM Homophily Slider -->
+                <div class="control-group" id="sbm-slider-group" style="display: none;">
+                    <label for="sbm-slider">Homophily (h): <span id="sbm-value">0.50</span></label>
+                    <input type="range" id="sbm-slider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+
+                <div class="control-group" id="type-group" style="display: none;">
+                    <label for="type-select">Visualization Type</label>
+                    <select id="type-select"></select>
+                </div>
+
+                <div class="control-actions">
+                    <button id="visualize-btn" class="btn-primary" disabled>
+                        Visualize
+                    </button>
+                    <button id="fullscreen-btn" class="btn-secondary" disabled>
+                        ⛶ Fullscreen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Warning/Info Box -->
+            <div id="info-box" class="info-box" style="display: none;">
+                <span class="icon">ℹ️</span>
+                <div class="info-content">
+                    <span id="info-text"></span>
+                    <div id="info-desc" style="display: none; margin-top: 0.25rem; font-size: 0.85rem; opacity: 0.9;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="data-table-section">
+            <div class="table-container">
+                <table id="stats-table">
+                    <thead>
+                        <!-- Populated by JS -->
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Visualization Area -->
+        <section class="visualization-display">
+            <div id="loader" class="loader" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading Graph...</p>
+            </div>
+            <iframe id="graph-frame" class="graph-frame" title="Graph Visualization"></iframe>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

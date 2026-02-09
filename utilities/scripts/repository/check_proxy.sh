@@ -10,7 +10,7 @@ fi
 
 # Run proxyon if USB is connected, else run proxyoff
 if $usb_connected; then
-    /home/sr101090/Documents/script/proxyon_script.sh
+    /home/$USER/Documents/script/proxyon_script.sh
 else
-    /home/sr101090/Documents/script/proxyoff_script.sh
+    /home/$USER/Documents/script/proxyoff_script.sh
 fi

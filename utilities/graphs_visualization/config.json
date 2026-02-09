@@ -1,0 +1,770 @@
+{
+    "graphs": {
+        "SBM": {
+            "h=0.40": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.40_full_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.40_lcc_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.20": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.20_lcc_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.20_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.90": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.90_full_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.90_lcc_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.50": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.50_lcc_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.50_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.30": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.30_lcc_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.30_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.80": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.80_lcc_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.80_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=1.00": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h1.00_lcc_interactive.html",
+                    "size_mb": 0.06
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h1.00_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.60": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.60_full_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.60_lcc_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.00": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.00_lcc_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.00_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.70": [
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.70_lcc_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.70_full_interactive.html",
+                    "size_mb": 0.19
+                }
+            ],
+            "h=0.10": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_h0.10_full_interactive.html",
+                    "size_mb": 0.19
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/SBM/SBM_h0.10_lcc_interactive.html",
+                    "size_mb": 0.19
+                }
+            ]
+        },
+        "Texas": {
+            "Standard": [
+                {
+                    "type": "lcc",
+                    "path": "resources/Texas/Texas_lcc_interactive.html",
+                    "size_mb": 5.21
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Texas/Texas_full_interactive.html",
+                    "size_mb": 5.21
+                }
+            ]
+        },
+        "Chameleon": {
+            "Standard": [
+                {
+                    "type": "lcc",
+                    "path": "resources/Chameleon/Chameleon_lcc_interactive.html",
+                    "size_mb": 89.84
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Chameleon/Chameleon_full_interactive.html",
+                    "size_mb": 89.84
+                }
+            ]
+        },
+        "PubMed": {
+            "Standard": [
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/PubMed/PubMed_full_sample_2500_interactive.html",
+                    "size_mb": 1.03
+                },
+                {
+                    "type": "full",
+                    "path": "resources/PubMed/PubMed_full_interactive.html",
+                    "size_mb": 9.44
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/PubMed/PubMed_lcc_sample_2500_interactive.html",
+                    "size_mb": 1.03
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/PubMed/PubMed_lcc_interactive.html",
+                    "size_mb": 9.44
+                }
+            ]
+        },
+        "Tolokers": {
+            "Standard": [
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Tolokers/Tolokers_lcc_sample_2500_interactive.html",
+                    "size_mb": 1.48
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Tolokers/Tolokers_full_sample_2500_interactive.html",
+                    "size_mb": 1.48
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Tolokers/Tolokers_full_interactive.html",
+                    "size_mb": 22.13
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Tolokers/Tolokers_lcc_interactive.html",
+                    "size_mb": 22.13
+                }
+            ]
+        },
+        "Actor": {
+            "Standard": [
+                {
+                    "type": "lcc",
+                    "path": "resources/Actor/Actor_lcc_interactive.html",
+                    "size_mb": 115.8
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Actor/Actor_full_interactive.html",
+                    "size_mb": 115.8
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Actor/Actor_full_sample_2500_interactive.html",
+                    "size_mb": 37.89
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Actor/Actor_lcc_sample_2500_interactive.html",
+                    "size_mb": 37.89
+                }
+            ]
+        },
+        "Questions": {
+            "Standard": [
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Questions/Questions_full_sample_2500_interactive.html",
+                    "size_mb": 1.02
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Questions/Questions_full_interactive.html",
+                    "size_mb": 25.25
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Questions/Questions_lcc_interactive.html",
+                    "size_mb": 25.25
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Questions/Questions_lcc_sample_2500_interactive.html",
+                    "size_mb": 1.02
+                }
+            ]
+        },
+        "Cornell": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Cornell/Cornell_full_interactive.html",
+                    "size_mb": 5.21
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Cornell/Cornell_lcc_interactive.html",
+                    "size_mb": 5.21
+                }
+            ]
+        },
+        "Amazon-ratings": {
+            "Standard": [
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Amazon-ratings/Amazon-ratings_full_sample_2500_interactive.html",
+                    "size_mb": 1.05
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Amazon-ratings/Amazon-ratings_lcc_interactive.html",
+                    "size_mb": 13.14
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Amazon-ratings/Amazon-ratings_lcc_sample_2500_interactive.html",
+                    "size_mb": 1.05
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Amazon-ratings/Amazon-ratings_full_interactive.html",
+                    "size_mb": 13.14
+                }
+            ]
+        },
+        "CiteSeer": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/CiteSeer/CiteSeer_full_interactive.html",
+                    "size_mb": 208.49
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/CiteSeer/CiteSeer_lcc_interactive.html",
+                    "size_mb": 132.88
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/CiteSeer/CiteSeer_full_sample_2500_interactive.html",
+                    "size_mb": 156.64
+                }
+            ]
+        },
+        "Wisconsin": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Wisconsin/Wisconsin_full_interactive.html",
+                    "size_mb": 7.14
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Wisconsin/Wisconsin_lcc_interactive.html",
+                    "size_mb": 7.14
+                }
+            ]
+        },
+        "Squirrel": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Squirrel/Squirrel_full_interactive.html",
+                    "size_mb": 188.7
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Squirrel/Squirrel_lcc_interactive.html",
+                    "size_mb": 188.7
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Squirrel/Squirrel_full_sample_2500_interactive.html",
+                    "size_mb": 87.9
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Squirrel/Squirrel_lcc_sample_2500_interactive.html",
+                    "size_mb": 87.9
+                }
+            ]
+        },
+        "Minesweeper": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Minesweeper/Minesweeper_full_interactive.html",
+                    "size_mb": 3.46
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Minesweeper/Minesweeper_lcc_interactive.html",
+                    "size_mb": 3.46
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Minesweeper/Minesweeper_full_sample_2500_interactive.html",
+                    "size_mb": 0.87
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Minesweeper/Minesweeper_lcc_sample_2500_interactive.html",
+                    "size_mb": 0.87
+                }
+            ]
+        },
+        "Roman-empire": {
+            "Standard": [
+                {
+                    "type": "lcc",
+                    "path": "resources/Roman-empire/Roman-empire_lcc_interactive.html",
+                    "size_mb": 10.19
+                },
+                {
+                    "type": "full",
+                    "path": "resources/Roman-empire/Roman-empire_full_interactive.html",
+                    "size_mb": 10.19
+                },
+                {
+                    "type": "lcc_sample_2500",
+                    "path": "resources/Roman-empire/Roman-empire_lcc_sample_2500_interactive.html",
+                    "size_mb": 1.14
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Roman-empire/Roman-empire_full_sample_2500_interactive.html",
+                    "size_mb": 1.14
+                }
+            ]
+        },
+        "Cora": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Cora/Cora_full_interactive.html",
+                    "size_mb": 64.23
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Cora/Cora_full_sample_2500_interactive.html",
+                    "size_mb": 59.3
+                },
+                {
+                    "type": "lcc",
+                    "path": "resources/Cora/Cora_lcc_interactive.html",
+                    "size_mb": 58.95
+                }
+            ]
+        }
+    },
+    "stats": {
+        "Cora": {
+            "Dataset": "Cora",
+            "Nodes": "2708",
+            "Edges": "5278",
+            "Feats": "1433",
+            "Classes": "7",
+            "Comp": "78",
+            "Avg Deg": "3.9",
+            "Dens": "0.0014",
+            "H_obs": "0.81",
+            "H_exp": "0.18",
+            "H_adj": "0.768",
+            "Inertia ratio within": "0.974",
+            "Inertia ratio between": "0.026",
+            "Mod": "0.64",
+            "Clust": "0.257",
+            "Diam": "inf"
+        },
+        "CiteSeer": {
+            "Dataset": "CiteSeer",
+            "Nodes": "3327",
+            "Edges": "4552",
+            "Feats": "3703",
+            "Classes": "6",
+            "Comp": "438",
+            "Avg Deg": "2.74",
+            "Dens": "0.0008227",
+            "H_obs": "0.736",
+            "H_exp": "0.178",
+            "H_adj": "0.678",
+            "Inertia ratio within": "0.983",
+            "Inertia ratio between": "0.017",
+            "Mod": "0.539",
+            "Clust": "0.122",
+            "Diam": "inf"
+        },
+        "PubMed": {
+            "Dataset": "PubMed",
+            "Nodes": "19717",
+            "Edges": "44324",
+            "Feats": "500",
+            "Classes": "3",
+            "Comp": "1",
+            "Avg Deg": "4.5",
+            "Dens": "0.000228",
+            "H_obs": "0.802",
+            "H_exp": "0.357",
+            "H_adj": "0.693",
+            "Inertia ratio within": "0.982",
+            "Inertia ratio between": "0.018",
+            "Mod": "0.432",
+            "Clust": "0.054",
+            "Diam": "18"
+        },
+        "Cornell": {
+            "Dataset": "Cornell",
+            "Nodes": "183",
+            "Edges": "149",
+            "Feats": "1703",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "1.63",
+            "Dens": "0.0089",
+            "H_obs": "0.131",
+            "H_exp": "0.287",
+            "H_adj": "-0.219",
+            "Inertia ratio within": "0.93",
+            "Inertia ratio between": "0.07",
+            "Mod": "-0.146",
+            "Clust": "0.158",
+            "Diam": "8"
+        },
+        "Texas": {
+            "Dataset": "Texas",
+            "Nodes": "183",
+            "Edges": "162",
+            "Feats": "1703",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "1.78",
+            "Dens": "0.0097",
+            "H_obs": "0.108",
+            "H_exp": "0.374",
+            "H_adj": "-0.425",
+            "Inertia ratio within": "0.939",
+            "Inertia ratio between": "0.061",
+            "Mod": "-0.164",
+            "Clust": "0.253",
+            "Diam": "8"
+        },
+        "Wisconsin": {
+            "Dataset": "Wisconsin",
+            "Nodes": "251",
+            "Edges": "257",
+            "Feats": "1703",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "2.05",
+            "Dens": "0.0082",
+            "H_obs": "0.196",
+            "H_exp": "0.324",
+            "H_adj": "-0.189",
+            "Inertia ratio within": "0.911",
+            "Inertia ratio between": "0.089",
+            "Mod": "-0.093",
+            "Clust": "0.222",
+            "Diam": "8"
+        },
+        "Chameleon": {
+            "Dataset": "Chameleon",
+            "Nodes": "2277",
+            "Edges": "18050",
+            "Feats": "2325",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "15.85",
+            "Dens": "0.007",
+            "H_obs": "0.235",
+            "H_exp": "0.202",
+            "H_adj": "0.042",
+            "Inertia ratio within": "0.993",
+            "Inertia ratio between": "0.007",
+            "Mod": "0.027",
+            "Clust": "0.488",
+            "Diam": "11"
+        },
+        "Squirrel": {
+            "Dataset": "Squirrel",
+            "Nodes": "5201",
+            "Edges": "108536",
+            "Feats": "2089",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "41.74",
+            "Dens": "0.008",
+            "H_obs": "0.224",
+            "H_exp": "0.2",
+            "H_adj": "0.03",
+            "Inertia ratio within": "0.995",
+            "Inertia ratio between": "0.005",
+            "Mod": "0.006",
+            "Clust": "0.415",
+            "Diam": "10"
+        },
+        "Actor": {
+            "Dataset": "Actor",
+            "Nodes": "7600",
+            "Edges": "15009",
+            "Feats": "932",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "3.95",
+            "Dens": "0.0005198",
+            "H_obs": "0.219",
+            "H_exp": "0.213",
+            "H_adj": "0.007",
+            "Inertia ratio within": "0.994",
+            "Inertia ratio between": "0.006",
+            "Mod": "0.005",
+            "Clust": "0.084",
+            "Diam": "12"
+        },
+        "Minesweeper": {
+            "Dataset": "Minesweeper",
+            "Nodes": "10000",
+            "Edges": "39402",
+            "Feats": "7",
+            "Classes": "2",
+            "Comp": "1",
+            "Avg Deg": "7.88",
+            "Dens": "0.0007881",
+            "H_obs": "0.683",
+            "H_exp": "0.68",
+            "H_adj": "0.009",
+            "Inertia ratio within": "1",
+            "Inertia ratio between": "0.0001318",
+            "Mod": "0.003",
+            "Clust": "0.434",
+            "Diam": "99"
+        },
+        "Tolokers": {
+            "Dataset": "Tolokers",
+            "Nodes": "11758",
+            "Edges": "519000",
+            "Feats": "10",
+            "Classes": "2",
+            "Comp": "1",
+            "Avg Deg": "88.28",
+            "Dens": "0.0075",
+            "H_obs": "0.595",
+            "H_exp": "0.659",
+            "H_adj": "-0.188",
+            "Inertia ratio within": "0.973",
+            "Inertia ratio between": "0.027",
+            "Mod": "0.041",
+            "Clust": "0.534",
+            "Diam": "11"
+        },
+        "Roman-empire": {
+            "Dataset": "Roman-empire",
+            "Nodes": "22662",
+            "Edges": "32927",
+            "Feats": "300",
+            "Classes": "18",
+            "Comp": "1",
+            "Avg Deg": "2.91",
+            "Dens": "0.0001282",
+            "H_obs": "0.047",
+            "H_exp": "0.088",
+            "H_adj": "-0.045",
+            "Inertia ratio within": "0.839",
+            "Inertia ratio between": "0.161",
+            "Mod": "-0.043",
+            "Clust": "0.394",
+            "Diam": "6824"
+        },
+        "Amazon-ratings": {
+            "Dataset": "Amazon-ratings",
+            "Nodes": "24492",
+            "Edges": "93050",
+            "Feats": "300",
+            "Classes": "5",
+            "Comp": "1",
+            "Avg Deg": "7.6",
+            "Dens": "0.0003103",
+            "H_obs": "0.38",
+            "H_exp": "0.271",
+            "H_adj": "0.15",
+            "Inertia ratio within": "0.999",
+            "Inertia ratio between": "0.0009036",
+            "Mod": "0.101",
+            "Clust": "0.589",
+            "Diam": "46"
+        },
+        "Questions": {
+            "Dataset": "Questions",
+            "Nodes": "48921",
+            "Edges": "153540",
+            "Feats": "301",
+            "Classes": "2",
+            "Comp": "1",
+            "Avg Deg": "6.28",
+            "Dens": "0.0001283",
+            "H_obs": "0.84",
+            "H_exp": "0.942",
+            "H_adj": "-1.771",
+            "Inertia ratio within": "0.998",
+            "Inertia ratio between": "0.002",
+            "Mod": "0.003",
+            "Clust": "0.026",
+            "Diam": "16"
+        },
+        "SBM": {
+            "h=0.00": {
+                "Dataset": "SBM (h=0.0)",
+                "Nodes": "2000",
+                "Edges": "10003",
+                "Feats": "10",
+                "Classes": "4",
+                "Comp": "1",
+                "Avg Deg": "10",
+                "Dens": "0.005",
+                "H_obs": "0",
+                "H_exp": "0.25",
+                "H_adj": "-0.333",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "-0.25",
+                "Clust": "0.003",
+                "Diam": "6"
+            },
+            "h=0.20": {
+                "Dataset": "SBM (h=0.2)",
+                "Nodes": "2000",
+                "Edges": "10070",
+                "Feats": "10",
+                "Classes": "4",
+                "Comp": "1",
+                "Avg Deg": "10.07",
+                "Dens": "0.005",
+                "H_obs": "0.197",
+                "H_exp": "0.25",
+                "H_adj": "-0.071",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "-0.053",
+                "Clust": "0.004",
+                "Diam": "6"
+            },
+            "h=0.50": {
+                "Dataset": "SBM (h=0.5)",
+                "Nodes": "2000",
+                "Edges": "10119",
+                "Feats": "10",
+                "Classes": "4",
+                "Comp": "1",
+                "Avg Deg": "10.12",
+                "Dens": "0.0051",
+                "H_obs": "0.493",
+                "H_exp": "0.25",
+                "H_adj": "0.324",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.243",
+                "Clust": "0.004",
+                "Diam": "6"
+            },
+            "h=0.80": {
+                "Dataset": "SBM (h=0.8)",
+                "Nodes": "2000",
+                "Edges": "9920",
+                "Feats": "10",
+                "Classes": "4",
+                "Comp": "1",
+                "Avg Deg": "9.92",
+                "Dens": "0.005",
+                "H_obs": "0.802",
+                "H_exp": "0.25",
+                "H_adj": "0.735",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.552",
+                "Clust": "0.01",
+                "Diam": "7"
+            },
+            "h=1.00": {
+                "Dataset": "SBM (h=1.0)",
+                "Nodes": "2000",
+                "Edges": "9912",
+                "Feats": "10",
+                "Classes": "4",
+                "Comp": "4",
+                "Avg Deg": "9.91",
+                "Dens": "0.005",
+                "H_obs": "1",
+                "H_exp": "0.25",
+                "H_adj": "1",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.75",
+                "Clust": "0.021",
+                "Diam": "inf"
+            }
+        }
+    }
+}
