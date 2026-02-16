@@ -1,24 +1,5 @@
-# Large files (> 50MB) excluded for GitHub
-utilities/graphs_visualization/resources/Actor/Actor_full_interactive.html
-utilities/graphs_visualization/resources/Actor/Actor_lcc_interactive.html
-utilities/graphs_visualization/resources/Chameleon/Chameleon_full_interactive.html
-utilities/graphs_visualization/resources/Chameleon/Chameleon_lcc_interactive.html
-utilities/graphs_visualization/resources/CiteSeer/CiteSeer_full_interactive.html
-utilities/graphs_visualization/resources/CiteSeer/CiteSeer_full_sample_2500_interactive.html
-utilities/graphs_visualization/resources/CiteSeer/CiteSeer_lcc_interactive.html
-utilities/graphs_visualization/resources/Cora/Cora_full_interactive.html
-utilities/graphs_visualization/resources/Cora/Cora_full_sample_2500_interactive.html
-utilities/graphs_visualization/resources/Cora/Cora_lcc_interactive.html
-utilities/graphs_visualization/resources/Squirrel/Squirrel_full_interactive.html
-utilities/graphs_visualization/resources/Squirrel/Squirrel_full_sample_2500_interactive.html
-utilities/graphs_visualization/resources/Squirrel/Squirrel_lcc_interactive.html
-utilities/graphs_visualization/resources/Squirrel/Squirrel_lcc_sample_2500_interactive.html
-
 # Generic patterns
 *.log
 __pycache__/
 .DS_Store
 .gemini/
-large_files.txt
-all_large_files.txt
-sizes.txt

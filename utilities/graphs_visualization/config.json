@@ -4,143 +4,83 @@
             "h=0.40": [
                 {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.40_full_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.40_lcc_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.20": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.20_lcc_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.20_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.90": [
                 {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.90_full_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.90_lcc_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.50": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.50_lcc_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.50_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.30": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.30_lcc_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.30_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.80": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.80_lcc_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.80_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=1.00": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h1.00_lcc_interactive.html",
-                    "size_mb": 0.06
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h1.00_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.60": [
                 {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.60_full_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.60_lcc_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.00": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.00_lcc_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.00_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.70": [
                 {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.70_lcc_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.70_full_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ],
             "h=0.10": [
                 {
                     "type": "full",
-                    "path": "resources/SBM/SBM_h0.10_full_interactive.html",
-                    "size_mb": 0.19
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/SBM/SBM_h0.10_lcc_interactive.html",
+                    "path": "resources/SBM/SBM_explorer.html",
                     "size_mb": 0.19
                 }
             ]
         },
         "Texas": {
             "Standard": [
-                {
-                    "type": "lcc",
-                    "path": "resources/Texas/Texas_lcc_interactive.html",
-                    "size_mb": 5.21
-                },
                 {
                     "type": "full",
                     "path": "resources/Texas/Texas_full_interactive.html",
@@ -150,11 +90,6 @@
         },
         "Chameleon": {
             "Standard": [
-                {
-                    "type": "lcc",
-                    "path": "resources/Chameleon/Chameleon_lcc_interactive.html",
-                    "size_mb": 89.84
-                },
                 {
                     "type": "full",
                     "path": "resources/Chameleon/Chameleon_full_interactive.html",
@@ -173,26 +108,11 @@
                     "type": "full",
                     "path": "resources/PubMed/PubMed_full_interactive.html",
                     "size_mb": 9.44
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/PubMed/PubMed_lcc_sample_2500_interactive.html",
-                    "size_mb": 1.03
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/PubMed/PubMed_lcc_interactive.html",
-                    "size_mb": 9.44
                 }
             ]
         },
         "Tolokers": {
             "Standard": [
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Tolokers/Tolokers_lcc_sample_2500_interactive.html",
-                    "size_mb": 1.48
-                },
                 {
                     "type": "full_sample_2500",
                     "path": "resources/Tolokers/Tolokers_full_sample_2500_interactive.html",
@@ -202,21 +122,11 @@
                     "type": "full",
                     "path": "resources/Tolokers/Tolokers_full_interactive.html",
                     "size_mb": 22.13
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/Tolokers/Tolokers_lcc_interactive.html",
-                    "size_mb": 22.13
                 }
             ]
         },
         "Actor": {
             "Standard": [
-                {
-                    "type": "lcc",
-                    "path": "resources/Actor/Actor_lcc_interactive.html",
-                    "size_mb": 115.8
-                },
                 {
                     "type": "full",
                     "path": "resources/Actor/Actor_full_interactive.html",
@@ -225,11 +135,6 @@
                 {
                     "type": "full_sample_2500",
                     "path": "resources/Actor/Actor_full_sample_2500_interactive.html",
-                    "size_mb": 37.89
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Actor/Actor_lcc_sample_2500_interactive.html",
                     "size_mb": 37.89
                 }
             ]
@@ -245,16 +150,6 @@
                     "type": "full",
                     "path": "resources/Questions/Questions_full_interactive.html",
                     "size_mb": 25.25
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/Questions/Questions_lcc_interactive.html",
-                    "size_mb": 25.25
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Questions/Questions_lcc_sample_2500_interactive.html",
-                    "size_mb": 1.02
                 }
             ]
         },
@@ -264,11 +159,6 @@
                     "type": "full",
                     "path": "resources/Cornell/Cornell_full_interactive.html",
                     "size_mb": 5.21
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/Cornell/Cornell_lcc_interactive.html",
-                    "size_mb": 5.21
                 }
             ]
         },
@@ -277,16 +167,6 @@
                 {
                     "type": "full_sample_2500",
                     "path": "resources/Amazon-ratings/Amazon-ratings_full_sample_2500_interactive.html",
-                    "size_mb": 1.05
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/Amazon-ratings/Amazon-ratings_lcc_interactive.html",
-                    "size_mb": 13.14
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Amazon-ratings/Amazon-ratings_lcc_sample_2500_interactive.html",
                     "size_mb": 1.05
                 },
                 {
@@ -321,11 +201,6 @@
                     "type": "full",
                     "path": "resources/Wisconsin/Wisconsin_full_interactive.html",
                     "size_mb": 7.14
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/Wisconsin/Wisconsin_lcc_interactive.html",
-                    "size_mb": 7.14
                 }
             ]
         },
@@ -337,18 +212,8 @@
                     "size_mb": 188.7
                 },
                 {
-                    "type": "lcc",
-                    "path": "resources/Squirrel/Squirrel_lcc_interactive.html",
-                    "size_mb": 188.7
-                },
-                {
                     "type": "full_sample_2500",
                     "path": "resources/Squirrel/Squirrel_full_sample_2500_interactive.html",
-                    "size_mb": 87.9
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Squirrel/Squirrel_lcc_sample_2500_interactive.html",
                     "size_mb": 87.9
                 }
             ]
@@ -361,18 +226,8 @@
                     "size_mb": 3.46
                 },
                 {
-                    "type": "lcc",
-                    "path": "resources/Minesweeper/Minesweeper_lcc_interactive.html",
-                    "size_mb": 3.46
-                },
-                {
                     "type": "full_sample_2500",
                     "path": "resources/Minesweeper/Minesweeper_full_sample_2500_interactive.html",
-                    "size_mb": 0.87
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Minesweeper/Minesweeper_lcc_sample_2500_interactive.html",
                     "size_mb": 0.87
                 }
             ]
@@ -380,19 +235,9 @@
         "Roman-empire": {
             "Standard": [
                 {
-                    "type": "lcc",
-                    "path": "resources/Roman-empire/Roman-empire_lcc_interactive.html",
-                    "size_mb": 10.19
-                },
-                {
                     "type": "full",
                     "path": "resources/Roman-empire/Roman-empire_full_interactive.html",
                     "size_mb": 10.19
-                },
-                {
-                    "type": "lcc_sample_2500",
-                    "path": "resources/Roman-empire/Roman-empire_lcc_sample_2500_interactive.html",
-                    "size_mb": 1.14
                 },
                 {
                     "type": "full_sample_2500",
@@ -438,7 +283,11 @@
             "Inertia ratio between": "0.026",
             "Mod": "0.64",
             "Clust": "0.257",
-            "Diam": "inf"
+            "Diam": "inf",
+            "Article": "Revisiting semi-supervised learning with graph embeddings",
+            "Authors": "Yang, Z. et al. (2016)",
+            "Link": "https://arxiv.org/abs/1603.08861",
+            "Class Sizes": "[351, 217, 418, 818, 426, 298, 180]"
         },
         "CiteSeer": {
             "Dataset": "CiteSeer",
@@ -456,7 +305,11 @@
             "Inertia ratio between": "0.017",
             "Mod": "0.539",
             "Clust": "0.122",
-            "Diam": "inf"
+            "Diam": "inf",
+            "Article": "Revisiting semi-supervised learning with graph embeddings",
+            "Authors": "Yang, Z. et al. (2016)",
+            "Link": "https://arxiv.org/abs/1603.08861",
+            "Class Sizes": "[264, 590, 668, 701, 596, 508]"
         },
         "PubMed": {
             "Dataset": "PubMed",
@@ -474,7 +327,11 @@
             "Inertia ratio between": "0.018",
             "Mod": "0.432",
             "Clust": "0.054",
-            "Diam": "18"
+            "Diam": "18",
+            "Article": "Revisiting semi-supervised learning with graph embeddings",
+            "Authors": "Yang, Z. et al. (2016)",
+            "Link": "https://arxiv.org/abs/1603.08861",
+            "Class Sizes": "[4103, 7739, 7875]"
         },
         "Cornell": {
             "Dataset": "Cornell",
@@ -492,25 +349,33 @@
             "Inertia ratio between": "0.07",
             "Mod": "-0.146",
             "Clust": "0.158",
-            "Diam": "8"
+            "Diam": "8",
+            "Article": "Learning to extract symbolic knowledge from the World Wide Web",
+            "Authors": "Craven, M. et al. (1998)",
+            "Link": "http://www.cs.cmu.edu/~webkb/",
+            "Class Sizes": "[38, 16, 30, 82, 17]"
         },
         "Texas": {
             "Dataset": "Texas",
-            "Nodes": "183",
-            "Edges": "162",
+            "Nodes": "182",
+            "Edges": "161",
             "Feats": "1703",
-            "Classes": "5",
+            "Classes": "4",
             "Comp": "1",
-            "Avg Deg": "1.78",
-            "Dens": "0.0097",
+            "Avg Deg": "1.77",
+            "Dens": "0.0098",
             "H_obs": "0.108",
-            "H_exp": "0.374",
-            "H_adj": "-0.425",
-            "Inertia ratio within": "0.939",
-            "Inertia ratio between": "0.061",
-            "Mod": "-0.164",
-            "Clust": "0.253",
-            "Diam": "8"
+            "H_exp": "0.378",
+            "H_adj": "-0.433",
+            "Inertia ratio within": "0.94",
+            "Inertia ratio between": "0.06",
+            "Mod": "-0.166",
+            "Clust": "0.25",
+            "Diam": "8",
+            "Article": "Learning to extract symbolic knowledge from the World Wide Web",
+            "Authors": "Craven, M. et al. (1998)",
+            "Link": "http://www.cs.cmu.edu/~webkb/",
+            "Class Sizes": "[33, 18, 101, 30]"
         },
         "Wisconsin": {
             "Dataset": "Wisconsin",
@@ -528,7 +393,11 @@
             "Inertia ratio between": "0.089",
             "Mod": "-0.093",
             "Clust": "0.222",
-            "Diam": "8"
+            "Diam": "8",
+            "Article": "Learning to extract symbolic knowledge from the World Wide Web",
+            "Authors": "Craven, M. et al. (1998)",
+            "Link": "http://www.cs.cmu.edu/~webkb/",
+            "Class Sizes": "[10, 70, 118, 32, 21]"
         },
         "Chameleon": {
             "Dataset": "Chameleon",
@@ -546,7 +415,11 @@
             "Inertia ratio between": "0.007",
             "Mod": "0.027",
             "Clust": "0.488",
-            "Diam": "11"
+            "Diam": "11",
+            "Article": "Multi-scale attributed node embedding",
+            "Authors": "Rozemberczki, B. et al. (2021)",
+            "Link": "https://arxiv.org/abs/1909.13021",
+            "Class Sizes": "[456, 460, 453, 521, 387]"
         },
         "Squirrel": {
             "Dataset": "Squirrel",
@@ -564,7 +437,11 @@
             "Inertia ratio between": "0.005",
             "Mod": "0.006",
             "Clust": "0.415",
-            "Diam": "10"
+            "Diam": "10",
+            "Article": "Multi-scale attributed node embedding",
+            "Authors": "Rozemberczki, B. et al. (2021)",
+            "Link": "https://arxiv.org/abs/1909.13021",
+            "Class Sizes": "[1042, 1040, 1039, 1040, 1040]"
         },
         "Actor": {
             "Dataset": "Actor",
@@ -582,7 +459,11 @@
             "Inertia ratio between": "0.006",
             "Mod": "0.005",
             "Clust": "0.084",
-            "Diam": "12"
+            "Diam": "12",
+            "Article": "Social influence analysis in large-scale networks",
+            "Authors": "Tang, J. et al. (2009)",
+            "Link": "https://dl.acm.org/doi/10.1145/1557019.1557108",
+            "Class Sizes": "[853, 1337, 1630, 1815, 1965]"
         },
         "Minesweeper": {
             "Dataset": "Minesweeper",
@@ -600,7 +481,11 @@
             "Inertia ratio between": "0.0001318",
             "Mod": "0.003",
             "Clust": "0.434",
-            "Diam": "99"
+            "Diam": "99",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
+            "Class Sizes": "[8000, 2000]"
         },
         "Tolokers": {
             "Dataset": "Tolokers",
@@ -618,7 +503,11 @@
             "Inertia ratio between": "0.027",
             "Mod": "0.041",
             "Clust": "0.534",
-            "Diam": "11"
+            "Diam": "11",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
+            "Class Sizes": "[9192, 2566]"
         },
         "Roman-empire": {
             "Dataset": "Roman-empire",
@@ -636,7 +525,11 @@
             "Inertia ratio between": "0.161",
             "Mod": "-0.043",
             "Clust": "0.394",
-            "Diam": "6824"
+            "Diam": "6824",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
+            "Class Sizes": "[944, 3163, 3133, 2502, 2487, 1359, 1244, 1080, 852, 789, 717, 445, 428, 365, 329, 319, 312, 2194]"
         },
         "Amazon-ratings": {
             "Dataset": "Amazon-ratings",
@@ -654,7 +547,11 @@
             "Inertia ratio between": "0.0009036",
             "Mod": "0.101",
             "Clust": "0.589",
-            "Diam": "46"
+            "Diam": "46",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
+            "Class Sizes": "[6560, 9010, 5678, 2183, 1061]"
         },
         "Questions": {
             "Dataset": "Questions",
@@ -672,7 +569,11 @@
             "Inertia ratio between": "0.002",
             "Mod": "0.003",
             "Clust": "0.026",
-            "Diam": "16"
+            "Diam": "16",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
+            "Class Sizes": "[47461, 1460]"
         },
         "SBM": {
             "h=0.00": {
@@ -691,7 +592,11 @@
                 "Inertia ratio between": "0.184",
                 "Mod": "-0.25",
                 "Clust": "0.003",
-                "Diam": "6"
+                "Diam": "6",
+                "Article": "-",
+                "Authors": "-",
+                "Link": "-",
+                "Class Sizes": "[500, 500, 500, 500]"
             },
             "h=0.20": {
                 "Dataset": "SBM (h=0.2)",
@@ -709,7 +614,11 @@
                 "Inertia ratio between": "0.184",
                 "Mod": "-0.053",
                 "Clust": "0.004",
-                "Diam": "6"
+                "Diam": "6",
+                "Article": "-",
+                "Authors": "-",
+                "Link": "-",
+                "Class Sizes": "[500, 500, 500, 500]"
             },
             "h=0.50": {
                 "Dataset": "SBM (h=0.5)",
@@ -727,7 +636,11 @@
                 "Inertia ratio between": "0.184",
                 "Mod": "0.243",
                 "Clust": "0.004",
-                "Diam": "6"
+                "Diam": "6",
+                "Article": "-",
+                "Authors": "-",
+                "Link": "-",
+                "Class Sizes": "[500, 500, 500, 500]"
             },
             "h=0.80": {
                 "Dataset": "SBM (h=0.8)",
@@ -745,7 +658,11 @@
                 "Inertia ratio between": "0.184",
                 "Mod": "0.552",
                 "Clust": "0.01",
-                "Diam": "7"
+                "Diam": "7",
+                "Article": "-",
+                "Authors": "-",
+                "Link": "-",
+                "Class Sizes": "[500, 500, 500, 500]"
             },
             "h=1.00": {
                 "Dataset": "SBM (h=1.0)",
@@ -763,7 +680,11 @@
                 "Inertia ratio between": "0.184",
                 "Mod": "0.75",
                 "Clust": "0.021",
-                "Diam": "inf"
+                "Diam": "inf",
+                "Article": "-",
+                "Authors": "-",
+                "Link": "-",
+                "Class Sizes": "[500, 500, 500, 500]"
             }
         }
     }
