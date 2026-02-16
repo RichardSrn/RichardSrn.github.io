@@ -14,11 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const variantGroup = document.getElementById('variant-group');
     const typeGroup = document.getElementById('type-group');
     const sbmSliderGroup = document.getElementById('sbm-slider-group');
+    const fullTableBtn = document.getElementById('fulltable-btn');
     const visualizationDisplay = document.querySelector('.visualization-display');
 
     let config = {};
     let tableData = [];
     let sortState = { column: null, direction: 'asc' };
+    let isFullTable = false; // State for table truncation toggle
 
     // Load Configuration
     fetch('config.json')
@@ -223,10 +225,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    fullTableBtn.addEventListener('click', () => {
+        isFullTable = !isFullTable;
+        if (isFullTable) {
+            document.body.classList.add('table-expanded');
+            fullTableBtn.textContent = 'Collapse Table';
+            fullTableBtn.classList.add('active');
+        } else {
+            document.body.classList.remove('table-expanded');
+            fullTableBtn.textContent = 'Expand Table';
+            fullTableBtn.classList.remove('active');
+        }
+    });
+    // Set initial text
+    fullTableBtn.textContent = 'Expand Table';
+
     function updateVisualization() {
         const data = getSelectedGraphData();
         if (!data) return;
 
+        const isSBMExplorer = data.path.endsWith('SBM_explorer.html');
+        // Check if we are already viewing the SBM explorer (compare existing src)
+        const currentSrc = graphFrame.getAttribute('src');
+        // We use getAttribute because 'src' property might differ (absolute vs relative)
+
+        if (isSBMExplorer && currentSrc && currentSrc.endsWith('SBM_explorer.html')) {
+            // Already loaded, just update the homophily locally
+            const hVal = parseFloat(sbmSlider.value);
+            if (graphFrame.contentWindow && graphFrame.contentWindow.setHomophily) {
+                // Determine if we need to show loader? Maybe not for quick switch
+                graphFrame.contentWindow.setHomophily(hVal);
+            } else {
+                // Fallback if function not ready yet (unlikely if loaded)
+                console.warn("setHomophily not found on contentWindow");
+            }
+            return;
+        }
+
+        // Standard Load / Initial SBM Load
         loader.style.display = 'flex';
         graphFrame.style.opacity = '0.5';
         fullscreenBtn.disabled = false;
@@ -237,6 +273,14 @@ document.addEventListener('DOMContentLoaded', () => {
             loader.style.display = 'none';
             graphFrame.style.opacity = '1';
             syncThemeToIframe();
+
+            // If it is SBM, set initial value because resource defaults to 0.5
+            if (isSBMExplorer) {
+                const hVal = parseFloat(sbmSlider.value);
+                if (graphFrame.contentWindow && graphFrame.contentWindow.setHomophily) {
+                    graphFrame.contentWindow.setHomophily(hVal);
+                }
+            }
         };
     }
 
@@ -273,6 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Edges': 'Number of undirected edges (|E|)',
         'Feats': 'Dimensionality of per-node feature vectors (d)',
         'Classes': 'Number of distinct categories in the labels (C)',
+        'Class Sizes': 'Sizes of the classes',
         'Comp': 'Number of connected groups of nodes (Connected Components)',
         'Avg Deg': 'Average number of connections per node',
         'Dens': 'Graph density',
@@ -283,7 +328,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'Inertia ratio between': 'Ratio of between-class inertia to total inertia',
         'Mod': 'Modularity: Strength of division into communities',
         'Clust': 'Clustering Coefficient: Degree to which nodes tend to cluster',
-        'Diam': 'Diameter: Longest shortest path'
+        'Diam': 'Diameter: Longest shortest path',
+        'Article': 'Title of the paper introducing the dataset',
+        'Authors': 'Authors of the paper',
+        'Link': 'Link to the paper or dataset source',
     };
 
     function renderStatsTable() {
@@ -297,8 +345,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Headers
         // Get generic headers excluding internal fields starting with _
         const headers = Object.keys(tableData[0]).filter(k => !k.startsWith('_'));
-        // Move Dataset to front
-        const sortedHeaders = ['Dataset', ...headers.filter(h => h !== 'Dataset')];
+        // Move Dataset to front and Class Sizes next to Classes
+        let sortedHeaders = ['Dataset', ...headers.filter(h => h !== 'Dataset' && h !== 'Class Sizes')];
+        const classesIdx = sortedHeaders.indexOf('Classes');
+        if (classesIdx !== -1) {
+            sortedHeaders.splice(classesIdx + 1, 0, 'Class Sizes');
+        } else {
+            sortedHeaders.push('Class Sizes');
+        }
 
         const trHead = document.createElement('tr');
         sortedHeaders.forEach(h => {
@@ -323,7 +377,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             sortedHeaders.forEach(h => {
                 const td = document.createElement('td');
-                td.textContent = row[h] || '-';
+
+                if (h === 'Link' && row[h] && row[h] !== '-') {
+                    const a = document.createElement('a');
+                    a.href = row[h];
+                    a.textContent = 'Link';
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.addEventListener('click', (e) => e.stopPropagation());
+                    td.appendChild(a);
+                } else {
+                    td.textContent = row[h] || '-';
+
+                    // Truncation Logic for specific columns
+                    const truncationCols = ['Article', 'Authors', 'Class Sizes'];
+                    if (truncationCols.includes(h)) {
+                        td.classList.add('truncate-cell');
+                        if (h === 'Article') td.classList.add('col-article');
+                        if (h === 'Authors') td.classList.add('col-authors');
+                        if (h === 'Class Sizes') td.classList.add('col-class-sizes');
+
+                        td.title = row[h]; // Tooltip
+
+                        // Click to expand
+                        td.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Prevent row selection
+                            td.classList.toggle('expanded-cell');
+                        });
+                    }
+                }
 
                 // Add classes for specific columns
                 if (h === 'Dataset') {
