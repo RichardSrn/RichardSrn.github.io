@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sbmValue = document.getElementById('sbm-value');
     const visualizeBtn = document.getElementById('visualize-btn');
     const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const floatingFullscreenBtn = document.getElementById('floating-fullscreen-btn');
     const infoBox = document.getElementById('info-box');
     const infoText = document.getElementById('info-text');
     const graphFrame = document.getElementById('graph-frame');
@@ -69,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         typeGroup.style.display = 'none';
         visualizeBtn.disabled = true;
         fullscreenBtn.disabled = true;
+        floatingFullscreenBtn.disabled = true;
         infoBox.style.display = 'none';
 
         if (!variants) return;
@@ -134,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             typeSelect.innerHTML = '';
             visualizeBtn.disabled = true;
             fullscreenBtn.disabled = true;
+            floatingFullscreenBtn.disabled = true;
         }
     }
 
@@ -225,6 +228,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    floatingFullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            if (visualizationDisplay.requestFullscreen) {
+                visualizationDisplay.requestFullscreen();
+            } else if (visualizationDisplay.webkitRequestFullscreen) {
+                visualizationDisplay.webkitRequestFullscreen();
+            } else if (visualizationDisplay.msRequestFullscreen) {
+                visualizationDisplay.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    });
+
+    // Listen for fullscreen changes to update button icon if desired
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+    document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+    document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+
+    function updateFullscreenButton() {
+        const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        floatingFullscreenBtn.textContent = isFullscreen ? ' ⬃ ' : '⛶';
+        floatingFullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
+    }
+
     fullTableBtn.addEventListener('click', () => {
         isFullTable = !isFullTable;
         if (isFullTable) {
@@ -266,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loader.style.display = 'flex';
         graphFrame.style.opacity = '0.5';
         fullscreenBtn.disabled = false;
+        floatingFullscreenBtn.disabled = false;
 
         graphFrame.src = data.path;
 
@@ -381,7 +417,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (h === 'Link' && row[h] && row[h] !== '-') {
                     const a = document.createElement('a');
                     a.href = row[h];
-                    a.textContent = 'Link';
+
+                    // Display domain name
+                    try {
+                        const url = new URL(row[h]);
+                        // Remove www. and get the first part of the hostname
+                        const domain = url.hostname.replace('www.', '').split('.')[0];
+                        a.textContent = `[${domain}]`;
+                    } catch (e) {
+                        a.textContent = '[link]';
+                    }
+
                     a.target = '_blank';
                     a.rel = 'noopener noreferrer';
                     a.addEventListener('click', (e) => e.stopPropagation());
