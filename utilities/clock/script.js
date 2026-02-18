@@ -8,6 +8,9 @@ const maximizeBtn = document.getElementById('maximizeBtn');
 const exitButton = document.getElementById('exitButton');
 const primaryColorPicker = document.getElementById('primaryColorPicker');
 const secondaryColorPicker = document.getElementById('secondaryColorPicker');
+const layoutToggleBtn = document.getElementById('layoutToggleBtn');
+const arrow1 = document.getElementById('arrow1');
+const arrow2 = document.getElementById('arrow2');
 
 const warnHalfTime = document.getElementById('warnHalfTime');
 const warnLong = document.getElementById('warnLong');
@@ -27,6 +30,7 @@ const timePickerBtn = document.getElementById('timePickerBtn');
 const timePickerPopup = document.getElementById('timePickerPopup');
 const pickerHours = document.getElementById('pickerHours');
 const pickerMinutes = document.getElementById('pickerMinutes');
+const pickerSeconds = document.getElementById('pickerSeconds');
 const pickerCtrls = document.querySelectorAll('.picker-ctrl');
 const presetBtns = document.querySelectorAll('.preset-btn');
 
@@ -70,18 +74,26 @@ function setInputMode(mode) {
 
     if (mode === 'duration') {
         endTimeInput.type = 'text';
-        endTimeInput.placeholder = 'e.g. 1h 30m, 90, 1:30';
+        const lang = localStorage.getItem('preferredLanguage') || 'fr';
+        endTimeInput.placeholder = (typeof translations !== 'undefined' && translations[lang])
+            ? translations[lang]['clock_placeholder_duration']
+            : 'e.g. 1h 30m 20s, 1:30:00';
 
         if (previousMode === 'endtime' && previousValue && previousValue.includes(':')) {
             // Convert end-time → duration: duration = end - now
-            const [h, m] = previousValue.split(':').map(Number);
+            const parts = previousValue.split(':').map(Number);
             const end = new Date();
-            end.setHours(h, m, 0, 0);
+            if (parts.length === 3) {
+                end.setHours(parts[0], parts[1], parts[2], 0);
+            } else {
+                end.setHours(parts[0], parts[1], 0, 0);
+            }
             if (end <= now) end.setDate(end.getDate() + 1);
-            const totalMin = Math.round((end - now) / 60000);
-            const dh = Math.floor(totalMin / 60);
-            const dm = totalMin % 60;
-            endTimeInput.value = `${dh}:${String(dm).padStart(2, '0')}`;
+            const totalSec = Math.round((end - now) / 1000);
+            const dh = Math.floor(totalSec / 3600);
+            const dm = Math.floor((totalSec % 3600) / 60);
+            const ds = totalSec % 60;
+            endTimeInput.value = `${dh}:${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
         } else if (previousMode === 'duration' && previousValue) {
             // Staying in duration (e.g. initial load) — keep value as-is
             endTimeInput.value = previousValue;
@@ -90,6 +102,7 @@ function setInputMode(mode) {
         }
     } else {
         // Read value before setting type to 'time'
+        endTimeInput.step = '1'; // Enable seconds in native time picker
         endTimeInput.type = 'time';
 
         if (previousMode === 'duration' && previousValue) {
@@ -97,17 +110,17 @@ function setInputMode(mode) {
             const durationMs = parseDuration(previousValue);
             if (durationMs !== null && durationMs > 0) {
                 const end = new Date(now.getTime() + durationMs);
-                endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+                endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}:${String(end.getSeconds()).padStart(2, '0')}`;
             } else {
                 const end = new Date(now.getTime() + 3600000);
-                endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+                endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}:${String(end.getSeconds()).padStart(2, '0')}`;
             }
         } else if (previousMode === 'endtime' && previousValue) {
             // Staying in endtime — keep value as-is
             endTimeInput.value = previousValue;
         } else {
             const end = new Date(now.getTime() + 3600000);
-            endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+            endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}:${String(end.getSeconds()).padStart(2, '0')}`;
         }
     }
 }
@@ -125,15 +138,16 @@ timePickerBtn.addEventListener('click', (e) => {
     } else {
         // Toggle custom picker on Duration mode
         timePickerPopup.classList.toggle('visible');
-        // Initialize picker values from endTimeInput if it's a valid HH:MM format
-        const match = endTimeInput.value.match(/^(\d+):(\d+)$/);
+        // Initialize picker values from endTimeInput if it's a valid H:MM:SS or H:MM format
+        const match = endTimeInput.value.match(/^(\d+):(\d+)(?::(\d+))?$/);
         if (match) {
             pickerHours.value = parseInt(match[1]);
             pickerMinutes.value = match[2];
+            pickerSeconds.value = match[3] ? match[3] : '00';
         } else {
-            // Default to 00:00 if not HH:MM
             pickerHours.value = 0;
             pickerMinutes.value = '00';
+            pickerSeconds.value = '00';
         }
     }
 });
@@ -150,7 +164,7 @@ pickerCtrls.forEach(ctrl => {
     ctrl.addEventListener('click', () => {
         const action = ctrl.dataset.action;
         const target = ctrl.dataset.target;
-        const input = target === 'hours' ? pickerHours : pickerMinutes;
+        const input = target === 'hours' ? pickerHours : target === 'minutes' ? pickerMinutes : pickerSeconds;
         let val = parseInt(input.value) || 0;
 
         if (action === 'inc') {
@@ -168,7 +182,7 @@ pickerCtrls.forEach(ctrl => {
             if (val > 59) val = 0;
         }
 
-        input.value = target === 'minutes' ? String(val).padStart(2, '0') : val;
+        input.value = target === 'hours' ? val : String(val).padStart(2, '0');
         updateInputFromPicker();
     });
 });
@@ -179,20 +193,26 @@ pickerMinutes.addEventListener('change', () => {
     pickerMinutes.value = String(Math.max(0, Math.min(59, parseInt(pickerMinutes.value) || 0))).padStart(2, '0');
     updateInputFromPicker();
 });
+pickerSeconds.addEventListener('change', () => {
+    pickerSeconds.value = String(Math.max(0, Math.min(59, parseInt(pickerSeconds.value) || 0))).padStart(2, '0');
+    updateInputFromPicker();
+});
 
 function updateInputFromPicker() {
     const h = pickerHours.value || 0;
     const m = String(pickerMinutes.value || 0).padStart(2, '0');
-    endTimeInput.value = `${h}:${m}`;
+    const s = String(pickerSeconds.value || 0).padStart(2, '0');
+    endTimeInput.value = `${h}:${m}:${s}`;
 }
 
 // Preset buttons
 presetBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         endTimeInput.value = btn.dataset.value;
-        const [h, m] = btn.dataset.value.split(':');
-        pickerHours.value = parseInt(h);
-        pickerMinutes.value = m;
+        const parts = btn.dataset.value.split(':');
+        pickerHours.value = parseInt(parts[0]);
+        pickerMinutes.value = parts[1] || '00';
+        pickerSeconds.value = parts[2] || '00';
         timePickerPopup.classList.remove('visible');
     });
 });
@@ -252,14 +272,18 @@ function startTimer() {
     if (currentInputMode === 'duration') {
         const durationMs = parseDuration(endTimeInput.value);
         if (durationMs === null) {
-            alert('Invalid duration format. Use e.g. 1h 30m, 90, 1:30');
+            alert('Invalid duration format. Use e.g. 1h 30m 20s, 1:30:00');
             return;
         }
         endTime = new Date(now.getTime() + durationMs);
     } else {
-        const [endHours, endMinutes] = endTimeInput.value.split(':');
+        const parts = endTimeInput.value.split(':').map(Number);
         endTime = new Date();
-        endTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
+        if (parts.length === 3) {
+            endTime.setHours(parts[0], parts[1], parts[2], 0);
+        } else {
+            endTime.setHours(parts[0], parts[1], 0, 0);
+        }
         if (endTime < now) endTime.setDate(endTime.getDate() + 1);
     }
 
@@ -277,24 +301,26 @@ function parseDuration(str) {
     let totalMs = 0;
     let matchFound = false;
 
-    // Check for HH:MM format
-    const colonMatch = str.match(/^(\d+):(\d+)$/);
-    if (colonMatch) {
-        return (parseInt(colonMatch[1]) * 3600 + parseInt(colonMatch[2]) * 60) * 1000;
+    // Check for H:MM:SS format
+    const colonMatch3 = str.match(/^(\d+):(\d+):(\d+)$/);
+    if (colonMatch3) {
+        return (parseInt(colonMatch3[1]) * 3600 + parseInt(colonMatch3[2]) * 60 + parseInt(colonMatch3[3])) * 1000;
     }
 
-    // Check for units like 1h, 30m, 1.5h
+    // Check for H:MM format
+    const colonMatch2 = str.match(/^(\d+):(\d+)$/);
+    if (colonMatch2) {
+        return (parseInt(colonMatch2[1]) * 3600 + parseInt(colonMatch2[2]) * 60) * 1000;
+    }
+
+    // Check for units like 1h, 30m, 20s, 1.5h
     const hMatch = str.match(/(\d+\.?\d*)\s*h/);
-    const mMatch = str.match(/(\d+\.?\d*)\s*m/);
+    const mMatch = str.match(/(\d+\.?\d*)\s*m(?!s)/);
+    const sMatch = str.match(/(\d+\.?\d*)\s*s/);
 
-    if (hMatch) {
-        totalMs += parseFloat(hMatch[1]) * 3600000;
-        matchFound = true;
-    }
-    if (mMatch) {
-        totalMs += parseFloat(mMatch[1]) * 60000;
-        matchFound = true;
-    }
+    if (hMatch) { totalMs += parseFloat(hMatch[1]) * 3600000; matchFound = true; }
+    if (mMatch) { totalMs += parseFloat(mMatch[1]) * 60000; matchFound = true; }
+    if (sMatch) { totalMs += parseFloat(sMatch[1]) * 1000; matchFound = true; }
 
     // If no units but contains a number, treat as minutes
     if (!matchFound) {
@@ -324,9 +350,10 @@ function updateTime() {
     if (!endTime) return;
     const endHours = String(endTime.getHours()).padStart(2, '0');
     const endMinutes = String(endTime.getMinutes()).padStart(2, '0');
+    const endSeconds = String(endTime.getSeconds()).padStart(2, '0');
 
     // Update end time display
-    updateDigits(endTimeValue, `${endHours}:${endMinutes}`);
+    updateDigits(endTimeValue, `${endHours}:${endMinutes}:${endSeconds}`);
 
     // Calculate time difference
     const diff = endTime - now;
@@ -481,9 +508,45 @@ function updateDigits(container, newTimeString) {
 function initializeTimeDisplay() {
     // Initial setup for time displays with placeholder values
     updateDigits(currentTimeValue, '--:--');
-    updateDigits(endTimeValue, '--:--');
+    updateDigits(endTimeValue, '--:--:--');
     updateDigits(remainingTimeValue, '00:00:00');
 }
+
+// Layout toggle (horizontal ↔ vertical)
+let isVertical = window.innerWidth <= 540; // match CSS breakpoint
+
+function applyLayout() {
+    if (isVertical) {
+        timeDisplay.classList.add('layout-vertical');
+        timeDisplay.classList.remove('layout-horizontal');
+        layoutToggleBtn.textContent = '⇄';
+        arrow1.textContent = '↓';
+        arrow2.textContent = '↓';
+    } else {
+        timeDisplay.classList.remove('layout-vertical');
+        timeDisplay.classList.add('layout-horizontal');
+        layoutToggleBtn.textContent = '⇅';
+        arrow1.textContent = '→';
+        arrow2.textContent = '→';
+    }
+}
+
+layoutToggleBtn.addEventListener('click', () => {
+    isVertical = !isVertical;
+    applyLayout();
+});
+
+// Auto-switch on resize (only if user hasn't manually toggled)
+let userOverrodeLayout = false;
+layoutToggleBtn.addEventListener('click', () => { userOverrodeLayout = true; }, { once: true });
+window.addEventListener('resize', () => {
+    if (!userOverrodeLayout) {
+        isVertical = window.innerWidth <= 540;
+        applyLayout();
+    }
+});
+
+applyLayout();
 
 // Fullscreen / Maximized Mode
 maximizeBtn.addEventListener('click', enterMaximizedMode);

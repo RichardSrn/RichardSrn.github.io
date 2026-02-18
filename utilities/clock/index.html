@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time Tracker</title>
+    <title data-i18n="clock_page_title">Time Tracker</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/icon/favicon_32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/icon/favicon_16.png">
@@ -13,21 +13,30 @@
 </head>
 
 <body>
+    <!-- Language switcher (same pattern as main page) -->
+    <div class="language-switcher">
+        <select id="language-select">
+            <option value="fr">FR</option>
+            <option value="en">EN</option>
+        </select>
+    </div>
+
     <div class="container" id="mainContainer">
-        <a href="../../index.html" class="back-link">← Back</a>
+        <a href="../../index.html" class="back-link" data-i18n="clock_back">← Back</a>
         <div class="controls-container hide-in-fullscreen">
             <div class="mode-selector">
-                <button class="mode-btn active" id="modeDuration">Duration</button>
-                <button class="mode-btn" id="modeEndTime">End Time</button>
+                <button class="mode-btn active" id="modeDuration" data-i18n="clock_mode_duration">Duration</button>
+                <button class="mode-btn" id="modeEndTime" data-i18n="clock_mode_endtime">End Time</button>
             </div>
             <div class="input-container">
                 <div class="field-with-icon">
-                    <input type="text" id="endTimeInput" placeholder="e.g. 1h 30m" required>
+                    <input type="text" id="endTimeInput" placeholder="e.g. 1h 30m 20s, 1:30:00"
+                        data-i18n-placeholder="clock_placeholder_duration" required>
                     <button class="icon-btn" id="timePickerBtn" title="Select time">🕒</button>
                     <!-- Time Picker Popup Layer -->
                     <div class="time-picker-popup" id="timePickerPopup">
                         <div class="picker-group">
-                            <span class="picker-label">Hours</span>
+                            <span class="picker-label" data-i18n="clock_picker_hours">Hours</span>
                             <div class="picker-controls">
                                 <button class="picker-ctrl" data-action="dec" data-target="hours">-</button>
                                 <input type="number" id="pickerHours" value="1" min="0" max="23">
@@ -35,31 +44,39 @@
                             </div>
                         </div>
                         <div class="picker-group">
-                            <span class="picker-label">Minutes</span>
+                            <span class="picker-label" data-i18n="clock_picker_minutes">Minutes</span>
                             <div class="picker-controls">
                                 <button class="picker-ctrl" data-action="dec" data-target="minutes">-</button>
                                 <input type="number" id="pickerMinutes" value="00" min="0" max="59">
                                 <button class="picker-ctrl" data-action="inc" data-target="minutes">+</button>
                             </div>
                         </div>
+                        <div class="picker-group">
+                            <span class="picker-label" data-i18n="clock_picker_seconds">Seconds</span>
+                            <div class="picker-controls">
+                                <button class="picker-ctrl" data-action="dec" data-target="seconds">-</button>
+                                <input type="number" id="pickerSeconds" value="00" min="0" max="59">
+                                <button class="picker-ctrl" data-action="inc" data-target="seconds">+</button>
+                            </div>
+                        </div>
                         <div class="presets">
-                            <button class="preset-btn" data-value="0:15">15m</button>
-                            <button class="preset-btn" data-value="0:30">30m</button>
-                            <button class="preset-btn" data-value="1:00">1h</button>
-                            <button class="preset-btn" data-value="2:00">2h</button>
+                            <button class="preset-btn" data-value="0:01:30" data-i18n="clock_preset_1m30">1m30</button>
+                            <button class="preset-btn" data-value="0:15:00" data-i18n="clock_preset_15m">15m</button>
+                            <button class="preset-btn" data-value="0:30:00" data-i18n="clock_preset_30m">30m</button>
+                            <button class="preset-btn" data-value="1:00:00" data-i18n="clock_preset_1h">1h</button>
                         </div>
                     </div>
                 </div>
-                <button class="ok-btn" id="okBtn">OK</button>
+                <button class="ok-btn" id="okBtn" data-i18n="clock_ok">OK</button>
             </div>
 
             <div class="color-container">
                 <div class="color-group">
-                    <span class="color-label">Primary Color</span>
+                    <span class="color-label" data-i18n="clock_primary_color">Primary Color</span>
                     <input type="color" id="primaryColorPicker" value="#BB86FC">
                 </div>
                 <div class="color-group">
-                    <span class="color-label">Secondary Color</span>
+                    <span class="color-label" data-i18n="clock_secondary_color">Secondary Color</span>
                     <input type="color" id="secondaryColorPicker" value="#03DAC6">
                 </div>
             </div>
@@ -68,30 +85,33 @@
                 <div class="warnings-header">
                     <label class="master-warn-label">
                         <input type="checkbox" id="masterWarningToggle" checked>
-                        <span>Warnings</span>
+                        <span data-i18n="clock_warnings">Warnings</span>
                     </label>
                     <div class="header-controls">
-                        <div class="config-btn" id="toggleConfig" title="Toggle configuration panel">⚙️ Config</div>
-                        <div class="test-box" id="testWarnings" title="Click to test the warning blink effect">TEST
+                        <div class="config-btn" id="toggleConfig" title="Toggle configuration panel"
+                            data-i18n="clock_config">⚙️ Config</div>
+                        <div class="test-box" id="testWarnings" title="Click to test the warning blink effect"
+                            data-i18n="clock_test">TEST
                         </div>
                     </div>
                 </div>
 
                 <div class="warning-config" id="warningConfigPanel">
                     <div class="config-row">
-                        <span>Breath Duration:</span>
+                        <span data-i18n="clock_breath_duration">Breath Duration:</span>
                         <label><input type="number" id="breathDuration" value="1" min="0.1" max="10" step="0.1"
                                 class="mini-input"> s</label>
                     </div>
                     <div class="config-row">
-                        <span>Single Breath:</span>
+                        <span data-i18n="clock_single_breath">Single Breath:</span>
                         <label><input type="checkbox" id="warnLong" checked> <input type="number" id="warnLongMin"
                                 value="10" min="1" max="60" class="mini-input"></label>
-                        <label><input type="checkbox" id="warnHalfTime" checked> Half-Time</label>
+                        <label><input type="checkbox" id="warnHalfTime" checked> <span
+                                data-i18n="clock_half_time">Half-Time</span></label>
                     </div>
                     <div class="config-row countdown-group">
                         <div class="countdown-options">
-                            <span>Double Breath:</span>
+                            <span data-i18n="clock_double_breath">Double Breath:</span>
                             <label><input type="checkbox" id="warn5" checked> <input type="number" id="val5" value="5"
                                     class="mini-input"></label>
                             <label><input type="checkbox" id="warn4" checked> <input type="number" id="val4" value="4"
@@ -105,39 +125,42 @@
                         </div>
                     </div>
                     <div class="config-row">
-                        <span>Invert Theme at</span>
+                        <span data-i18n="clock_invert_at">Invert Theme at</span>
                         <label><input type="checkbox" id="warnInvert" checked> 00:00</label>
                     </div>
                 </div>
             </div>
 
-            <button class="maximize-btn" id="maximizeBtn">Maximize</button>
+            <button class="maximize-btn" id="maximizeBtn" data-i18n="clock_maximize">Maximize</button>
         </div>
 
         <div class="time-display hidden" id="timeDisplay">
+            <button class="layout-toggle-btn" id="layoutToggleBtn" title="Toggle layout">⇅</button>
             <div class="time-block">
                 <div class="time-value" id="currentTimeValue"></div>
-                <div class="time-label">CURRENT</div>
+                <div class="time-label" data-i18n="clock_label_current">CURRENT</div>
             </div>
 
-            <div class="arrow">→</div>
+            <div class="arrow" id="arrow1">→</div>
 
             <div class="time-block">
                 <div class="time-value" id="remainingTimeValue"></div>
-                <div class="time-label">REMAINING</div>
+                <div class="time-label" data-i18n="clock_label_remaining">REMAINING</div>
             </div>
 
-            <div class="arrow">→</div>
+            <div class="arrow" id="arrow2">→</div>
 
             <div class="time-block">
                 <div class="time-value" id="endTimeValue"></div>
-                <div class="time-label">END</div>
+                <div class="time-label" data-i18n="clock_label_end">END</div>
             </div>
         </div>
     </div>
 
     <div class="exit-button" id="exitButton">×</div>
+    <div id="ripple-overlay"></div>
 
+    <script src="../../assets/js/i18n.js"></script>
     <script src="script.js"></script>
 </body>
 

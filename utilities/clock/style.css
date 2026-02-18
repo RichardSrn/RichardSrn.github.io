@@ -30,6 +30,44 @@ body.maximized {
     padding: 0;
 }
 
+/* Language Switcher */
+.language-switcher {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 2000;
+}
+
+#language-select {
+    background: rgba(30, 30, 30, 0.9);
+    color: var(--on-surface);
+    border: 1px solid rgba(187, 134, 252, 0.35);
+    padding: 6px 28px 6px 10px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 9px;
+}
+
+#language-select:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(187, 134, 252, 0.25);
+}
+
+#language-select option {
+    background-color: var(--surface);
+    color: var(--on-surface);
+}
+
 .container {
     background-color: var(--surface);
     border-radius: 8px;
@@ -455,6 +493,64 @@ button:hover {
     align-items: center;
     margin-top: 24px;
     width: 100%;
+    position: relative;
+    transition: flex-direction 0.3s ease;
+}
+
+/* Vertical layout */
+.time-display.layout-vertical {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+}
+
+.time-display.layout-vertical .arrow {
+    margin: 0;
+    font-size: 20px;
+    transform: rotate(90deg);
+}
+
+/* Layout toggle button */
+.layout-toggle-btn {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--primary-color);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+    line-height: 1;
+}
+
+.layout-toggle-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Auto-vertical on narrow screens */
+@media (max-width: 540px) {
+    .time-display:not(.layout-horizontal) {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .time-display:not(.layout-horizontal) .arrow {
+        margin: 0;
+        font-size: 20px;
+        transform: rotate(90deg);
+    }
+
+    .time-value {
+        font-size: 22px;
+    }
 }
 
 /* Fullscreen mode removed */
@@ -507,6 +603,18 @@ body.maximized .time-display {
     justify-content: center;
     gap: min(4vw, 4vh);
     padding: 20px;
+}
+
+body.maximized .time-display.layout-vertical {
+    flex-direction: column;
+    gap: min(2vw, 2vh);
+    padding: 20px;
+}
+
+body.maximized .time-display.layout-vertical .arrow {
+    font-size: min(3vw, 5vh);
+    margin: 0;
+    transform: rotate(90deg);
 }
 
 body.maximized .time-block {
@@ -641,13 +749,12 @@ body.maximized .back-link {
     display: none;
 }
 
-/* Warning states — ripple overlay via ::before pseudo-element */
-body::before {
-    content: '';
+/* Warning states — ripple overlay */
+#ripple-overlay {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 99999;
     border-radius: 50%;
     opacity: 0;
     background: radial-gradient(circle at center,
@@ -655,14 +762,13 @@ body::before {
             rgba(3, 218, 198, 0.08) 40%,
             transparent 70%);
     transform: scale(0);
-    transition: none;
 }
 
-body.warning-slow::before {
+body.warning-slow #ripple-overlay {
     animation: ripple-out var(--breath-duration, 1s) infinite ease-out;
 }
 
-body.warning-blink-double::before {
+body.warning-blink-double #ripple-overlay {
     animation: ripple-out var(--breath-duration, 1s) 2 ease-out;
 }
 
