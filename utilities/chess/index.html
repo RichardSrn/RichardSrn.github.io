@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Chess</title>
+    <meta name="description"
+        content="Play chess against a friend or AI. Features board evaluation, hints, and multiple game modes.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/icon/favicon_32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/icon/favicon_16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/icon/favicon_128.png">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/icon/icon.svg">
+</head>
+
+<body>
+    <!-- Back navigation -->
+    <a href="../../" class="back-link glass-panel" title="Back to Home">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+        </svg>
+    </a>
+
+    <!-- ===================== MAIN MENU SCREEN ===================== -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-container">
+            <h1 class="menu-title">
+                <span class="title-icon">♟</span>
+                Chess
+            </h1>
+            <p class="menu-subtitle">Choose a game mode</p>
+
+            <div class="mode-cards">
+                <!-- Player vs Player -->
+                <button class="mode-card" id="mode-pvp" data-mode="pvp">
+                    <div class="mode-icon">👥</div>
+                    <div class="mode-info">
+                        <h2>Player vs Player</h2>
+                        <p>Play against a friend on the same screen</p>
+                    </div>
+                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
+                </button>
+
+                <!-- Player vs AI -->
+                <button class="mode-card" id="mode-ai" data-mode="ai">
+                    <div class="mode-icon">🤖</div>
+                    <div class="mode-info">
+                        <h2>Player vs AI</h2>
+                        <p>Challenge the engine</p>
+                    </div>
+                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
+                </button>
+
+                <!-- Board Evaluation -->
+                <button class="mode-card" id="mode-eval" data-mode="evaluation">
+                    <div class="mode-icon">📊</div>
+                    <div class="mode-info">
+                        <h2>Board Evaluation</h2>
+                        <p>Analyze positions and get hints</p>
+                    </div>
+                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
+                </button>
+
+                <!-- Chess Variants -->
+                <button class="mode-card disabled" id="mode-variants" data-mode="variants" disabled>
+                    <div class="mode-icon">🎲</div>
+                    <div class="mode-info">
+                        <h2>Chess Variants</h2>
+                        <p>3, 4, 5+ players — Coming Soon</p>
+                    </div>
+                    <span class="coming-soon-badge">Soon</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== AI BOT SELECTOR ===================== -->
+    <div id="ai-difficulty-screen" class="screen">
+        <div class="menu-container bot-select-container">
+            <h1 class="menu-title">
+                <span class="title-icon">🤖</span>
+                Choose Your Opponent
+            </h1>
+            <p class="menu-subtitle">Select a bot to play against</p>
+
+            <div class="bot-roster" id="bot-roster">
+                <!-- Populated dynamically by ui.js -->
+            </div>
+
+            <button class="btn-secondary" id="btn-diff-back">← Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- ===================== GAME SCREEN ===================== -->
+    <div id="game-screen" class="screen">
+        <div class="game-layout">
+
+            <!-- Top info bar (opponent) -->
+            <div class="player-bar" id="player-bar-top">
+                <div class="player-info">
+                    <span class="player-name" id="player-top-name">Black</span>
+                    <span class="player-captures" id="player-top-captures"></span>
+                </div>
+                <!-- TODO: Add clock/timer here -->
+            </div>
+
+            <!-- Chess Board -->
+            <div class="board-wrapper">
+                <!-- Evaluation Bar -->
+                <div class="eval-bar-container" id="eval-bar-container" style="display: none;">
+                    <div class="eval-bar-fill" id="eval-bar-fill"></div>
+                </div>
+
+                <div class="board-container" id="board-container">
+                    <!-- Coordinate labels -->
+                    <div class="coords coords-files" id="coords-files"></div>
+                    <div class="coords coords-ranks" id="coords-ranks"></div>
+                    <!-- 8x8 board squares generated by board.js -->
+                    <div class="board" id="chess-board"></div>
+                </div>
+            </div>
+
+            <!-- Bottom info bar (current player) -->
+            <div class="player-bar" id="player-bar-bottom">
+                <div class="player-info">
+                    <span class="player-name" id="player-bottom-name">White</span>
+                    <span class="player-captures" id="player-bottom-captures"></span>
+                </div>
+                <!-- TODO: Add clock/timer here -->
+            </div>
+
+            <!-- Game status message -->
+            <div class="game-status" id="game-status"></div>
+
+            <!-- AI thinking indicator -->
+            <div class="ai-thinking" id="ai-thinking" style="display: none;">
+                <div class="thinking-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="thinking-text">Engine is thinking…</span>
+            </div>
+
+            <!-- Engine loading overlay -->
+            <div class="engine-loading" id="engine-loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <span>Loading Stockfish engine…</span>
+            </div>
+
+            <!-- Game controls -->
+            <div class="game-controls glass-panel">
+                <button class="ctrl-btn" id="btn-back-menu" title="Back to Menu">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                    </svg>
+                </button>
+                <button class="ctrl-btn" id="btn-new-game" title="New Game">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
+                    </svg>
+                </button>
+                <button class="ctrl-btn" id="btn-undo" title="Undo Move">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+                    </svg>
+                </button>
+                <button class="ctrl-btn" id="btn-flip" title="Flip Board">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z" />
+                    </svg>
+                </button>
+
+                <!-- Hint Button -->
+                <button class="ctrl-btn" id="btn-hint" title="Get Hint">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M9 21c0 .5.5 1 1 1h4c.5 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.5 1 1 1h6c.5 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z" />
+                    </svg>
+                </button>
+
+                <!-- PvP rotation toggle -->
+                <label class="toggle-label" id="rotation-toggle-container" style="display: none;">
+                    <input type="checkbox" id="toggle-rotation">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-text">Rotate</span>
+                </label>
+
+                <div class="ctrl-spacer"></div>
+
+                <!-- TODO: Settings button -->
+                <button class="ctrl-btn" id="btn-resign" title="Resign">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Move history panel -->
+            <div class="move-history glass-panel" id="move-history-panel">
+                <h3>Moves</h3>
+                <div class="move-list" id="move-list">
+                    <!-- Populated by ui.js -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===================== EVALUATION SCREEN ===================== -->
+    <!-- TODO: Board evaluation screen -->
+    <div id="eval-screen" class="screen">
+        <div class="placeholder-screen">
+            <div class="placeholder-icon">📊</div>
+            <h2>Board Evaluation</h2>
+            <p>Set up a board position and get analysis, hints, and best moves.</p>
+            <p class="todo-tag">TODO: Implement board editor + Stockfish evaluation</p>
+            <button class="btn-primary" id="btn-eval-back">Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="chess.min.js"></script>
+    <script src="board.js"></script>
+    <script src="game.js"></script>
+    <script src="ai.js"></script>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
