@@ -40,6 +40,7 @@ let timerInterval;
 let totalDuration = 0;
 let lastWarnedMinute = -1;
 let currentInputMode = 'duration'; // 'duration' or 'endtime'
+let endTime = null; // Stores the computed end time after startTimer()
 
 // Sync breath duration with CSS
 function updateBreathDuration() {
@@ -55,6 +56,9 @@ modeDurationBtn.addEventListener('click', () => setInputMode('duration'));
 modeEndTimeBtn.addEventListener('click', () => setInputMode('endtime'));
 
 function setInputMode(mode) {
+    const previousMode = currentInputMode;
+    // Read value BEFORE changing input type — browser sanitizes value on type change
+    const previousValue = endTimeInput.value;
     currentInputMode = mode;
     modeDurationBtn.classList.toggle('active', mode === 'duration');
     modeEndTimeBtn.classList.toggle('active', mode === 'endtime');
@@ -62,21 +66,48 @@ function setInputMode(mode) {
     // Close picker if open
     timePickerPopup.classList.remove('visible');
 
+    const now = new Date();
+
     if (mode === 'duration') {
         endTimeInput.type = 'text';
         endTimeInput.placeholder = 'e.g. 1h 30m, 90, 1:30';
-        // Set default duration if empty or looks like an end time
-        if (!endTimeInput.value || endTimeInput.value.includes(':')) {
-            endTimeInput.value = '01:00';
+
+        if (previousMode === 'endtime' && previousValue && previousValue.includes(':')) {
+            // Convert end-time → duration: duration = end - now
+            const [h, m] = previousValue.split(':').map(Number);
+            const end = new Date();
+            end.setHours(h, m, 0, 0);
+            if (end <= now) end.setDate(end.getDate() + 1);
+            const totalMin = Math.round((end - now) / 60000);
+            const dh = Math.floor(totalMin / 60);
+            const dm = totalMin % 60;
+            endTimeInput.value = `${dh}:${String(dm).padStart(2, '0')}`;
+        } else if (previousMode === 'duration' && previousValue) {
+            // Staying in duration (e.g. initial load) — keep value as-is
+            endTimeInput.value = previousValue;
+        } else {
+            endTimeInput.value = '1:00';
         }
     } else {
+        // Read value before setting type to 'time'
         endTimeInput.type = 'time';
-        // Set default end time if empty (current + 1h)
-        if (!endTimeInput.value || !endTimeInput.value.includes(':')) {
-            const now = new Date();
-            const defaultEndTime = new Date(now);
-            defaultEndTime.setHours(defaultEndTime.getHours() + 1);
-            endTimeInput.value = `${String(defaultEndTime.getHours()).padStart(2, '0')}:${String(defaultEndTime.getMinutes()).padStart(2, '0')}`;
+
+        if (previousMode === 'duration' && previousValue) {
+            // Convert duration → end-time: end = now + duration
+            const durationMs = parseDuration(previousValue);
+            if (durationMs !== null && durationMs > 0) {
+                const end = new Date(now.getTime() + durationMs);
+                endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+            } else {
+                const end = new Date(now.getTime() + 3600000);
+                endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+            }
+        } else if (previousMode === 'endtime' && previousValue) {
+            // Staying in endtime — keep value as-is
+            endTimeInput.value = previousValue;
+        } else {
+            const end = new Date(now.getTime() + 3600000);
+            endTimeInput.value = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
         }
     }
 }
@@ -188,7 +219,6 @@ testWarningsBtn.addEventListener('click', () => {
 });
 
 // Set default state
-endTimeInput.value = '01:00';
 setInputMode('duration');
 updateInputFromPicker(); // Sync picker with initial value
 
@@ -218,7 +248,6 @@ function startTimer() {
     }
 
     const now = new Date();
-    let endTime;
 
     if (currentInputMode === 'duration') {
         const durationMs = parseDuration(endTimeInput.value);
@@ -291,20 +320,13 @@ function updateTime() {
     // Update current time display
     updateDigits(currentTimeValue, `${currentHours}:${currentMinutes}`);
 
-    // Get end time
-    const [endHours, endMinutes] = endTimeInput.value.split(':');
+    // Use the stored endTime (set in startTimer) for display
+    if (!endTime) return;
+    const endHours = String(endTime.getHours()).padStart(2, '0');
+    const endMinutes = String(endTime.getMinutes()).padStart(2, '0');
 
     // Update end time display
     updateDigits(endTimeValue, `${endHours}:${endMinutes}`);
-
-    // Calculate end time today
-    const endTime = new Date();
-    endTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
-
-    // If end time is in the past, set to tomorrow
-    if (endTime < now) {
-        endTime.setDate(endTime.getDate() + 1);
-    }
 
     // Calculate time difference
     const diff = endTime - now;
