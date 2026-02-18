@@ -41,7 +41,36 @@ const translations = {
         "game0_title": "Phantom Phase Serpent",
         "game0_desc": "A unique twist on Snake with phase-shifting mechanics and avoiding phantoms.",
 
-        "footer_text": "&copy; 2026 Richard Serrano. Hosted on GitHub Pages."
+        "footer_text": "&copy; 2026 Richard Serrano. Hosted on GitHub Pages.",
+
+        // Clock utility
+        "clock_page_title": "Time Tracker",
+        "clock_back": "← Back",
+        "clock_mode_duration": "Duration",
+        "clock_mode_endtime": "End Time",
+        "clock_placeholder_duration": "e.g. 1h 30m 20s, 1:30:00",
+        "clock_ok": "OK",
+        "clock_primary_color": "Primary Color",
+        "clock_secondary_color": "Secondary Color",
+        "clock_warnings": "Warnings",
+        "clock_config": "⚙️ Config",
+        "clock_test": "TEST",
+        "clock_breath_duration": "Breath Duration:",
+        "clock_single_breath": "Single Breath:",
+        "clock_half_time": "Half-Time",
+        "clock_double_breath": "Double Breath:",
+        "clock_invert_at": "Invert Theme at",
+        "clock_maximize": "Maximize",
+        "clock_label_current": "CURRENT",
+        "clock_label_remaining": "REMAINING",
+        "clock_label_end": "END",
+        "clock_picker_hours": "Hours",
+        "clock_picker_minutes": "Minutes",
+        "clock_picker_seconds": "Seconds",
+        "clock_preset_1m30": "1m30",
+        "clock_preset_15m": "15m",
+        "clock_preset_30m": "30m",
+        "clock_preset_1h": "1h"
     },
     fr: {
         "hero_greeting_prefix": "Bonjour, je suis ",
@@ -80,7 +109,36 @@ const translations = {
         "game0_title": "Serpent de Phase Fantôme", // Literal translation, sounds a bit cool/gamey
         "game0_desc": "Une variante unique du Snake avec mécaniques de déphasage et évitement de fantômes.",
 
-        "footer_text": "&copy; 2026 Richard Serrano. Hébergé sur GitHub Pages."
+        "footer_text": "&copy; 2026 Richard Serrano. Hébergé sur GitHub Pages.",
+
+        // Clock utility
+        "clock_page_title": "Minuteur",
+        "clock_back": "← Retour",
+        "clock_mode_duration": "Durée",
+        "clock_mode_endtime": "Heure de fin",
+        "clock_placeholder_duration": "ex. 1h 30m 20s, 1:30:00",
+        "clock_ok": "OK",
+        "clock_primary_color": "Couleur principale",
+        "clock_secondary_color": "Couleur secondaire",
+        "clock_warnings": "Alertes",
+        "clock_config": "⚙️ Config",
+        "clock_test": "TEST",
+        "clock_breath_duration": "Durée du souffle :",
+        "clock_single_breath": "Souffle simple :",
+        "clock_half_time": "Mi-temps",
+        "clock_double_breath": "Double souffle :",
+        "clock_invert_at": "Inverser le thème à",
+        "clock_maximize": "Agrandir",
+        "clock_label_current": "ACTUEL",
+        "clock_label_remaining": "RESTANT",
+        "clock_label_end": "FIN",
+        "clock_picker_hours": "Heures",
+        "clock_picker_minutes": "Minutes",
+        "clock_picker_seconds": "Secondes",
+        "clock_preset_1m30": "1m30",
+        "clock_preset_15m": "15m",
+        "clock_preset_30m": "30m",
+        "clock_preset_1h": "1h"
     }
 };
 
@@ -95,6 +153,14 @@ function setLanguage(lang) {
             } else {
                 element.textContent = translations[lang][key];
             }
+        }
+    });
+
+    // 1b. Update placeholder attributes
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+            element.placeholder = translations[lang][key];
         }
     });
 
