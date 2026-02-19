@@ -389,6 +389,36 @@ body {
     color: var(--sq-light);
 }
 
+/* ===================== COORDINATE MODES ===================== */
+/* Mode 0: OFF */
+.coords-mode-0 .coords {
+    display: none;
+}
+
+/* Mode 2: ALL SQUARES (Internal) */
+.coords-mode-2 .coords {
+    display: none;
+}
+
+.coords-mode-2 .square::after {
+    content: attr(data-square);
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.coords-mode-2 .square.light::after {
+    color: var(--sq-dark);
+}
+
+.coords-mode-2 .square.dark::after {
+    color: var(--sq-light);
+}
+
 /* Squares */
 .square {
     position: relative;
@@ -465,16 +495,21 @@ body {
     background: transparent;
 }
 
-/* Piece styling */
+/* Piece styling — with high-contrast outline for white pieces on light squares */
 .piece {
     font-size: calc(var(--sq-size) * 0.78);
     line-height: 1;
     pointer-events: none;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    /* Multi-shadow outline: dark edges make white pieces pop on light squares */
+    text-shadow:
+        0 0 3px rgba(0, 0, 0, 0.7),
+        0 1px 3px rgba(0, 0, 0, 0.5),
+        1px 0 3px rgba(0, 0, 0, 0.5),
+        -1px 0 3px rgba(0, 0, 0, 0.5),
+        0 -1px 3px rgba(0, 0, 0, 0.5);
     transition: transform 0.08s ease;
     z-index: 1;
     will-change: transform;
-    /* Optimized for animation */
 }
 
 /* Animation class for smooth moves */
@@ -1005,7 +1040,7 @@ body {
 }
 
 /* ============================================
-   AI THINKING INDICATOR
+   AI THINKING INDICATOR — visibility-based (no layout shift)
    ============================================ */
 .ai-thinking {
     display: flex;
@@ -1016,6 +1051,16 @@ body {
     color: var(--accent);
     font-size: 0.85rem;
     font-weight: 500;
+    /* Use opacity+visibility instead of display:none to prevent layout shifts */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    min-height: 2rem;
+}
+
+.ai-thinking.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .thinking-dots {
@@ -1059,7 +1104,7 @@ body {
 }
 
 /* ============================================
-   ENGINE LOADING
+   ENGINE LOADING — visibility-based
    ============================================ */
 .engine-loading {
     display: flex;
@@ -1069,6 +1114,15 @@ body {
     padding: 0.6rem 0;
     color: var(--text-secondary);
     font-size: 0.85rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    min-height: 2.2rem;
+}
+
+.engine-loading.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .loading-spinner {
@@ -1083,5 +1137,252 @@ body {
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   HISTORY BANNER
+   ============================================ */
+.history-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.35rem 0.8rem;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--warning);
+    font-weight: 500;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.history-banner.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.history-back-btn {
+    background: none;
+    border: none;
+    color: var(--warning);
+    font-family: var(--font-main);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.history-back-btn:hover {
+    color: var(--text-primary);
+}
+
+/* ============================================
+   GAME OVER OVERLAY
+   ============================================ */
+.game-over-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: inherit;
+}
+
+.game-over-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.game-over-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+    overflow: hidden;
+    animation: gameOverIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes gameOverIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.game-over-icon {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.game-over-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.game-over-reason {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.game-over-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.confetti-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* ============================================
+   SETTINGS SCREEN
+   ============================================ */
+.settings-container {
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings-section {
+    text-align: left;
+}
+
+.settings-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+}
+
+/* Language toggle */
+.lang-toggle {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.lang-btn {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    backdrop-filter: blur(8px);
+}
+
+.lang-btn:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.lang-btn.active {
+    background: rgba(124, 106, 239, 0.15);
+    border-color: var(--accent);
+    color: var(--text-primary);
+    box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* Theme swatches */
+.theme-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+}
+
+.theme-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.3rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+}
+
+.theme-swatch:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.theme-swatch.active {
+    border-color: var(--accent);
+    background: rgba(124, 106, 239, 0.12);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.swatch-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.swatch-preview span {
+    display: block;
+}
+
+.swatch-name {
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* ============================================
+   RESPONSIVE (patch)
+   ============================================ */
+@media (max-width: 480px) {
+    .theme-swatches {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
