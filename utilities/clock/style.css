@@ -508,7 +508,6 @@ button:hover {
 .time-display.layout-vertical .arrow {
     margin: 0;
     font-size: 20px;
-    transform: rotate(90deg);
 }
 
 /* Layout toggle button */
@@ -545,7 +544,6 @@ button:hover {
     .time-display:not(.layout-horizontal) .arrow {
         margin: 0;
         font-size: 20px;
-        transform: rotate(90deg);
     }
 
     .time-value {
@@ -614,7 +612,6 @@ body.maximized .time-display.layout-vertical {
 body.maximized .time-display.layout-vertical .arrow {
     font-size: min(3vw, 5vh);
     margin: 0;
-    transform: rotate(90deg);
 }
 
 body.maximized .time-block {
