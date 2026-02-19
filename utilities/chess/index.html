@@ -19,7 +19,7 @@
 
 <body>
     <!-- Back navigation -->
-    <a href="../../" class="back-link glass-panel" title="Back to Home">
+    <a href="../../" class="back-link glass-panel" data-i18n-title="tooltip_back" title="Back to Home">
         <svg viewBox="0 0 24 24" width="20" height="20">
             <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
         </svg>
@@ -30,17 +30,17 @@
         <div class="menu-container">
             <h1 class="menu-title">
                 <span class="title-icon">♟</span>
-                Chess
+                <span data-i18n="chess_title">Chess</span>
             </h1>
-            <p class="menu-subtitle">Choose a game mode</p>
+            <p class="menu-subtitle" data-i18n="choose_game_mode">Choose a game mode</p>
 
             <div class="mode-cards">
                 <!-- Player vs Player -->
                 <button class="mode-card" id="mode-pvp" data-mode="pvp">
                     <div class="mode-icon">👥</div>
                     <div class="mode-info">
-                        <h2>Player vs Player</h2>
-                        <p>Play against a friend on the same screen</p>
+                        <h2 data-i18n="pvp_title">Player vs Player</h2>
+                        <p data-i18n="pvp_desc">Play against a friend on the same screen</p>
                     </div>
                     <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
                         <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
@@ -51,8 +51,8 @@
                 <button class="mode-card" id="mode-ai" data-mode="ai">
                     <div class="mode-icon">🤖</div>
                     <div class="mode-info">
-                        <h2>Player vs AI</h2>
-                        <p>Challenge the engine</p>
+                        <h2 data-i18n="ai_title">Player vs AI</h2>
+                        <p data-i18n="ai_desc">Challenge the engine</p>
                     </div>
                     <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
                         <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
@@ -63,8 +63,20 @@
                 <button class="mode-card" id="mode-eval" data-mode="evaluation">
                     <div class="mode-icon">📊</div>
                     <div class="mode-info">
-                        <h2>Board Evaluation</h2>
-                        <p>Analyze positions and get hints</p>
+                        <h2 data-i18n="eval_title">Board Evaluation</h2>
+                        <p data-i18n="eval_desc">Analyze positions and get hints</p>
+                    </div>
+                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
+                </button>
+
+                <!-- Settings -->
+                <button class="mode-card" id="mode-settings">
+                    <div class="mode-icon">⚙️</div>
+                    <div class="mode-info">
+                        <h2 data-i18n="settings_title">Settings</h2>
+                        <p data-i18n="settings_desc">Language, themes &amp; preferences</p>
                     </div>
                     <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
                         <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
@@ -75,10 +87,10 @@
                 <button class="mode-card disabled" id="mode-variants" data-mode="variants" disabled>
                     <div class="mode-icon">🎲</div>
                     <div class="mode-info">
-                        <h2>Chess Variants</h2>
-                        <p>3, 4, 5+ players — Coming Soon</p>
+                        <h2 data-i18n="variants_title">Chess Variants</h2>
+                        <p data-i18n="variants_desc">3, 4, 5+ players — Coming Soon</p>
                     </div>
-                    <span class="coming-soon-badge">Soon</span>
+                    <span class="coming-soon-badge" data-i18n="soon_badge">Soon</span>
                 </button>
             </div>
         </div>
@@ -89,15 +101,44 @@
         <div class="menu-container bot-select-container">
             <h1 class="menu-title">
                 <span class="title-icon">🤖</span>
-                Choose Your Opponent
+                <span data-i18n="choose_opponent">Choose Your Opponent</span>
             </h1>
-            <p class="menu-subtitle">Select a bot to play against</p>
+            <p class="menu-subtitle" data-i18n="select_bot">Select a bot to play against</p>
 
             <div class="bot-roster" id="bot-roster">
                 <!-- Populated dynamically by ui.js -->
             </div>
 
-            <button class="btn-secondary" id="btn-diff-back">← Back to Menu</button>
+            <button class="btn-secondary" id="btn-diff-back" data-i18n="back_to_menu">← Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- ===================== SETTINGS SCREEN ===================== -->
+    <div id="settings-screen" class="screen">
+        <div class="menu-container settings-container">
+            <h1 class="menu-title">
+                <span class="title-icon">⚙️</span>
+                <span data-i18n="settings_header">Settings</span>
+            </h1>
+
+            <!-- Language -->
+            <div class="settings-section">
+                <h3 class="settings-label" data-i18n="language_label">Language</h3>
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+                    <button class="lang-btn" data-lang="fr">🇫🇷 Français</button>
+                </div>
+            </div>
+
+            <!-- Board Theme -->
+            <div class="settings-section">
+                <h3 class="settings-label" data-i18n="board_theme_label">Board Theme</h3>
+                <div class="theme-swatches" id="theme-swatches">
+                    <!-- Populated by ui.js -->
+                </div>
+            </div>
+
+            <button class="btn-secondary" id="btn-settings-back" data-i18n="back_to_menu">← Back to Menu</button>
         </div>
     </div>
 
@@ -111,7 +152,6 @@
                     <span class="player-name" id="player-top-name">Black</span>
                     <span class="player-captures" id="player-top-captures"></span>
                 </div>
-                <!-- TODO: Add clock/timer here -->
             </div>
 
             <!-- Chess Board -->
@@ -136,54 +176,70 @@
                     <span class="player-name" id="player-bottom-name">White</span>
                     <span class="player-captures" id="player-bottom-captures"></span>
                 </div>
-                <!-- TODO: Add clock/timer here -->
             </div>
 
             <!-- Game status message -->
             <div class="game-status" id="game-status"></div>
 
             <!-- AI thinking indicator -->
-            <div class="ai-thinking" id="ai-thinking" style="display: none;">
+            <div class="ai-thinking" id="ai-thinking">
                 <div class="thinking-dots">
                     <span></span><span></span><span></span>
                 </div>
-                <span class="thinking-text">Engine is thinking…</span>
+                <span class="thinking-text" data-i18n="engine_thinking">Engine is thinking…</span>
             </div>
 
             <!-- Engine loading overlay -->
-            <div class="engine-loading" id="engine-loading" style="display: none;">
+            <div class="engine-loading" id="engine-loading">
                 <div class="loading-spinner"></div>
-                <span>Loading Stockfish engine…</span>
+                <span data-i18n="loading_stockfish">Loading Stockfish engine…</span>
+            </div>
+
+            <!-- History view banner -->
+            <div class="history-banner" id="history-banner">
+                <span data-i18n="viewing_history">Viewing history</span>
+                <button class="history-back-btn" id="btn-history-back" data-i18n="back_to_live">→ Live game</button>
             </div>
 
             <!-- Game controls -->
             <div class="game-controls glass-panel">
-                <button class="ctrl-btn" id="btn-back-menu" title="Back to Menu">
+                <button class="ctrl-btn" id="btn-back-menu" data-i18n-title="tooltip_back" title="Back to Menu">
                     <svg viewBox="0 0 24 24" width="18" height="18">
                         <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
                     </svg>
                 </button>
-                <button class="ctrl-btn" id="btn-new-game" title="New Game">
+                <button class="ctrl-btn" id="btn-new-game" data-i18n-title="tooltip_new_game" title="New Game">
                     <svg viewBox="0 0 24 24" width="18" height="18">
                         <path fill="currentColor"
                             d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
                     </svg>
                 </button>
-                <button class="ctrl-btn" id="btn-undo" title="Undo Move">
+                <button class="ctrl-btn" id="btn-undo" data-i18n-title="tooltip_undo" title="Undo Move">
                     <svg viewBox="0 0 24 24" width="18" height="18">
                         <path fill="currentColor"
                             d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
                     </svg>
                 </button>
-                <button class="ctrl-btn" id="btn-flip" title="Flip Board">
+                <button class="ctrl-btn" id="btn-flip" data-i18n-title="tooltip_flip" title="Flip Board">
                     <svg viewBox="0 0 24 24" width="18" height="18">
                         <path fill="currentColor"
                             d="M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z" />
                     </svg>
                 </button>
 
+                <!-- Coords Toggle (State 1: Hidden, 2: Outside, 3: Inside) -->
+                <button class="ctrl-btn" id="btn-coords" title="Toggle Coordinates">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M9 7H7v2h2V7zm0 4H7v2h2v-2zm0-8a2 2 0 0 1 2 2h-1a1 1 0 0 0-1-1V3zm4 0h1a1 1 0 0 0-1 1v-1zm-8 4h1a1 1 0 0 0-1-1v1zm0-4a2 2 0 0 1 2 2H6a1 1 0 0 0-1-1V3zm8 16a2 2 0 0 1-2 2h1a1 1 0 0 0 1-1v-1zm-4 0h-1a1 1 0 0 0 1 1v-1z M5 21h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zm2-2v-2h2v2H7zm4 0v-2h2v2h-2zm4 0v-2h2v2h-2z" />
+                        <!-- Simple ABC icon representation -->
+                        <text x="50%" y="65%" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor"
+                            style="pointer-events: none;">xy</text>
+                    </svg>
+                </button>
+
                 <!-- Hint Button -->
-                <button class="ctrl-btn" id="btn-hint" title="Get Hint">
+                <button class="ctrl-btn" id="btn-hint" data-i18n-title="tooltip_hint" title="Get Hint">
                     <svg viewBox="0 0 24 24" width="18" height="18">
                         <path fill="currentColor"
                             d="M9 21c0 .5.5 1 1 1h4c.5 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.5 1 1 1h6c.5 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z" />
@@ -194,13 +250,12 @@
                 <label class="toggle-label" id="rotation-toggle-container" style="display: none;">
                     <input type="checkbox" id="toggle-rotation">
                     <span class="toggle-slider"></span>
-                    <span class="toggle-text">Rotate</span>
+                    <span class="toggle-text" data-i18n="rotate_label">Rotate</span>
                 </label>
 
                 <div class="ctrl-spacer"></div>
 
-                <!-- TODO: Settings button -->
-                <button class="ctrl-btn" id="btn-resign" title="Resign">
+                <button class="ctrl-btn" id="btn-resign" data-i18n-title="tooltip_resign" title="Resign">
                     <svg viewBox="0 0 24 24" width="18" height="18">
                         <path fill="currentColor" d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" />
                     </svg>
@@ -209,29 +264,45 @@
 
             <!-- Move history panel -->
             <div class="move-history glass-panel" id="move-history-panel">
-                <h3>Moves</h3>
+                <h3 data-i18n="moves_label">Moves</h3>
                 <div class="move-list" id="move-list">
                     <!-- Populated by ui.js -->
                 </div>
             </div>
 
         </div>
+
+        <!-- Game Over Overlay (inside game screen) -->
+        <div class="game-over-overlay" id="game-over-overlay">
+            <div class="game-over-card glass-panel">
+                <div class="game-over-icon" id="game-over-icon">♛</div>
+                <h2 class="game-over-title" id="game-over-title">Checkmate!</h2>
+                <p class="game-over-reason" id="game-over-reason">Black wins by checkmate</p>
+                <div class="game-over-actions">
+                    <button class="btn-primary" id="btn-gameover-new" data-i18n="new_game">New Game</button>
+                    <button class="btn-secondary" id="btn-gameover-menu" data-i18n="back_to_menu">← Back to
+                        Menu</button>
+                </div>
+                <!-- Confetti canvas -->
+                <canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+            </div>
+        </div>
     </div>
 
     <!-- ===================== EVALUATION SCREEN ===================== -->
-    <!-- TODO: Board evaluation screen -->
     <div id="eval-screen" class="screen">
         <div class="placeholder-screen">
             <div class="placeholder-icon">📊</div>
-            <h2>Board Evaluation</h2>
-            <p>Set up a board position and get analysis, hints, and best moves.</p>
-            <p class="todo-tag">TODO: Implement board editor + Stockfish evaluation</p>
-            <button class="btn-primary" id="btn-eval-back">Back to Menu</button>
+            <h2 data-i18n="eval_screen_title">Board Evaluation</h2>
+            <p data-i18n="eval_screen_desc">Set up a board position and get analysis, hints, and best moves.</p>
+            <button class="btn-primary" id="btn-eval-back" data-i18n="back_to_menu_btn">Back to Menu</button>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="chess.min.js"></script>
+    <script src="i18n.js"></script>
+    <script src="themes.js"></script>
     <script src="board.js"></script>
     <script src="game.js"></script>
     <script src="ai.js"></script>

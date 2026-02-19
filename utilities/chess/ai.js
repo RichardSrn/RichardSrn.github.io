@@ -15,6 +15,7 @@ const ChessAI = (() => {
     let isThinking = false;
     let currentBot = null;
     let computeMode = 'client';
+    let activeTurn = 'w'; // 'w' or 'b', tracked for score normalization
 
     // Resolve function for the current bestmove promise
     let bestMoveResolver = null;
@@ -60,6 +61,9 @@ const ChessAI = (() => {
                 worker.onmessage = handleMessage;
                 worker.onerror = (e) => {
                     console.error('Stockfish Worker error:', e);
+                    if (e.message) console.error('Message:', e.message);
+                    if (e.filename) console.error('File:', e.filename, 'Line:', e.lineno);
+
                     isReady = false;
                     if (readyResolver) {
                         readyResolver(false);
@@ -112,12 +116,26 @@ const ChessAI = (() => {
             }
             bestMoveResolver = null;
         } else if (line.startsWith('info') && line.includes('score')) {
-            // Collect search info for evaluation
             const info = parseInfoLine(line);
             searchInfoLines.push(info);
 
-            if (onEvaluationUpdate && (info.score !== undefined || info.mate !== undefined)) {
-                onEvaluationUpdate(info.score, info.mate, info.depth);
+            // Stockfish reports score from side-to-move perspective.
+            // We want absolute score (White +ve, Black -ve).
+            // If Black to move, negate the score.
+            let absScore = info.score;
+            let absMate = info.mate;
+
+            if (activeTurn === 'b') {
+                if (absScore !== undefined) absScore = -absScore;
+                if (absMate !== undefined) absMate = -absMate;
+            }
+
+            // Emit live updates
+            if (onEvaluationUpdate && (absScore !== undefined || absMate !== undefined)) {
+                // Emit frequenty (depth >= 2)
+                if (!info.depth || info.depth >= 2) {
+                    onEvaluationUpdate(absScore, absMate, info.depth);
+                }
             }
         }
     }
@@ -196,6 +214,10 @@ const ChessAI = (() => {
         isThinking = true;
         searchInfoLines = [];
 
+        // Parse active turn from FEN (2nd token)
+        const parts = fen.split(' ');
+        activeTurn = parts[1] || 'w';
+
         const bot = currentBot || BOTS[5];
 
         return new Promise((resolve) => {
@@ -240,6 +262,10 @@ const ChessAI = (() => {
         isThinking = true;
         searchInfoLines = [];
 
+        // Parse active turn
+        const parts = fen.split(' ');
+        activeTurn = parts[1] || 'w';
+
         return new Promise((resolve) => {
             bestMoveResolver = () => {
                 // When bestmove arrives, return the last (deepest) info line
@@ -249,10 +275,19 @@ const ChessAI = (() => {
                     ? validLines[validLines.length - 1]
                     : { score: 0, depth: 0 };
 
+                // Normalize final result too
+                let absScore = lastInfo.score || 0;
+                let absMate = lastInfo.mate || null;
+
+                if (activeTurn === 'b') {
+                    if (absScore !== 0) absScore = -absScore;
+                    if (absMate !== null) absMate = -absMate;
+                }
+
                 resolve({
-                    score: lastInfo.score || 0,
+                    score: absScore,
                     bestLine: lastInfo.pv || [],
-                    mate: lastInfo.mate || null,
+                    mate: absMate,
                     depth: lastInfo.depth || 0
                 });
             };

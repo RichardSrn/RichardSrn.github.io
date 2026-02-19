@@ -15,7 +15,10 @@ const ChessGame = (() => {
     let rotateBoard = false;   // PvP board rotation toggle
     let playerColor = 'w';     // For AI mode: which color the human plays
     let moveHistory = [];      // Array of { moveNumber, white, black }
+    let fullSANHistory = [];   // Raw SAN array, always kept up-to-date
     let isGameOver = false;
+    let historyMode = false;   // true when browsing past moves
+    let historyView = null;    // Temporary chess.js instance used for history view
 
     // Callbacks
     let onMove = null;
@@ -67,6 +70,7 @@ const ChessGame = (() => {
         if (result) {
             // Update history
             updateMoveHistory(result);
+            fullSANHistory = game.history();
 
             // Check game state
             const state = getState();
@@ -194,6 +198,7 @@ const ChessGame = (() => {
      */
     function rebuildMoveHistory() {
         const historyArr = game.history();
+        fullSANHistory = [...historyArr];
         moveHistory = [];
 
         for (let i = 0; i < historyArr.length; i++) {
@@ -208,6 +213,67 @@ const ChessGame = (() => {
                 moveHistory[moveHistory.length - 1].black = historyArr[i];
             }
         }
+    }
+
+    /**
+     * Navigate to a specific half-move index (0-based)
+     * @param {number} halfMoveIdx - 0 = after first white move, 1 = after first black move, etc.
+     * @returns {object} state of the board at that point
+     */
+    function navigateToMove(halfMoveIdx) {
+        const movesToPlay = fullSANHistory.slice(0, halfMoveIdx + 1);
+        historyView = new Chess();
+        for (const san of movesToPlay) {
+            historyView.move(san);
+        }
+        historyMode = true;
+        return getHistoryState();
+    }
+
+    /**
+     * Exit history mode back to live game
+     */
+    function exitHistoryMode() {
+        historyMode = false;
+        historyView = null;
+    }
+
+    /**
+     * Get the current history-view state
+     */
+    function getHistoryState() {
+        if (!historyView) return getState();
+        return {
+            board: historyView.board(),
+            turn: historyView.turn(),
+            isCheck: historyView.in_check(),
+            isCheckmate: false,
+            isStalemate: false,
+            isDraw: false,
+            isThreefold: false,
+            isInsufficient: false,
+            isGameOver: false,
+            fen: historyView.fen(),
+            pgn: historyView.pgn(),
+            moveHistory: moveHistory,
+            mode: mode,
+            rotateBoard: rotateBoard,
+            moveCount: historyView.history().length
+        };
+    }
+
+    /**
+     * Get the full raw SAN history (for replaying)
+     */
+    function getFullMoveHistory() {
+        return [...fullSANHistory];
+    }
+
+    /**
+     * Whether we are in history browsing mode
+     */
+    function isInHistoryMode() {
+        return historyMode;
     }
 
     /**
@@ -267,6 +333,7 @@ const ChessGame = (() => {
         getLegalMoves,
         undo,
         getState,
+        getHistoryState,
         getKingSquare,
         isPlayerTurn,
         isPromotionMove,
@@ -274,6 +341,10 @@ const ChessGame = (() => {
         getMode,
         shouldRotate,
         reset,
-        loadFEN
+        loadFEN,
+        navigateToMove,
+        exitHistoryMode,
+        isInHistoryMode,
+        getFullMoveHistory
     };
 })();

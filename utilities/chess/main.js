@@ -1,494 +1,344 @@
 /**
- * main.js — Chess Utility Entry Point
- * 
- * Wires together:
- * - ChessBoard (board.js) — rendering
- * - ChessGame (game.js) — game logic
- * - ChessAI (ai.js) — AI opponent
- * - ChessUI (ui.js) — UI controls
+ * main.js — Chess Application Entry Point (Phase 2)
+ *
+ * Orchestrates ChessUI, ChessBoard, ChessGame, ChessAI together.
+ * Handles:
+ * - Game initialization (PvP, AI)
+ * - Move execution + AI move triggering
+ * - Screen transitions
+ * - History-mode navigation
+ * - Game-over detection and overlay
+ * - Hint computation
+ * - Undo, resign, flip, rotation
+ * - Eval bar live updates
  */
 
 (function () {
     'use strict';
 
-    let selectedSquare = null;
-    let isEvaluationEnabled = true;
+    let gameMode = null;     // 'pvp' | 'ai'
+    let selectedBot = null;  // bot id string
+    let playerColor = 'w';
+    let aiIsThinking = false;
+    let historyViewIdx = -1; // current history browse index
 
-    /**
-     * Initialize everything on DOM ready
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialize UI
-        ChessUI.init({
-            onModeSelect: startGame,
-            onBotSelect: startAIGame,
-            onBackToMenu: backToMenu,
-            onNewGame: newGame,
-            onUndo: undoMove,
-            onFlip: flipBoard,
-            onResign: resign,
-            onRotationToggle: toggleRotation,
-            onHint: handleHint,
-            onMoveClick: handleMoveClick
-        });
-
-        // Setup AI evaluation callback
-        ChessAI.setOnEvaluationUpdate(handleEvaluationUpdate);
-    });
-
-    /**
-     * Start a game with the selected mode
-     */
-    function startGame(mode) {
-        selectedSquare = null;
-
-        // Initialize game logic
-        ChessGame.init({
-            mode: mode,
-            rotateBoard: false,
-            playerColor: 'w',
-            onMove: handleMove,
-            onGameOver: handleGameOver,
-            onStateChange: handleStateChange
-        });
-
-        startBoard();
-
-        // Show rotation toggle only for PvP
-        ChessUI.showRotationToggle(mode === 'pvp');
-
-        // Hide AI indicators
-        ChessUI.showThinking(false);
-        ChessUI.showEngineLoading(false);
-        ChessUI.showEvalBar(false);
-
-        // Transition to game screen
-        ChessUI.showScreen('game');
-
-        // Render initial position
-        renderFullState();
-    }
-
-    /**
-     * Start an AI game (called from bot selector)
-     */
-    async function startAIGame(botId) {
-        selectedSquare = null;
-
-        // Select the bot
-        ChessAI.selectBot(botId);
-        const bot = ChessAI.getCurrentBot();
-
-        // Tell UI about the bot for player bar labels
-        ChessUI.setCurrentBot(bot);
-
-        // Initialize game in AI mode
-        ChessGame.init({
-            mode: 'ai',
-            rotateBoard: false,
-            playerColor: 'w',
-            onMove: handleMove,
-            onGameOver: handleGameOver,
-            onStateChange: handleStateChange
-        });
-
-        startBoard();
-
-        // Hide rotation toggle for AI mode
-        ChessUI.showRotationToggle(false);
-
-        // Show Eval bar (starts at 50% neutral)
-        ChessUI.showEvalBar(true);
-        ChessUI.updateEvalBar(0, null); // Reset
-
-        // Transition to game screen
-        ChessUI.showScreen('game');
-        renderFullState();
-
-        // Initialize Stockfish engine
-        ChessUI.showEngineLoading(true);
-        const success = await ChessAI.init();
-        ChessUI.showEngineLoading(false);
-
-        if (success) {
-            console.log('Stockfish engine ready');
-            // Trigger initial evaluation
-            triggerEvaluation();
-        } else {
-            console.warn('Stockfish failed to load — using random moves fallback');
-        }
-    }
-
-    /* Common board init */
-    function startBoard() {
+    /* ===================== INIT ===================== */
+    function init() {
         ChessBoard.init({
             onSquareClick: handleSquareClick,
-            onPieceDrop: handlePieceDrop,
-            flipped: false
+            onPieceDrop: handlePieceDrop
+        });
+
+        ChessUI.init({
+            onModeSelect: handleModeSelect,
+            onBotSelect: handleBotSelect,
+            onBackToMenu: handleBackToMenu,
+            onNewGame: handleNewGame,
+            onUndo: handleUndo,
+            onFlip: handleFlip,
+            onResign: handleResign,
+            onHint: handleHint,
+            onRotationToggle: handleRotationToggle,
+            onMoveClick: handleMoveClick,
+            onHistoryBack: handleHistoryBack
+        });
+
+        ChessAI.setOnEvaluationUpdate((score, mate, depth) => {
+            ChessUI.updateEvalBar(score, mate);
         });
     }
 
-    /**
-     * Handle square click (select piece or make move)
-     */
+    /* ===================== MODE SELECTION ===================== */
+    function handleModeSelect(mode) {
+        if (mode === 'pvp') {
+            gameMode = 'pvp';
+            startPvPGame();
+        }
+    }
+
+    function handleBotSelect(botId) {
+        selectedBot = botId;
+        startAIGame(botId);
+    }
+
+    function startPvPGame() {
+        ChessUI.showScreen('game');
+        ChessUI.showRotationToggle(true);
+        ChessUI.showEvalBar(false);
+        ChessUI.hideGameOver();
+
+        ChessGame.init({
+            mode: 'pvp',
+            onMove: handleMove,
+            onGameOver: handleGameOver,
+            onStateChange: renderFullState
+        });
+
+        ChessBoard.flipBoard(false);
+        renderFullState(ChessGame.getState());
+    }
+
+    async function startAIGame(botId) {
+        ChessUI.showScreen('game');
+        ChessUI.showRotationToggle(false);
+        ChessUI.showEvalBar(true);
+        ChessUI.hideGameOver();
+
+        const bot = ChessAI.getBotById(botId);
+        ChessUI.setCurrentBot(bot);
+
+        ChessAI.selectBot(botId);
+        ChessBoard.flipBoard(false);
+
+        ChessGame.init({
+            mode: 'ai',
+            playerColor: 'w',
+            onMove: handleMove,
+            onGameOver: handleGameOver,
+            onStateChange: renderFullState
+        });
+
+        renderFullState(ChessGame.getState());
+
+        // Init engine in background
+        ChessUI.showEngineLoading(true);
+        await ChessAI.init();
+        ChessUI.showEngineLoading(false);
+    }
+
+    /* ===================== SQUARE / MOVE HANDLING ===================== */
+    let selectedSquare = null;
+
     function handleSquareClick(sqName) {
-        if (!ChessGame.isPlayerTurn()) return;
+        // Ignore input while in history mode or AI is thinking
+        if (ChessGame.isInHistoryMode()) return;
+        if (aiIsThinking) return;
 
         const state = ChessGame.getState();
         if (state.isGameOver) return;
+        if (!ChessGame.isPlayerTurn()) return;
 
-        if (selectedSquare) {
-            // If clicking the same square, deselect
+        if (!selectedSquare) {
+            // Select piece
+            const legalMoves = ChessGame.getLegalMoves(sqName);
+            if (legalMoves.length > 0) {
+                selectedSquare = sqName;
+                ChessBoard.setSelected(sqName);
+                ChessBoard.showLegalMoves(legalMoves);
+            }
+        } else {
             if (sqName === selectedSquare) {
-                deselectPiece();
+                // Deselect
+                deselect();
                 return;
             }
-
-            // Try to make a move
+            // Try move
             attemptMove(selectedSquare, sqName);
-        } else {
-            // Select a piece
-            selectPiece(sqName);
         }
     }
 
-    /**
-     * Handle drag & drop
-     */
     function handlePieceDrop(from, to) {
-        if (!ChessGame.isPlayerTurn()) return;
+        if (ChessGame.isInHistoryMode()) return;
+        if (aiIsThinking || !ChessGame.isPlayerTurn()) return;
+        attemptMove(from, to);
+    }
 
-        const state = ChessGame.getState();
-        if (state.isGameOver) return;
+    async function attemptMove(from, to) {
+        deselect();
 
-        // Clear any selection
-        deselectPiece();
+        const moveResult = ChessGame.makeMove(from, to);
+        if (!moveResult) return;
 
-        // Make move directly (animation handled by drag)
-        const result = ChessGame.makeMove(from, to);
-        if (result) {
-            if (result.needsPromotion) {
-                handlePromotion(from, to, result.color);
-            } else {
-                renderFullState();
-                postMoveActions(result);
-            }
-        } else {
-            // Invalid move -> snap back
-            renderFullState();
+        // Pawn promotion
+        if (moveResult.needsPromotion) {
+            const state = ChessGame.getState();
+            const turn = state.turn;
+            const promotion = await ChessUI.showPromotionDialog(turn);
+            ChessGame.makeMove(from, to, promotion);
         }
     }
 
-    /**
-     * Select a piece and show its legal moves
-     */
-    function selectPiece(sqName) {
-        const moves = ChessGame.getLegalMoves(sqName);
-        if (moves.length === 0) return;
-
-        selectedSquare = sqName;
-        ChessBoard.setSelected(sqName);
-        ChessBoard.showLegalMoves(moves);
-    }
-
-    /**
-     * Deselect current piece
-     */
-    function deselectPiece() {
+    function deselect() {
         selectedSquare = null;
         ChessBoard.setSelected(null);
         ChessBoard.showLegalMoves([]);
     }
 
-    /**
-     * Attempt a move, handling promotion if needed
-     */
-    async function attemptMove(from, to) {
-        const moves = ChessGame.getLegalMoves(from);
-        const isValid = moves.some(m => m.to === to);
+    /* ===================== MOVE / GAME OVER CALLBACKS ===================== */
+    async function handleMove(result, state) {
+        // Stop hint display on move
+        ChessBoard.clearHighlights('hint-move');
+        ChessBoard.clearHighlights('hint-from');
 
-        if (!isValid) {
-            deselectPiece();
-            selectPiece(to);
-            return;
-        }
+        renderFullState(state);
 
-        // Animate move for click-click
-        await ChessBoard.animateMove(from, to);
-
-        const result = ChessGame.makeMove(from, to);
-
-        if (result.needsPromotion) {
-            handlePromotion(from, to, result.color);
-            return;
-        }
-
-        // Move succeeded
-        deselectPiece();
-        renderFullState();
-        postMoveActions(result);
-    }
-
-    async function handlePromotion(from, to, color) {
-        // Show promotion dialog
-        const piece = await ChessUI.showPromotionDialog(color);
-        const promoResult = ChessGame.makeMove(from, to, piece);
-        if (promoResult) {
-            deselectPiece();
-            renderFullState();
-            postMoveActions(promoResult);
-        } else {
-            renderFullState(); // Cancelled
+        // AI response
+        if (!state.isGameOver && state.mode === 'ai' && !ChessGame.isPlayerTurn()) {
+            await triggerAIMove();
         }
     }
 
-    /**
-     * Actions after a successful move
-     */
-    async function postMoveActions(moveResult) {
-        ChessUI.clearHint();
-
-        // Board rotation for PvP rotate mode
-        if (ChessGame.shouldRotate()) {
-            const state = ChessGame.getState();
-            const shouldFlip = state.turn === 'b';
-            setTimeout(() => {
-                ChessUI.animateBoardRotation(shouldFlip);
-            }, 300);
-        }
-
-        // AI move for AI mode
-        if (ChessGame.getMode() === 'ai') {
-            if (!ChessGame.isPlayerTurn()) {
-                await makeAIMove();
-            } else {
-                // Player just moved. Trigger eval for the new position
-                triggerEvaluation();
-            }
-        }
+    function handleGameOver(state) {
+        ChessUI.updateStatus(state);
+        ChessUI.showGameOver(state);
     }
 
-    async function makeAIMove() {
-        const state = ChessGame.getState();
-        if (state.isGameOver) return;
-
-        // Show thinking indicator
+    /* ===================== AI MOVE ===================== */
+    async function triggerAIMove() {
+        if (aiIsThinking) return;
+        aiIsThinking = true;
         ChessUI.showThinking(true);
 
+        const state = ChessGame.getState();
         const aiMove = await ChessAI.getBestMove(state.fen);
 
-        // Hide thinking indicator
         ChessUI.showThinking(false);
+        aiIsThinking = false;
 
-        if (aiMove) {
-            // Animate AI move
-            await ChessBoard.animateMove(aiMove.from, aiMove.to);
+        if (!aiMove) return;
 
-            // Apply move
-            ChessGame.makeMove(aiMove.from, aiMove.to, aiMove.promotion);
-            renderFullState();
+        // Animate AI move
+        await ChessBoard.animateMove(aiMove.from, aiMove.to);
+        ChessGame.makeMove(aiMove.from, aiMove.to, aiMove.promotion);
+    }
 
-            // Trigger eval for the new position (Human turn)
-            triggerEvaluation();
+    /* ===================== RENDER ===================== */
+    function renderFullState(state) {
+        if (!state) return;
+
+        // Exec in history mode if active
+        const activeState = ChessGame.isInHistoryMode()
+            ? ChessGame.getHistoryState()
+            : state;
+
+        ChessBoard.updatePosition(activeState.board);
+
+        // Clear old check highlight
+        ChessBoard.clearHighlights('in-check');
+        if (activeState.isCheck) {
+            const kingSq = ChessGame.getKingSquare(activeState.turn);
+            ChessBoard.showCheck(kingSq);
+        }
+
+        ChessUI.updateStatus(activeState);
+        ChessUI.updatePlayerBars(activeState);
+        ChessUI.updateMoveHistory(state.moveHistory, historyViewIdx);
+
+        // Flip board for PvP if rotation enabled
+        if (state.mode === 'pvp' && state.rotateBoard) {
+            const shouldFlip = state.turn === 'b';
+            if (ChessBoard.isFlipped() !== shouldFlip) {
+                ChessBoard.flipBoard(shouldFlip);
+            }
         }
     }
 
-    /**
-     * Provide a hint (with loading indicator)
-     */
-    async function handleHint() {
-        if (!ChessGame.isPlayerTurn()) return;
+    /* ===================== HISTORY NAVIGATION ===================== */
+    function handleMoveClick(halfMoveIdx) {
+        const history = ChessGame.getFullMoveHistory();
+        if (halfMoveIdx < 0 || halfMoveIdx >= history.length) return;
 
+        historyViewIdx = halfMoveIdx;
+        const viewState = ChessGame.navigateToMove(halfMoveIdx);
+
+        ChessBoard.updatePosition(viewState.board);
+        ChessBoard.clearAllHighlights();
+
+        if (viewState.isCheck) {
+            const kingSq = ChessGame.getKingSquare(viewState.turn);
+            ChessBoard.showCheck(kingSq);
+        }
+
+        const liveState = ChessGame.getState();
+        ChessUI.updateMoveHistory(liveState.moveHistory, historyViewIdx);
+        ChessUI.setHistoryMode(true, halfMoveIdx);
+    }
+
+    function handleHistoryBack() {
+        historyViewIdx = -1;
+        ChessGame.exitHistoryMode();
+        ChessUI.setHistoryMode(false);
+
+        const state = ChessGame.getState();
+        renderFullState(state);
+    }
+
+    /* ===================== CONTROLS ===================== */
+    function handleBackToMenu() {
+        ChessGame.exitHistoryMode();
+        historyViewIdx = -1;
+        ChessUI.setHistoryMode(false);
+        ChessUI.hideGameOver();
+        ChessAI.stopThinking();
+        ChessUI.showScreen('menu');
+    }
+
+    function handleNewGame() {
+        historyViewIdx = -1;
+        ChessGame.exitHistoryMode();
+        ChessUI.setHistoryMode(false);
+        ChessUI.hideGameOver();
+
+        if (gameMode === 'pvp') {
+            ChessGame.reset();
+            renderFullState(ChessGame.getState());
+        } else if (gameMode === 'ai' && selectedBot) {
+            startAIGame(selectedBot);
+        }
+    }
+
+    function handleUndo() {
+        if (ChessGame.isInHistoryMode()) {
+            handleHistoryBack();
+            return;
+        }
+        aiIsThinking = false;
+        ChessAI.stopThinking();
+        ChessGame.undo();
+    }
+
+    function handleFlip() {
+        const newFlipped = ChessBoard.flipBoard();
+        const state = ChessGame.isInHistoryMode()
+            ? ChessGame.getHistoryState()
+            : ChessGame.getState();
+        ChessUI.updatePlayerBars(state);
+    }
+
+    function handleResign() {
+        if (ChessGame.isInHistoryMode()) return;
         const state = ChessGame.getState();
         if (state.isGameOver) return;
 
-        // Show loading spinner on hint button
-        ChessUI.showHintLoading(true);
+        ChessUI.showGameOver({ ...state, resigned: true });
+    }
 
+    async function handleHint() {
+        if (ChessGame.isInHistoryMode()) return;
+        const state = ChessGame.getState();
+        if (state.isGameOver || !ChessGame.isPlayerTurn()) return;
+
+        ChessUI.showHintLoading(true);
         try {
             const result = await ChessAI.evaluatePosition(state.fen, 15);
-
-            if (result.bestLine && result.bestLine.length > 0) {
-                const bestMove = result.bestLine[0]; // e.g., "e2e4"
-                const from = bestMove.substring(0, 2);
-                const to = bestMove.substring(2, 4);
-                ChessUI.showHint(from, to);
+            if (result && result.bestLine && result.bestLine.length >= 1) {
+                const move = result.bestLine[0];
+                if (move && move.length >= 4) {
+                    ChessUI.showHint(move.substring(0, 2), move.substring(2, 4));
+                }
             }
         } finally {
-            // Always hide loading, even on error
             ChessUI.showHintLoading(false);
         }
     }
 
-    /**
-     * Handle clicking a move in the history panel
-     */
-    function handleMoveClick(halfMoveIndex) {
-        // Highlight the clicked move visually
-        const moveNotations = document.querySelectorAll('.move-notation');
-        moveNotations.forEach((el, idx) => {
-            el.classList.toggle('current', idx === halfMoveIndex);
-        });
-    }
-
-    /**
-     * Trigger board evaluation
-     */
-    function triggerEvaluation() {
-        if (isEvaluationEnabled && ChessGame.getMode() === 'ai') {
-            const state = ChessGame.getState();
-            if (!state.isGameOver) {
-                // Run a quick eval
-                ChessAI.evaluatePosition(state.fen, 12);
-            }
-        }
-    }
-
-    /**
-     * Handle eval update from AI
-     */
-    function handleEvaluationUpdate(score, mate, depth) {
-        ChessUI.updateEvalBar(score, mate);
-    }
-
-    /**
-     * Handle move callback from game
-     */
-    function handleMove(moveResult, state) {
-        // Sound effects, etc.
-    }
-
-    /**
-     * Handle game over
-     */
-    function handleGameOver(state) {
-        // TODO: Show game over overlay/modal
-    }
-
-    /**
-     * Handle state change
-     */
-    function handleStateChange(state) {
-        // Could be used for live updates
-    }
-
-    /**
-     * Render the full board state (position + highlights + UI)
-     */
-    function renderFullState() {
+    function handleRotationToggle(checked) {
+        ChessGame.setRotation(checked);
         const state = ChessGame.getState();
-
-        // Update board pieces (diff-based, no flicker)
-        ChessBoard.updatePosition(state.board);
-
-        // Always clear check highlight before re-evaluating
-        ChessBoard.clearHighlights('in-check');
-
-        // Show check highlight only if currently in check
-        if (state.isCheck) {
-            const kingSq = ChessGame.getKingSquare(state.turn);
-            ChessBoard.showCheck(kingSq);
-        }
-
-        // Update UI
-        ChessUI.updatePlayerBars(state);
-        ChessUI.updateMoveHistory(state.moveHistory);
-        ChessUI.updateStatus(state);
+        if (!checked) ChessBoard.flipBoard(false);
+        renderFullState(state);
     }
 
-    /**
-     * Back to menu
-     */
-    function backToMenu() {
-        deselectPiece();
-        ChessBoard.clearAllHighlights();
-        ChessUI.clearHint();
-        // Stop AI if thinking
-        if (ChessAI.isAIThinking()) {
-            ChessAI.stopThinking();
-        }
-        ChessUI.showThinking(false);
-        ChessUI.showEngineLoading(false);
-        ChessUI.showEvalBar(false);
-        // Clear bot info
-        ChessUI.setCurrentBot(null);
-        // Destroy engine when leaving
-        ChessAI.destroy();
-        ChessUI.showScreen('menu');
-    }
-
-    /**
-     * New game (same mode)
-     */
-    function newGame() {
-        selectedSquare = null;
-        // Stop AI if thinking
-        if (ChessAI.isAIThinking()) {
-            ChessAI.stopThinking();
-        }
-        ChessUI.showThinking(false);
-        ChessUI.clearHint();
-        const state = ChessGame.reset();
-        ChessBoard.clearAllHighlights();
-        ChessBoard.flipBoard(false);
-        renderFullState();
-
-        if (ChessGame.getMode() === 'ai') {
-            ChessUI.updateEvalBar(0, null);
-            triggerEvaluation();
-        }
-    }
-
-    /**
-     * Undo last move
-     */
-    function undoMove() {
-        // Stop AI if thinking
-        if (ChessAI.isAIThinking()) {
-            ChessAI.stopThinking();
-        }
-        ChessUI.showThinking(false);
-        ChessUI.clearHint();
-        selectedSquare = null;
-        ChessGame.undo();
-        ChessBoard.clearAllHighlights();
-        renderFullState();
-
-        if (ChessGame.getMode() === 'ai') {
-            triggerEvaluation();
-        }
-    }
-
-    /**
-     * Flip the board
-     */
-    function flipBoard() {
-        const isFlipped = ChessBoard.flipBoard();
-        // Also flip eval bar
-        const evalBar = document.getElementById('eval-bar-container');
-        if (evalBar) {
-            evalBar.classList.toggle('flipped', isFlipped);
-        }
-        renderFullState();
-    }
-
-    /**
-     * Toggle board rotation for PvP
-     */
-    function toggleRotation(enabled) {
-        ChessGame.setRotation(enabled);
-    }
-
-    /**
-     * Resign current game
-     */
-    function resign() {
-        const state = ChessGame.getState();
-        if (!state.isGameOver) {
-            const winner = state.turn === 'w' ? 'Black' : 'White';
-            const statusEl = document.getElementById('game-status');
-            statusEl.textContent = `${state.turn === 'w' ? 'White' : 'Black'} resigns — ${winner} wins`;
-            statusEl.classList.add('game-over');
-        }
-    }
+    /* ===================== START ===================== */
+    document.addEventListener('DOMContentLoaded', init);
 })();
