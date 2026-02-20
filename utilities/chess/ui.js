@@ -24,6 +24,11 @@ const ChessUI = (() => {
     // Coords mode: 0=Off (default), 1=Edge, 2=All
     let coordsMode = 0;
 
+    // Settings
+    let isBlindMode = false;
+    let isScoreBarVisible = true;
+    let blindTtsEnabled = true;
+
     // Eval bar lerp
     let evalTarget = 50;
     let evalCurrent = 50;
@@ -32,6 +37,8 @@ const ChessUI = (() => {
     // Callbacks
     let _onMoveClick = null;
     let _onHistoryBack = null;
+    let _onTextInputSubmit = null; // added for text/voice inputs
+    let resolveTextInput = null;   // modal promise resolver
 
     // DOM refs
     const els = {};
@@ -43,6 +50,7 @@ const ChessUI = (() => {
         // Load saved theme and coords
         ChessThemes.loadSavedTheme();
         loadSavedCoords();
+        loadSavedPrefs();
 
         // Init i18n (reads localStorage)
         ChessI18n.init();
@@ -79,8 +87,57 @@ const ChessUI = (() => {
         els.btnCoords.addEventListener('click', cycleCoords);
         els.rotationToggle.addEventListener('change', e => { if (config.onRotationToggle) config.onRotationToggle(e.target.checked); });
 
-        // History back
+        // Settings Toggles
+        els.settingBlindChess.addEventListener('change', e => {
+            localStorage.setItem('chess_blind_default', e.target.checked);
+        });
+        els.settingScoreBar.addEventListener('change', e => {
+            localStorage.setItem('chess_score_bar_default', e.target.checked);
+            toggleScoreBar(e.target.checked); // immediate preview
+        });
+
+        // Quick Controls
+        els.btnToggleBlind.addEventListener('click', () => toggleBlindMode());
+        els.btnToggleEval.addEventListener('click', () => toggleScoreBar());
+
+        // History back & read
         els.btnHistoryBack.addEventListener('click', () => { if (_onHistoryBack) _onHistoryBack(); });
+        els.btnReadHistory.addEventListener('click', () => { if (config.onReadHistory) config.onReadHistory(); });
+
+        // Blind UI interactions
+        els.btnBlindTts.addEventListener('click', () => {
+            blindTtsEnabled = !blindTtsEnabled;
+            els.btnBlindTts.classList.toggle('active', blindTtsEnabled);
+        });
+
+        els.btnBlindVoice.addEventListener('click', async () => {
+            const transcript = await startVoiceInput();
+            if (transcript && config.onVoiceInput) config.onVoiceInput(transcript);
+        });
+
+        els.btnBlindText.addEventListener('click', async () => {
+            const input = await showTextInputDialog();
+            if (input && config.onTextInput) config.onTextInput(input.piece, input.square);
+        });
+
+        // Text Input Modal setup
+        document.querySelectorAll('.ti-piece').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ti-piece').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+        els.btnTiCancel.addEventListener('click', () => {
+            els.textInputOverlay.classList.remove('active');
+            if (resolveTextInput) resolveTextInput(null);
+        });
+        els.btnTiSubmit.addEventListener('click', () => {
+            els.textInputOverlay.classList.remove('active');
+            const pieceBtn = document.querySelector('.ti-piece.selected');
+            const pieceStr = pieceBtn ? pieceBtn.dataset.piece : '';
+            const sqStr = els.tiSquare.value.trim();
+            if (resolveTextInput) resolveTextInput({ piece: pieceStr, square: sqStr });
+        });
 
         // Game over actions
         els.btnGameoverNew.addEventListener('click', () => { if (config.onNewGame) config.onNewGame(); });
@@ -136,6 +193,27 @@ const ChessUI = (() => {
 
         els.evalBarContainer = document.getElementById('eval-bar-container');
         els.evalBarFill = document.getElementById('eval-bar-fill');
+        els.evalScoreText = document.getElementById('eval-score-text');
+
+        els.settingBlindChess = document.getElementById('setting-blind-chess');
+        els.settingScoreBar = document.getElementById('setting-score-bar');
+
+        els.btnToggleBlind = document.getElementById('btn-toggle-blind');
+        els.btnToggleEval = document.getElementById('btn-toggle-eval');
+
+        els.blindBoardUi = document.getElementById('blind-board-ui');
+        els.blindLastMoveText = document.getElementById('blind-last-move-text');
+        els.btnBlindTts = document.getElementById('btn-blind-tts');
+        els.btnBlindVoice = document.getElementById('btn-blind-voice');
+        els.btnBlindText = document.getElementById('btn-blind-text');
+
+        els.btnReadHistory = document.getElementById('btn-read-history');
+
+        els.textInputOverlay = document.getElementById('text-input-overlay');
+        els.tiPieces = document.getElementById('text-input-pieces');
+        els.tiSquare = document.getElementById('text-input-square');
+        els.btnTiCancel = document.getElementById('btn-text-input-cancel');
+        els.btnTiSubmit = document.getElementById('btn-text-input-submit');
 
         els.modePvp = document.getElementById('mode-pvp');
         els.modeAi = document.getElementById('mode-ai');
@@ -194,7 +272,57 @@ const ChessUI = (() => {
         });
     }
 
-    /* ===================== SETTINGS ===================== */
+    /* ===================== PREFERENCES & SETTINGS ===================== */
+    function loadSavedPrefs() {
+        const blindSaved = localStorage.getItem('chess_blind_default');
+        if (blindSaved !== null) {
+            els.settingBlindChess.checked = blindSaved === 'true';
+        }
+
+        const scoreSaved = localStorage.getItem('chess_score_bar_default');
+        if (scoreSaved !== null) {
+            els.settingScoreBar.checked = scoreSaved === 'true';
+            isScoreBarVisible = els.settingScoreBar.checked;
+        }
+    }
+
+    function isBlindModeDefault() {
+        return !!els.settingBlindChess.checked;
+    }
+
+    function isScoreBarDefault() {
+        return !!els.settingScoreBar.checked;
+    }
+
+    // Toggle Blind Mode during game
+    function toggleBlindMode(forceState) {
+        if (forceState !== undefined) isBlindMode = forceState;
+        else isBlindMode = !isBlindMode;
+
+        if (isBlindMode) {
+            els.boardContainer.style.visibility = 'hidden';
+            els.blindBoardUi.style.display = 'flex';
+            els.btnReadHistory.style.display = 'block';
+            els.btnToggleBlind.style.color = 'var(--accent)';
+        } else {
+            els.boardContainer.style.visibility = 'visible';
+            els.blindBoardUi.style.display = 'none';
+            els.btnReadHistory.style.display = 'none';
+            els.btnToggleBlind.style.color = 'inherit';
+        }
+    }
+
+    // Toggle Score Bar during game
+    function toggleScoreBar(forceState) {
+        if (forceState !== undefined) isScoreBarVisible = forceState;
+        else isScoreBarVisible = !isScoreBarVisible;
+
+        if (els.evalBarContainer) {
+            els.evalBarContainer.style.display = isScoreBarVisible ? 'flex' : 'none';
+        }
+        els.btnToggleEval.style.color = isScoreBarVisible ? 'inherit' : 'var(--text-muted)';
+    }
+
     function renderSettings() {
         renderThemeSwatches();
         updateLangButtons();
@@ -498,6 +626,65 @@ const ChessUI = (() => {
         });
     }
 
+    /* ===================== BLIND INPUTS ===================== */
+    function showTextInputDialog() {
+        return new Promise(resolve => {
+            els.tiSquare.value = '';
+            els.textInputOverlay.classList.add('active');
+            els.tiSquare.focus();
+            resolveTextInput = resolve;
+        });
+    }
+
+    function startVoiceInput() {
+        return new Promise(resolve => {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRec) {
+                alert(ChessI18n.t('voice_not_supported') || 'Voice input is not supported in your browser.');
+                resolve(null);
+                return;
+            }
+
+            const recognition = new SpeechRec();
+            recognition.lang = ChessI18n.getLang() === 'fr' ? 'fr-FR' : 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            els.btnBlindVoice.classList.add('listening');
+
+            recognition.onresult = event => {
+                const speechResult = event.results[0][0].transcript.toLowerCase();
+                els.btnBlindVoice.classList.remove('listening');
+                resolve(speechResult);
+            };
+
+            recognition.onerror = event => {
+                els.btnBlindVoice.classList.remove('listening');
+                console.error("Speech recognition error", event.error);
+                resolve(null);
+            };
+
+            recognition.onend = () => {
+                els.btnBlindVoice.classList.remove('listening');
+            };
+
+            recognition.start();
+        });
+    }
+
+    function updateBlindLastMove(san) {
+        if (els.blindLastMoveText) els.blindLastMoveText.textContent = san || '--';
+    }
+
+    function readOutLoud(text) {
+        if (!blindTtsEnabled || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        const langCode = ChessI18n.getLang() === 'fr' ? 'fr-FR' : 'en-US';
+        utterance.lang = langCode;
+        window.speechSynthesis.speak(utterance);
+    }
+
     /* ===================== INDICATORS ===================== */
     function showThinking(show) {
         if (els.aiThinking) els.aiThinking.classList.toggle('visible', show);
@@ -533,20 +720,28 @@ const ChessUI = (() => {
 
     function updateEvalBar(score, mate) {
         let target = 50;
+        let scoreText = '0.0';
+
         if (mate !== null && mate !== undefined) {
             target = mate > 0 ? 95 : 5;
+            scoreText = mate > 0 ? `+M${Math.abs(mate)}` : `-M${Math.abs(mate)}`;
         } else {
             const clamped = Math.max(-10, Math.min(10, score));
             target = 50 + (clamped / 20) * 90;
+            scoreText = score > 0 ? `+${score.toFixed(1)}` : score.toFixed(1);
         }
         evalTarget = Math.max(5, Math.min(95, target));
+
+        if (els.evalScoreText) els.evalScoreText.textContent = scoreText;
     }
 
     function showEvalBar(show) {
+        isScoreBarVisible = show;
         if (els.evalBarContainer) {
             els.evalBarContainer.style.display = show ? 'flex' : 'none';
             if (show) { evalTarget = 50; evalCurrent = 50; }
         }
+        els.btnToggleEval.style.color = show ? 'inherit' : 'var(--text-muted)';
     }
 
     /* ===================== HINT ===================== */
@@ -584,6 +779,12 @@ const ChessUI = (() => {
         showHintLoading,
         updateEvalBar,
         showEvalBar,
+        isBlindModeDefault,
+        isScoreBarDefault,
+        toggleBlindMode,
+        toggleScoreBar,
+        updateBlindLastMove,
+        readOutLoud,
         showHint,
         clearHint,
         showGameOver,
