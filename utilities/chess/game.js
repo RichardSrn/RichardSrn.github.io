@@ -112,6 +112,15 @@ const ChessGame = (() => {
     }
 
     /**
+     * Get all legal moves in current position
+     * @returns {Array} chess.js move objects
+     */
+    function getAllLegalMoves() {
+        if (isGameOver) return [];
+        return game.moves({ verbose: true });
+    }
+
+    /**
      * Undo the last move (or last 2 for AI mode)
      */
     function undo() {
@@ -331,6 +340,7 @@ const ChessGame = (() => {
         init,
         makeMove,
         getLegalMoves,
+        getAllLegalMoves,
         undo,
         getState,
         getHistoryState,

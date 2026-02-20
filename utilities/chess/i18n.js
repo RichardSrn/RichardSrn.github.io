@@ -35,6 +35,9 @@ const ChessI18n = (() => {
             theme_forest: 'Forest',
             theme_midnight: 'Midnight',
             theme_chessy: 'Chessy',
+            app_preferences_label: 'Preferences',
+            default_blind_chess: 'Default to Blind Chess',
+            show_score_bar: 'Show Score Bar',
 
             // Game
             white: 'White',
@@ -78,6 +81,18 @@ const ChessI18n = (() => {
             tooltip_flip: 'Flip Board',
             tooltip_hint: 'Get Hint',
             tooltip_resign: 'Resign',
+
+            // Blind Chess & Modal
+            voice_input: 'Voice Input',
+            text_input: 'Text Input',
+            enter_move: 'Enter Move',
+            destination: 'Destination Square or Full Move:',
+            piece: 'Piece (optional):',
+            cancel: 'Cancel',
+            submit: 'Submit',
+            move_not_understood: 'I didn\'t catch that',
+            voice_not_supported: 'Voice input is not supported in your browser.',
+            invalid_move: 'Invalid move',
         },
         fr: {
             // Main Menu
@@ -109,6 +124,9 @@ const ChessI18n = (() => {
             theme_forest: 'Forêt',
             theme_midnight: 'Minuit',
             theme_chessy: 'Chessy',
+            app_preferences_label: 'Préférences',
+            default_blind_chess: 'Échecs à l\'aveugle par défaut',
+            show_score_bar: 'Afficher la barre de score',
 
             // Game
             white: 'Blancs',
@@ -152,6 +170,18 @@ const ChessI18n = (() => {
             tooltip_flip: 'Retourner le plateau',
             tooltip_hint: 'Obtenir un indice',
             tooltip_resign: 'Abandonner',
+
+            // Blind Chess & Modal
+            voice_input: 'Entrée vocale',
+            text_input: 'Saisie texte',
+            enter_move: 'Saisir un coup',
+            destination: 'Case de destination ou coup complet :',
+            piece: 'Pièce (optionnel) :',
+            cancel: 'Annuler',
+            submit: 'Valider',
+            move_not_understood: 'Je n\'ai pas compris le coup',
+            voice_not_supported: 'L\'entrée vocale n\'est pas supportée sur ce navigateur.',
+            invalid_move: 'Coup invalide',
         }
     };
 
