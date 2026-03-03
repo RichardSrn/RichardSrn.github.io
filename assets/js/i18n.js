@@ -72,7 +72,10 @@ const translations = {
         "clock_preset_1m30": "1m30",
         "clock_preset_15m": "15m",
         "clock_preset_30m": "30m",
-        "clock_preset_1h": "1h"
+        "clock_preset_1h": "1h",
+        "clock_negative_points": "Negative points",
+        "clock_negative_rate": "Negative rate:",
+        "clock_per_minute": "per minute"
     },
     fr: {
         "hero_greeting_prefix": "Bonjour, je suis ",
@@ -142,7 +145,10 @@ const translations = {
         "clock_preset_1m30": "1m30",
         "clock_preset_15m": "15m",
         "clock_preset_30m": "30m",
-        "clock_preset_1h": "1h"
+        "clock_preset_1h": "1h",
+        "clock_negative_points": "Points négatifs",
+        "clock_negative_rate": "Taux de malus :",
+        "clock_per_minute": "par minute"
     }
 };
 

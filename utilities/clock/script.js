@@ -22,6 +22,11 @@ const warningConfigPanel = document.getElementById('warningConfigPanel');
 const masterWarningToggle = document.getElementById('masterWarningToggle');
 const breathDurationInput = document.getElementById('breathDuration');
 
+// Negative Points Elements
+const masterNegativeToggle = document.getElementById('masterNegativeToggle');
+const negativeRateInput = document.getElementById('negativeRate');
+const negativePointsDisplay = document.getElementById('negativePointsDisplay');
+
 const modeDurationBtn = document.getElementById('modeDuration');
 const modeEndTimeBtn = document.getElementById('modeEndTime');
 
@@ -41,6 +46,7 @@ const countdownConfigs = [5, 4, 3, 2, 1].map(num => ({
 }));
 
 let timerInterval;
+let negativePointsInterval;
 let totalDuration = 0;
 let lastWarnedMinute = -1;
 let currentInputMode = 'duration'; // 'duration' or 'endtime'
@@ -262,10 +268,9 @@ function startTimer() {
         return;
     }
 
-    // Clear any existing interval
-    if (timerInterval) {
-        clearInterval(timerInterval);
-    }
+    // Clear any existing intervals
+    if (timerInterval) clearInterval(timerInterval);
+    if (negativePointsInterval) clearInterval(negativePointsInterval);
 
     const now = new Date();
 
@@ -290,10 +295,11 @@ function startTimer() {
     totalDuration = endTime - now;
     lastWarnedMinute = -1;
 
-    // Show the time display and start the timer
+    // Show the time display and start the timers
     timeDisplay.classList.remove('hidden');
     updateTime();
     timerInterval = setInterval(updateTime, 1000);
+    negativePointsInterval = setInterval(updateNegativePoints, 100);
 }
 
 function parseDuration(str) {
@@ -353,23 +359,56 @@ function updateTime() {
     const endSeconds = String(endTime.getSeconds()).padStart(2, '0');
 
     // Update end time display
-    updateDigits(endTimeValue, `${endHours}:${endMinutes}:${endSeconds}`);
+    updateDigits(endTimeValue, `${endHours}:${endMinutes}`);
 
     // Calculate time difference
     const diff = endTime - now;
-    const diffSeconds = Math.floor(diff / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
+    const isNegative = diff <= 0;
+    const absDiff = Math.abs(diff);
+
+    const diffSeconds = Math.floor(diff / 1000); // Original signed value for warnings
+    const absDiffSeconds = Math.floor(absDiff / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60); // Original signed value for warnings
 
     // Handle warnings
     handleWarnings(diffSeconds, diffMinutes);
 
-    // Convert to hours, minutes, seconds
-    let hours = Math.floor(diff / (1000 * 60 * 60)).toString().padStart(2, '0');
-    let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-    let seconds = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+    // Convert to hours, minutes, seconds using absolute difference
+    let hours = Math.floor(absDiff / (1000 * 60 * 60)).toString().padStart(2, '0');
+    let minutes = Math.floor((absDiff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+    let seconds = Math.floor((absDiff % (1000 * 60)) / 1000).toString().padStart(2, '0');
 
-    // Update remaining time in HH:MM:SS format
-    updateDigits(remainingTimeValue, `${hours}:${minutes}:${seconds}`);
+    // Format remaining time string
+    let remainingString = `${hours}:${minutes}:${seconds}`;
+    if (isNegative) {
+        remainingString = `-${remainingString}`;
+    }
+
+    // Update remaining time display
+    updateDigits(remainingTimeValue, remainingString);
+}
+
+function updateNegativePoints() {
+    if (!endTime) return;
+    const now = new Date();
+    const diff = endTime - now;
+
+    if (masterNegativeToggle.checked && diff < 0) {
+        // We are past the end time and negative points are active
+        const excessMinutes = Math.abs(diff) / 60000;
+        const rate = parseFloat(negativeRateInput.value) || 0.5;
+        const points = excessMinutes * rate;
+
+        const lang = localStorage.getItem('preferredLanguage') || 'fr';
+        const pointsLabel = (typeof translations !== 'undefined' && translations[lang] && translations[lang]['clock_negative_points'])
+            ? ` ${translations[lang]['clock_negative_points'].toLowerCase()}`
+            : ' points';
+
+        negativePointsDisplay.textContent = `${points.toFixed(3)}${pointsLabel}`;
+        negativePointsDisplay.classList.remove('hidden');
+    } else {
+        negativePointsDisplay.classList.add('hidden');
+    }
 }
 
 function handleWarnings(diffSeconds, diffMinutes) {
@@ -386,7 +425,7 @@ function handleWarnings(diffSeconds, diffMinutes) {
             document.body.classList.remove('inverted');
         }
         document.body.classList.remove('warning-slow', 'warning-blink-double');
-        return;
+        // Removed `return;` so updateTime() continues executing and counts up
     } else {
         document.body.classList.remove('inverted');
     }
@@ -460,37 +499,57 @@ function updateDigits(container, newTimeString) {
     // Clear container
     container.innerHTML = '';
 
+    // To prevent the "index shift" glitch when a prefix like '-' is added,
+    // we compare digits by aligning them from the right (the seconds side).
+    const oldDigitsOnly = currentText.split('').filter(c => c !== ':');
+    const newDigitsOnly = digitString.split('').filter(c => c !== ':');
+
+    // characters including separators
+    const oldChars = currentText.split('');
+    const newChars = digitString.split('');
+
+    // For better comparison, let's find the position of the first digit in both strings
+    const firstOldDigitIdx = oldChars.findIndex(c => /\d/.test(c));
+    const firstNewDigitIdx = newChars.findIndex(c => /\d/.test(c));
+
     // Add each character
     for (let i = 0; i < digitString.length; i++) {
         const char = digitString[i];
 
         if (char === ':') {
-            // Add separator
             const separator = document.createElement('span');
             separator.className = 'separator';
             separator.textContent = ':';
             container.appendChild(separator);
+        } else if (char === '-' || char === '+') {
+            // Prefix character (no animation)
+            const prefix = document.createElement('span');
+            prefix.className = 'prefix';
+            prefix.textContent = char;
+            container.appendChild(prefix);
         } else {
             // Create digit container
             const digitContainer = document.createElement('span');
             digitContainer.className = 'digit-container';
 
-            // Create digit
             const digit = document.createElement('span');
             digit.className = 'digit';
             digit.textContent = char;
 
-            // Check if this digit has changed
-            if (currentText && i < currentText.length && currentText[i] !== char && currentText[i] !== ':') {
+            // Logic to determine if a digit has changed:
+            // Compare digits based on their position relative to the END of the string
+            // This ensures HH:MM:SS aligns correctly even if a '-' is prepended at the start.
+            const distFromEnd = digitString.length - 1 - i;
+            const oldCharAtIndex = currentText[currentText.length - 1 - distFromEnd];
+
+            if (currentText && oldCharAtIndex !== undefined && oldCharAtIndex !== char && oldCharAtIndex !== ':' && /\d/.test(oldCharAtIndex)) {
                 const oldDigit = document.createElement('span');
                 oldDigit.className = 'digit old';
-                oldDigit.textContent = currentText[i];
+                oldDigit.textContent = oldCharAtIndex;
 
                 digit.className = 'digit new';
-
                 digitContainer.appendChild(oldDigit);
 
-                // Remove old digit after animation completes
                 setTimeout(() => {
                     if (oldDigit.parentNode === digitContainer) {
                         digitContainer.removeChild(oldDigit);
@@ -513,7 +572,7 @@ function initializeTimeDisplay() {
 }
 
 // Layout toggle (horizontal ↔ vertical)
-let isVertical = window.innerWidth <= 540; // match CSS breakpoint
+let isVertical = true; // Default to true as per new CSS baseline
 
 function applyLayout() {
     if (isVertical) {
@@ -541,7 +600,7 @@ let userOverrodeLayout = false;
 layoutToggleBtn.addEventListener('click', () => { userOverrodeLayout = true; }, { once: true });
 window.addEventListener('resize', () => {
     if (!userOverrodeLayout) {
-        isVertical = window.innerWidth <= 540;
+        isVertical = window.innerWidth <= 650;
         applyLayout();
     }
 });

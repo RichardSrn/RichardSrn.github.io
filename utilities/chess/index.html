@@ -59,6 +59,18 @@
                     </svg>
                 </button>
 
+                <!-- Play Online -->
+                <button class="mode-card" id="mode-online" data-mode="online">
+                    <div class="mode-icon">🌐</div>
+                    <div class="mode-info">
+                        <h2 data-i18n="online_title">Play Online (PvP)</h2>
+                        <p data-i18n="online_desc">Play with a friend via room code</p>
+                    </div>
+                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
+                </button>
+
                 <!-- Board Evaluation -->
                 <button class="mode-card" id="mode-eval" data-mode="evaluation">
                     <div class="mode-icon">📊</div>
@@ -110,6 +122,91 @@
             </div>
 
             <button class="btn-secondary" id="btn-diff-back" data-i18n="back_to_menu">← Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- ===================== ONLINE SELECTION SCREEN ===================== -->
+    <div id="online-selection-screen" class="screen">
+        <div class="menu-container">
+            <h1 class="menu-title">
+                <span class="title-icon">🌐</span>
+                <span data-i18n="online_pvp">Online PvP</span>
+            </h1>
+            <p class="menu-subtitle" data-i18n="online_choice">Create a new game or join one</p>
+
+            <div class="mode-cards">
+                <button class="mode-card" id="btn-create-room">
+                    <div class="mode-icon">➕</div>
+                    <div class="mode-info">
+                        <h2 data-i18n="create_game">Create Private Game</h2>
+                        <p data-i18n="create_desc">Get a code to share with a friend</p>
+                    </div>
+                </button>
+
+                <button class="mode-card" id="btn-join-room-ui">
+                    <div class="mode-icon">🔑</div>
+                    <div class="mode-info">
+                        <h2 data-i18n="join_game">Join via Code</h2>
+                        <p data-i18n="join_desc">Enter a code from your friend</p>
+                    </div>
+                </button>
+            </div>
+
+            <div id="join-room-input-container" style="display: none; margin-top: 1rem; width: 100%;">
+                <input type="text" id="room-code-input" placeholder="ABCDEF" maxlength="6"
+                    style="width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--glass-border); background: var(--bg-tertiary); color: var(--text-primary); font-size: 1.2rem; text-align: center; text-transform: uppercase;">
+                <button class="btn-primary" id="btn-confirm-join" style="width: 100%; margin-top: 0.5rem;"
+                    data-i18n="join_btn">Join Game</button>
+            </div>
+
+            <div id="room-display-container"
+                style="display: none; margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: var(--radius-md); text-align: center;">
+                <p data-i18n="share_code">Share this code with your friend:</p>
+                <div class="room-code-group" style="position: relative; max-width: 300px; margin: 1rem auto;">
+                    <h2 id="display-room-code"
+                        style="font-size: 2.5rem; letter-spacing: 0.5rem; margin: 1rem 0; color: var(--accent); cursor: pointer;"
+                        data-i18n-title="copy_code">------</h2>
+                    <span id="copy-feedback" class="copy-feedback" data-i18n="code_copied">Copied!</span>
+                </div>
+                <p data-i18n="waiting_opponent" style="font-style: italic; opacity: 0.7;">Waiting for opponent to
+                    join...</p>
+            </div>
+
+            <button class="btn-secondary" id="btn-online-back" style="margin-top: 2rem;" data-i18n="back_to_menu">← Back
+                to Menu</button>
+        </div>
+    </div>
+
+    <!-- ===================== ONLINE CREATE SCREEN ===================== -->
+    <div id="online-create-screen" class="screen">
+        <div class="menu-container">
+            <h1 class="menu-title">
+                <span class="title-icon">⚙️</span>
+                <span data-i18n="config_room">Room Config</span>
+            </h1>
+            <p class="menu-subtitle" data-i18n="config_desc">Choose your side and game rules</p>
+
+            <div class="settings-section">
+                <h3 class="settings-label" data-i18n="play_as">Play As</h3>
+                <div class="lang-toggle" id="online-color-select">
+                    <button class="lang-btn active" data-color="w" data-i18n="white">White</button>
+                    <button class="lang-btn" data-color="random" data-i18n="random">Random</button>
+                    <button class="lang-btn" data-color="b" data-i18n="black">Black</button>
+                </div>
+            </div>
+
+            <div class="settings-section" style="margin-top: 1.5rem">
+                <h3 class="settings-label" data-i18n="variant">Variant</h3>
+                <select id="online-variant-select" class="dropdown-select">
+                    <option value="standard" data-i18n="standard_chess" selected>Standard Chess</option>
+                    <option value="chess960" disabled>Chess960 (Soon)</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" id="btn-generate-room" style="width: 100%; margin-top: 2rem"
+                data-i18n="create_game">Create Private Game</button>
+            <button class="btn-secondary" id="btn-create-back" style="margin-top: 1rem"
+                data-i18n="cancel">Cancel</button>
         </div>
     </div>
 
@@ -387,7 +484,13 @@
     </div>
 
 
+    <!-- Firebase SDK (Compat versions for ease of use) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
     <!-- Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="multiplayer.js"></script>
     <script src="chess.min.js"></script>
     <script src="i18n.js"></script>
     <script src="themes.js"></script>
