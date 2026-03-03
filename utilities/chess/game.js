@@ -143,6 +143,16 @@ const ChessGame = (() => {
      * Get the current game state
      */
     function getState() {
+        if (!game) {
+            return {
+                board: [],
+                turn: 'w',
+                isGameOver: false,
+                moveHistory: [],
+                fen: '',
+                mode: mode
+            };
+        }
         return {
             board: game.board(),
             turn: game.turn(),

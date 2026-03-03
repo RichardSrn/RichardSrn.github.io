@@ -489,25 +489,43 @@ button:hover {
 
 .time-display {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    /* Default: vertical */
     align-items: center;
+    gap: 12px;
+    justify-content: center;
     margin-top: 24px;
     width: 100%;
     position: relative;
     transition: flex-direction 0.3s ease;
 }
 
-/* Vertical layout */
-.time-display.layout-vertical {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    justify-content: center;
-}
-
-.time-display.layout-vertical .arrow {
+.time-display .arrow {
     margin: 0;
     font-size: 20px;
+    /* transform: rotate(90deg); */
+}
+
+/* Horizontal layout */
+.time-display.layout-horizontal {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.time-display.layout-horizontal .time-value {
+    font-size: clamp(16px, 3.2vw, 32px);
+}
+
+.time-display.layout-horizontal .time-label {
+    font-size: clamp(10px, 1.5vw, 13px);
+}
+
+.time-display.layout-horizontal .arrow {
+    font-size: clamp(14px, 2.5vw, 20px);
+    color: var(--primary-color);
+    margin: 0 8px;
+    transform: none;
 }
 
 /* Layout toggle button */
@@ -532,22 +550,19 @@ button:hover {
     background: rgba(255, 255, 255, 0.12);
 }
 
-/* Auto-vertical on narrow screens */
-@media (max-width: 540px) {
-    .time-display:not(.layout-horizontal) {
-        flex-direction: column;
+/* Auto-vertical on narrow screens (forces vertical even if .layout-horizontal is set) */
+@media (max-width: 650px) {
+    .time-display {
+        flex-direction: column !important;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
         justify-content: center;
     }
 
-    .time-display:not(.layout-horizontal) .arrow {
-        margin: 0;
-        font-size: 20px;
-    }
-
-    .time-value {
-        font-size: 22px;
+    .time-display .arrow {
+        margin: 0 !important;
+        font-size: clamp(16px, 4vw, 20px) !important;
+        /* transform: rotate(90deg) !important; */
     }
 }
 
@@ -561,7 +576,7 @@ button:hover {
 }
 
 .time-value {
-    font-size: 32px;
+    font-size: clamp(24px, 6vw, 42px);
     font-weight: bold;
     margin-bottom: 8px;
     transition: font-size 0.3s ease;
@@ -571,26 +586,49 @@ button:hover {
 /* Fullscreen mode removed */
 
 body.maximized .time-value {
-    font-size: min(8vw, 12vh);
+    font-size: min(10vw, 15vh);
+}
+
+body.maximized .time-display.layout-horizontal .time-value {
+    font-size: min(5vw, 12vh);
 }
 
 .time-label {
-    font-size: 14px;
+    font-size: clamp(12px, 2.5vw, 14px);
     color: var(--primary-color);
     letter-spacing: 1px;
     transition: font-size 0.3s ease;
 }
 
+/* Negative Points Display */
+#negativePointsDisplay {
+    margin-top: 15px;
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: bold;
+    color: #ff5252;
+    text-shadow: 0 0 15px rgba(255, 82, 82, 0.4);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+    text-align: center;
+    transition: font-size 0.3s ease;
+}
+
+body.maximized #negativePointsDisplay {
+    font-size: min(6vw, 10vh);
+    margin-top: 30px;
+}
+
 /* Fullscreen mode removed */
 
 body.maximized .time-label {
+    font-size: min(2vw, 3vh);
+}
+
+body.maximized .time-display.layout-horizontal .time-label {
     font-size: min(1.5vw, 2.5vh);
 }
 
 .arrow {
-    font-size: 24px;
-    color: var(--primary-color);
-    margin: 0 15px;
     transition: all 0.3s ease;
 }
 
@@ -659,6 +697,7 @@ body.maximized .container {
     border-radius: 0;
     padding: 20px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }

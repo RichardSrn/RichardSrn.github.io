@@ -676,6 +676,24 @@ body {
     font-weight: 500;
 }
 
+.dropdown-select {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: var(--font-main);
+    outline: none;
+    cursor: pointer;
+}
+
+.dropdown-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* ============================================
    MOVE HISTORY PANEL
    ============================================ */
@@ -779,6 +797,32 @@ body {
     display: inline-block;
     margin: 0.5rem 0 1.5rem;
     border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.copy-feedback {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--success);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.copy-feedback.active {
+    opacity: 1;
+    top: -30px;
+}
+
+#display-room-code {
+    user-select: text;
+    -webkit-user-select: text;
 }
 
 .btn-primary {

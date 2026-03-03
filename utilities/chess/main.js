@@ -16,7 +16,7 @@
 (function () {
     'use strict';
 
-    let gameMode = null;     // 'pvp' | 'ai'
+    let gameMode = null;     // 'pvp' | 'ai' | 'online'
     let selectedBot = null;  // bot id string
     let playerColor = 'w';
     let aiIsThinking = false;
@@ -43,7 +43,9 @@
             onHistoryBack: handleHistoryBack,
             onVoiceInput: handleVoiceInput,
             onTextInput: handleTextInput,
-            onReadHistory: handleReadHistory
+            onReadHistory: handleReadHistory,
+            onCreateRoom: handleCreateRoom,
+            onJoinRoom: handleJoinRoom
         });
 
         ChessAI.setOnEvaluationUpdate((score, mate, depth) => {
@@ -51,12 +53,90 @@
         });
     }
 
-    /* ===================== MODE SELECTION ===================== */
     function handleModeSelect(mode) {
         if (mode === 'pvp') {
             gameMode = 'pvp';
             startPvPGame();
+        } else if (mode === 'online') {
+            gameMode = 'online';
+            ChessUI.showScreen('online-selection');
         }
+    }
+
+    async function handleCreateRoom(config) {
+        try {
+            const roomId = await ChessMultiplayer.createRoom(config);
+            ChessUI.showRoomCode(roomId);
+
+            // Listen for opponent joining
+            let gameStarted = false;
+            ChessMultiplayer.onRoomUpdate((data) => {
+                const hasOpponent = data && data.players && data.players.w && data.players.b;
+                console.log("Firebase: Room update:", { hasOpponent, gameMode, gameStarted });
+
+                if (hasOpponent && gameMode === 'online' && !gameStarted) {
+                    console.info("Firebase: Opponent joined! Starting game...");
+                    gameStarted = true;
+                    ChessMultiplayer.stopListening();
+                    startOnlineGame(data);
+                }
+            });
+        } catch (err) {
+            console.error("Failed to create room:", err);
+            alert("Error creating room. Please try again.");
+        }
+    }
+
+    async function handleJoinRoom(code) {
+        try {
+            const roomData = await ChessMultiplayer.joinRoom(code);
+            startOnlineGame(roomData);
+        } catch (err) {
+            alert(err.message);
+        }
+    }
+
+    function startOnlineGame(roomData) {
+        gameMode = 'online';
+        ChessUI.showScreen('game');
+        ChessUI.showRotationToggle(false); // Online usually handles its own orientation
+        ChessUI.showEvalBar(false);
+        ChessUI.hideGameOver();
+
+        playerColor = ChessMultiplayer.getRole(); // 'w' or 'b'
+
+        ChessGame.init({
+            mode: 'online',
+            playerColor: playerColor,
+            onMove: (result, state) => {
+                // If it was OUR move, push to Firebase
+                if (state.turn !== playerColor) {
+                    ChessMultiplayer.sendMove(state.fen, result.san);
+                }
+                handleMove(result, state);
+            },
+            onGameOver: handleGameOver,
+            onStateChange: renderFullState
+        });
+
+        // Listen for moves from opponent
+        ChessMultiplayer.onRoomUpdate((data) => {
+            if (!data) return;
+            const state = ChessGame.getState();
+
+            // If the database has a newer state and it's our turn
+            if (data.fen !== state.fen && data.turn === playerColor) {
+                console.log("Opponent moved, updating board...");
+                ChessGame.loadFEN(data.fen);
+            }
+        });
+
+        // Flip board if playing as black
+        ChessBoard.flipBoard(playerColor === 'b');
+
+        ChessUI.toggleBlindMode(ChessUI.isBlindModeDefault());
+        ChessUI.toggleScoreBar(ChessUI.isScoreBarDefault());
+        renderFullState(ChessGame.getState());
     }
 
     function handleBotSelect(botId) {
@@ -123,7 +203,7 @@
 
         const state = ChessGame.getState();
         if (state.isGameOver) return;
-        if (!ChessGame.isPlayerTurn()) return;
+        if (!isMyTurn()) return;
 
         if (!selectedSquare) {
             // Select piece
@@ -144,9 +224,21 @@
         }
     }
 
+    function isMyTurn() {
+        if (gameMode === 'online') {
+            return ChessGame.getState().turn === playerColor;
+        }
+        return ChessGame.isPlayerTurn();
+    }
+
     function handlePieceDrop(from, to) {
         if (ChessGame.isInHistoryMode()) return;
-        if (aiIsThinking || !ChessGame.isPlayerTurn()) return;
+        if (aiIsThinking) return;
+
+        // In online mode, only allow moves if it's our turn
+        if (gameMode === 'online' && !ChessGame.isPlayerTurn()) return;
+        if (gameMode === 'ai' && !ChessGame.isPlayerTurn()) return;
+
         attemptMove(from, to);
     }
 

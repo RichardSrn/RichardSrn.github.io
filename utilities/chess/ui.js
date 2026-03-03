@@ -61,6 +61,9 @@ const ChessUI = (() => {
             renderBotRoster(config.onBotSelect);
             showScreen('difficulty');
         });
+        els.modeOnline.addEventListener('click', () => {
+            if (config.onModeSelect) config.onModeSelect('online');
+        });
         els.modeEval.addEventListener('click', () => showScreen('eval'));
         els.modeSettings.addEventListener('click', () => {
             renderSettings();
@@ -75,6 +78,86 @@ const ChessUI = (() => {
 
         // Eval back
         els.btnEvalBack.addEventListener('click', () => showScreen('menu'));
+
+        // Online back
+        els.btnOnlineBack.addEventListener('click', () => {
+            els.joinRoomInputContainer.style.display = 'none';
+            els.roomDisplayContainer.style.display = 'none';
+            showScreen('menu');
+        });
+
+        // Online UI actions
+        els.btnCreateRoom.addEventListener('click', () => {
+            showScreen('online-create');
+        });
+
+        els.btnCreateBack.addEventListener('click', () => {
+            showScreen('online-selection');
+        });
+
+        els.colorBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                els.colorBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        els.btnGenerateRoom.addEventListener('click', () => {
+            const activeColorBtn = document.querySelector('#online-color-select .lang-btn.active');
+            const color = activeColorBtn ? activeColorBtn.dataset.color : 'random';
+            const variant = els.variantSelect.value;
+
+            showScreen('online-selection');
+            els.joinRoomInputContainer.style.display = 'none';
+            els.roomDisplayContainer.style.display = 'block';
+            els.displayRoomCode.textContent = '------'; // temp loading state
+
+            if (config.onCreateRoom) config.onCreateRoom({ color, variant });
+        });
+
+        els.btnJoinRoomUi.addEventListener('click', () => {
+            els.joinRoomInputContainer.style.display = 'block';
+            els.roomDisplayContainer.style.display = 'none';
+            els.roomCodeInput.focus();
+        });
+
+        els.btnConfirmJoin.addEventListener('click', () => {
+            const code = els.roomCodeInput.value.trim().toUpperCase();
+            if (code && config.onJoinRoom) config.onJoinRoom(code);
+        });
+
+        // Copy Room Code with Fallback
+        els.displayRoomCode.addEventListener('click', () => {
+            const code = els.displayRoomCode.textContent;
+            if (code && code !== '------') {
+                const showFeedback = () => {
+                    els.copyFeedback.classList.add('active');
+                    setTimeout(() => els.copyFeedback.classList.remove('active'), 2000);
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(code).then(showFeedback).catch(err => {
+                        console.error('Clipboard writeText failed', err);
+                    });
+                } else {
+                    // Fallback using execCommand
+                    const textArea = document.createElement("textarea");
+                    textArea.value = code;
+                    textArea.style.position = "fixed";  // Avoid scrolling
+                    textArea.style.opacity = "0";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        showFeedback();
+                    } catch (err) {
+                        console.error('Fallback copy failed', err);
+                    }
+                    document.body.removeChild(textArea);
+                }
+            }
+        });
 
         // Game controls
         els.btnBackMenu.addEventListener('click', () => { if (config.onBackToMenu) config.onBackToMenu(); });
@@ -217,8 +300,26 @@ const ChessUI = (() => {
 
         els.modePvp = document.getElementById('mode-pvp');
         els.modeAi = document.getElementById('mode-ai');
+        els.modeOnline = document.getElementById('mode-online');
         els.modeEval = document.getElementById('mode-eval');
         els.modeSettings = document.getElementById('mode-settings');
+
+        els.onlineSelectionScreen = document.getElementById('online-selection-screen');
+        els.btnCreateRoom = document.getElementById('btn-create-room');
+        els.btnJoinRoomUi = document.getElementById('btn-join-room-ui');
+        els.joinRoomInputContainer = document.getElementById('join-room-input-container');
+        els.roomCodeInput = document.getElementById('room-code-input');
+        els.btnConfirmJoin = document.getElementById('btn-confirm-join');
+        els.roomDisplayContainer = document.getElementById('room-display-container');
+        els.displayRoomCode = document.getElementById('display-room-code');
+        els.copyFeedback = document.getElementById('copy-feedback');
+        els.btnOnlineBack = document.getElementById('btn-online-back');
+
+        els.onlineCreateScreen = document.getElementById('online-create-screen');
+        els.btnGenerateRoom = document.getElementById('btn-generate-room');
+        els.btnCreateBack = document.getElementById('btn-create-back');
+        els.colorBtns = document.querySelectorAll('#online-color-select .lang-btn');
+        els.variantSelect = document.getElementById('online-variant-select');
 
         els.botRoster = document.getElementById('bot-roster');
         els.btnDiffBack = document.getElementById('btn-diff-back');
@@ -237,7 +338,7 @@ const ChessUI = (() => {
 
     /* ===================== SCREENS ===================== */
     function showScreen(screenName) {
-        [els.menuScreen, els.gameScreen, els.evalScreen, els.diffScreen, els.settingsScreen]
+        [els.menuScreen, els.gameScreen, els.evalScreen, els.diffScreen, els.settingsScreen, els.onlineSelectionScreen, els.onlineCreateScreen]
             .forEach(s => { if (s) s.classList.remove('active'); });
         currentScreen = screenName;
         switch (screenName) {
@@ -246,6 +347,8 @@ const ChessUI = (() => {
             case 'eval': els.evalScreen.classList.add('active'); break;
             case 'difficulty': els.diffScreen.classList.add('active'); break;
             case 'settings': els.settingsScreen.classList.add('active'); break;
+            case 'online-selection': els.onlineSelectionScreen.classList.add('active'); break;
+            case 'online-create': els.onlineCreateScreen.classList.add('active'); break;
         }
     }
 
@@ -788,6 +891,11 @@ const ChessUI = (() => {
         showHint,
         clearHint,
         showGameOver,
-        hideGameOver
+        hideGameOver,
+        showRoomCode: (code) => {
+            els.displayRoomCode.textContent = code;
+            els.roomDisplayContainer.style.display = 'block';
+            els.joinRoomInputContainer.style.display = 'none';
+        }
     };
 })();
