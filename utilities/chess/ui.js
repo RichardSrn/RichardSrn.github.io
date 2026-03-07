@@ -18,8 +18,10 @@
 
 const ChessUI = (() => {
     let currentScreen = 'menu';
+    let screenHistory = []; // stack of previous screens for back navigation
     let currentBotInfo = null;
     let currentHistoryIdx = -1;
+    let currentConfigMode = 'pvp'; // 'pvp', 'ai', 'online'
 
     // Coords mode: 0=Off (default), 1=Edge, 2=All
     let coordsMode = 0;
@@ -28,6 +30,7 @@ const ChessUI = (() => {
     let isBlindMode = false;
     let isScoreBarVisible = true;
     let blindTtsEnabled = true;
+    let isSpectatorMode = false;
 
     // Eval bar lerp
     let evalTarget = 50;
@@ -38,6 +41,7 @@ const ChessUI = (() => {
     let _onMoveClick = null;
     let _onHistoryBack = null;
     let _onTextInputSubmit = null; // added for text/voice inputs
+    let _onEvalBarToggle = null;
     let resolveTextInput = null;   // modal promise resolver
 
     // DOM refs
@@ -55,11 +59,16 @@ const ChessUI = (() => {
         // Init i18n (reads localStorage)
         ChessI18n.init();
 
+        // Back button (global)
+        const backBtn = document.getElementById('back-btn');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => goBack(config));
+        }
+
         // Menu mode buttons
         els.modePvp.addEventListener('click', () => { if (config.onModeSelect) config.onModeSelect('pvp'); });
         els.modeAi.addEventListener('click', () => {
-            renderBotRoster(config.onBotSelect);
-            showScreen('difficulty');
+            if (config.onModeSelect) config.onModeSelect('ai');
         });
         els.modeOnline.addEventListener('click', () => {
             if (config.onModeSelect) config.onModeSelect('online');
@@ -70,8 +79,39 @@ const ChessUI = (() => {
             showScreen('settings');
         });
 
-        // Difficulty back
-        els.btnDiffBack.addEventListener('click', () => showScreen('menu'));
+        // Render bot roster immediately so it's ready in config modal
+        renderBotRoster(null);
+
+        // Gear config buttons
+        document.querySelectorAll('.config-gear-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showConfigScreen(btn.dataset.target);
+            });
+        });
+
+        // Config screen save button
+        els.btnSaveConfig.addEventListener('click', () => {
+            if (config.onSaveConfig) {
+                const activeColorBtn = document.querySelector('#config-color-select .lang-btn.active');
+                const pColor = activeColorBtn ? activeColorBtn.dataset.color : 'random';
+                const pVariant = els.configVariantSelect.value;
+                const activeBotCard = document.querySelector('.bot-card.selected');
+                const pBot = activeBotCard ? activeBotCard.dataset.botId : 'sage';
+                const allowSpectators = els.configAllowSpectators ? els.configAllowSpectators.checked : true;
+                config.onSaveConfig({ color: pColor, variant: pVariant, bot: pBot, mode: currentConfigMode, allowSpectators });
+            }
+            // Go back to previous screen
+            showScreen(currentConfigMode === 'online' ? 'online-selection' : 'menu');
+        });
+
+        // Config color selection
+        els.configColorBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                els.configColorBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
 
         // Settings back
         els.btnSettingsBack.addEventListener('click', () => showScreen('menu'));
@@ -88,31 +128,8 @@ const ChessUI = (() => {
 
         // Online UI actions
         els.btnCreateRoom.addEventListener('click', () => {
-            showScreen('online-create');
-        });
-
-        els.btnCreateBack.addEventListener('click', () => {
-            showScreen('online-selection');
-        });
-
-        els.colorBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                els.colorBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        els.btnGenerateRoom.addEventListener('click', () => {
-            const activeColorBtn = document.querySelector('#online-color-select .lang-btn.active');
-            const color = activeColorBtn ? activeColorBtn.dataset.color : 'random';
-            const variant = els.variantSelect.value;
-
-            showScreen('online-selection');
-            els.joinRoomInputContainer.style.display = 'none';
-            els.roomDisplayContainer.style.display = 'block';
-            els.displayRoomCode.textContent = '------'; // temp loading state
-
-            if (config.onCreateRoom) config.onCreateRoom({ color, variant });
+            // Immediately dispatch creation using current online config
+            if (config.onCreateRoom) config.onCreateRoom();
         });
 
         els.btnJoinRoomUi.addEventListener('click', () => {
@@ -229,6 +246,7 @@ const ChessUI = (() => {
         // Store callbacks
         _onMoveClick = config.onMoveClick || null;
         _onHistoryBack = config.onHistoryBack || null;
+        _onEvalBarToggle = config.onEvalBarToggle || null;
 
         // Create promotion overlay
         createPromotionDialog();
@@ -315,11 +333,16 @@ const ChessUI = (() => {
         els.copyFeedback = document.getElementById('copy-feedback');
         els.btnOnlineBack = document.getElementById('btn-online-back');
 
-        els.onlineCreateScreen = document.getElementById('online-create-screen');
-        els.btnGenerateRoom = document.getElementById('btn-generate-room');
-        els.btnCreateBack = document.getElementById('btn-create-back');
-        els.colorBtns = document.querySelectorAll('#online-color-select .lang-btn');
-        els.variantSelect = document.getElementById('online-variant-select');
+        els.gameConfigScreen = document.getElementById('game-config-screen');
+        els.configSubtitle = document.getElementById('config-subtitle');
+        els.configColorSection = document.getElementById('config-color-section');
+        els.configVariantSection = document.getElementById('config-variant-section');
+        els.configBotSection = document.getElementById('config-bot-section');
+        els.configSpectatorSection = document.getElementById('config-spectator-section');
+        els.configAllowSpectators = document.getElementById('config-allow-spectators');
+        els.configColorBtns = document.querySelectorAll('#config-color-select .lang-btn');
+        els.configVariantSelect = document.getElementById('config-variant-select');
+        els.btnSaveConfig = document.getElementById('btn-save-config');
 
         els.botRoster = document.getElementById('bot-roster');
         els.btnDiffBack = document.getElementById('btn-diff-back');
@@ -338,21 +361,59 @@ const ChessUI = (() => {
 
     /* ===================== SCREENS ===================== */
     function showScreen(screenName) {
-        [els.menuScreen, els.gameScreen, els.evalScreen, els.diffScreen, els.settingsScreen, els.onlineSelectionScreen, els.onlineCreateScreen]
-            .forEach(s => { if (s) s.classList.remove('active'); });
+        // Push current screen to history before switching (except if same)
+        if (currentScreen && currentScreen !== screenName) {
+            screenHistory.push(currentScreen);
+        }
+
+        // Hide all screens
+        const allScreens = [
+            els.menuScreen, els.gameScreen, els.evalScreen,
+            els.settingsScreen, els.onlineSelectionScreen, els.gameConfigScreen
+        ].filter(s => s);
+
+        allScreens.forEach(s => s.classList.remove('active'));
+
         currentScreen = screenName;
         switch (screenName) {
             case 'menu': els.menuScreen.classList.add('active'); break;
             case 'game': els.gameScreen.classList.add('active'); break;
             case 'eval': els.evalScreen.classList.add('active'); break;
-            case 'difficulty': els.diffScreen.classList.add('active'); break;
             case 'settings': els.settingsScreen.classList.add('active'); break;
             case 'online-selection': els.onlineSelectionScreen.classList.add('active'); break;
-            case 'online-create': els.onlineCreateScreen.classList.add('active'); break;
+            case 'game-config': els.gameConfigScreen.classList.add('active'); break;
         }
     }
 
-    /* ===================== BOT ROSTER ===================== */
+    function goBack(config) {
+        if (currentScreen === 'menu') {
+            // On the menu screen — navigate to the parent website
+            window.location.href = '../../';
+            return;
+        }
+        if (currentScreen === 'game') {
+            // From game — go back to menu (same as the existing back-to-menu button)
+            if (config && config.onBackToMenu) config.onBackToMenu();
+            screenHistory = [];
+            return;
+        }
+        // Otherwise pop from screen history
+        if (screenHistory.length > 0) {
+            const prev = screenHistory.pop();
+            // Don't push current to history again — showScreen will do it, so we 
+            // need to remove the extra push. Use a direct switch instead.
+            currentScreen = null; // prevent double-push
+            showScreen(prev);
+        } else {
+            showScreen('menu');
+        }
+    }
+
+    function getCurrentScreen() {
+        return currentScreen;
+    }
+
+    /* ===================== AI BOT SELECTOR ===================== */
     function renderBotRoster(onBotSelect) {
         if (!els.botRoster) return;
         els.botRoster.innerHTML = '';
@@ -362,6 +423,9 @@ const ChessUI = (() => {
             const card = document.createElement('button');
             card.className = 'bot-card';
             card.dataset.botId = bot.id;
+            // Default select the middle bot for instance
+            if (bot.id === 'sage') card.classList.add('selected');
+
             card.innerHTML = `
                 <div class="bot-avatar" style="background: hsl(${hue}, 65%, 45%);">${bot.avatar}</div>
                 <div class="bot-info">
@@ -370,9 +434,48 @@ const ChessUI = (() => {
                 </div>
                 <div class="bot-elo" style="color: hsl(${hue}, 65%, 55%);">${bot.elo >= 3000 ? '3000+' : bot.elo}</div>
             `;
-            card.addEventListener('click', () => { if (onBotSelect) onBotSelect(bot.id); });
+
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.bot-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                if (onBotSelect) onBotSelect(bot.id);
+            });
             els.botRoster.appendChild(card);
         });
+    }
+
+    /* ===================== CONFIG MODAL ===================== */
+    function showConfigScreen(mode) {
+        currentConfigMode = mode;
+
+        let titleText = 'Game Config';
+        let subtitleText = 'Choose your side and game rules';
+
+        if (mode === 'pvp') {
+            titleText = ChessI18n.t('pvp_title') || 'Player vs Player';
+            els.configColorSection.style.display = 'block';
+            els.configVariantSection.style.display = 'block';
+            els.configBotSection.style.display = 'none';
+            els.configSpectatorSection.style.display = 'none';
+        } else if (mode === 'ai') {
+            titleText = ChessI18n.t('ai_title') || 'Player vs AI';
+            els.configColorSection.style.display = 'block';
+            els.configVariantSection.style.display = 'none'; // No variants against AI
+            els.configBotSection.style.display = 'block';
+            els.configSpectatorSection.style.display = 'none';
+        } else if (mode === 'online') {
+            titleText = ChessI18n.t('config_room') || 'Room Config';
+            els.configColorSection.style.display = 'block';
+            els.configVariantSection.style.display = 'block';
+            els.configBotSection.style.display = 'none';
+            els.configSpectatorSection.style.display = 'block';
+        }
+
+        const titleSpan = els.gameConfigScreen.querySelector('.menu-title span:last-child');
+        if (titleSpan) titleSpan.textContent = titleText;
+        if (els.configSubtitle) els.configSubtitle.textContent = subtitleText;
+
+        showScreen('game-config');
     }
 
     /* ===================== PREFERENCES & SETTINGS ===================== */
@@ -424,6 +527,8 @@ const ChessUI = (() => {
             els.evalBarContainer.style.display = isScoreBarVisible ? 'flex' : 'none';
         }
         els.btnToggleEval.style.color = isScoreBarVisible ? 'inherit' : 'var(--text-muted)';
+
+        if (_onEvalBarToggle) _onEvalBarToggle(isScoreBarVisible);
     }
 
     function renderSettings() {
@@ -586,6 +691,10 @@ const ChessUI = (() => {
     /* ===================== GAME STATUS ===================== */
     function updateStatus(state) {
         els.gameStatus.classList.remove('check', 'game-over');
+        if (state.spectating) {
+            els.gameStatus.textContent = '👁 ' + (ChessI18n.t('spectating') || 'Spectating');
+            return;
+        }
         if (state.isCheckmate) {
             els.gameStatus.textContent = ChessI18n.t('checkmate');
             els.gameStatus.classList.add('game-over');
@@ -847,6 +956,10 @@ const ChessUI = (() => {
         els.btnToggleEval.style.color = show ? 'inherit' : 'var(--text-muted)';
     }
 
+    function isScoreBarVisibleStatus() {
+        return isScoreBarVisible;
+    }
+
     /* ===================== HINT ===================== */
     function showHint(from, to) { ChessBoard.highlightHint(from, to); }
     function clearHint() {
@@ -863,6 +976,19 @@ const ChessUI = (() => {
             els.boardWrapper.classList.remove(className);
             els.boardWrapper.classList.toggle('rotated', toFlipped);
         }, 600);
+    }
+
+    function setFaceToFaceMode(isFaceToFace) {
+        if (els.boardWrapper) els.boardWrapper.classList.toggle('face-to-face', isFaceToFace);
+    }
+
+    function setSpectatorMode(enabled) {
+        isSpectatorMode = enabled;
+        // Hide interactive controls for spectators
+        if (els.btnUndo) els.btnUndo.style.display = enabled ? 'none' : '';
+        if (els.btnResign) els.btnResign.style.display = enabled ? 'none' : '';
+        if (els.btnHint) els.btnHint.style.display = enabled ? 'none' : '';
+        if (els.btnNewGame) els.btnNewGame.style.display = enabled ? 'none' : '';
     }
 
     /* ===================== PUBLIC API ===================== */
@@ -882,6 +1008,7 @@ const ChessUI = (() => {
         showHintLoading,
         updateEvalBar,
         showEvalBar,
+        isScoreBarVisibleStatus,
         isBlindModeDefault,
         isScoreBarDefault,
         toggleBlindMode,
@@ -892,6 +1019,8 @@ const ChessUI = (() => {
         clearHint,
         showGameOver,
         hideGameOver,
+        setFaceToFaceMode,
+        setSpectatorMode,
         showRoomCode: (code) => {
             els.displayRoomCode.textContent = code;
             els.roomDisplayContainer.style.display = 'block';

@@ -19,11 +19,11 @@
 
 <body>
     <!-- Back navigation -->
-    <a href="../../" class="back-link glass-panel" data-i18n-title="tooltip_back" title="Back to Home">
+    <button id="back-btn" class="back-link glass-panel" data-i18n-title="tooltip_back" title="Back">
         <svg viewBox="0 0 24 24" width="20" height="20">
             <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
         </svg>
-    </a>
+    </button>
 
     <!-- ===================== MAIN MENU SCREEN ===================== -->
     <div id="menu-screen" class="screen active">
@@ -36,40 +36,49 @@
 
             <div class="mode-cards">
                 <!-- Player vs Player -->
-                <button class="mode-card" id="mode-pvp" data-mode="pvp">
-                    <div class="mode-icon">👥</div>
-                    <div class="mode-info">
-                        <h2 data-i18n="pvp_title">Player vs Player</h2>
-                        <p data-i18n="pvp_desc">Play against a friend on the same screen</p>
-                    </div>
-                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
-                    </svg>
-                </button>
+                <div class="mode-card-wrapper">
+                    <button class="mode-card" id="mode-pvp" data-mode="pvp">
+                        <div class="mode-icon">👥</div>
+                        <div class="mode-info">
+                            <h2 data-i18n="pvp_title">Player vs Player</h2>
+                            <p data-i18n="pvp_desc">Play against a friend on the same screen</p>
+                        </div>
+                        <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                        </svg>
+                    </button>
+                    <button class="config-gear-btn" id="config-pvp" data-target="pvp" title="Configure Game">⚙️</button>
+                </div>
 
                 <!-- Player vs AI -->
-                <button class="mode-card" id="mode-ai" data-mode="ai">
-                    <div class="mode-icon">🤖</div>
-                    <div class="mode-info">
-                        <h2 data-i18n="ai_title">Player vs AI</h2>
-                        <p data-i18n="ai_desc">Challenge the engine</p>
-                    </div>
-                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
-                    </svg>
-                </button>
+                <div class="mode-card-wrapper">
+                    <button class="mode-card" id="mode-ai" data-mode="ai">
+                        <div class="mode-icon">🤖</div>
+                        <div class="mode-info">
+                            <h2 data-i18n="ai_title">Player vs AI</h2>
+                            <p data-i18n="ai_desc">Challenge the engine</p>
+                        </div>
+                        <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                        </svg>
+                    </button>
+                    <button class="config-gear-btn" id="config-ai" data-target="ai" title="Configure Game">⚙️</button>
+                </div>
 
                 <!-- Play Online -->
-                <button class="mode-card" id="mode-online" data-mode="online">
-                    <div class="mode-icon">🌐</div>
-                    <div class="mode-info">
-                        <h2 data-i18n="online_title">Play Online (PvP)</h2>
-                        <p data-i18n="online_desc">Play with a friend via room code</p>
-                    </div>
-                    <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
-                    </svg>
-                </button>
+                <div class="mode-card-wrapper">
+                    <button class="mode-card" id="mode-online" data-mode="online">
+                        <div class="mode-icon">🌐</div>
+                        <div class="mode-info">
+                            <h2 data-i18n="online_title">Play Online (PvP)</h2>
+                            <p data-i18n="online_desc">Play with a friend via room code</p>
+                        </div>
+                        <svg class="mode-arrow" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                        </svg>
+                    </button>
+                    <!-- No config gear for the main Online menu button, it asks for Join/Create first -->
+                </div>
 
                 <!-- Board Evaluation -->
                 <button class="mode-card" id="mode-eval" data-mode="evaluation">
@@ -95,35 +104,12 @@
                     </svg>
                 </button>
 
-                <!-- Chess Variants -->
-                <button class="mode-card disabled" id="mode-variants" data-mode="variants" disabled>
-                    <div class="mode-icon">🎲</div>
-                    <div class="mode-info">
-                        <h2 data-i18n="variants_title">Chess Variants</h2>
-                        <p data-i18n="variants_desc">3, 4, 5+ players — Coming Soon</p>
-                    </div>
-                    <span class="coming-soon-badge" data-i18n="soon_badge">Soon</span>
-                </button>
             </div>
         </div>
     </div>
 
     <!-- ===================== AI BOT SELECTOR ===================== -->
-    <div id="ai-difficulty-screen" class="screen">
-        <div class="menu-container bot-select-container">
-            <h1 class="menu-title">
-                <span class="title-icon">🤖</span>
-                <span data-i18n="choose_opponent">Choose Your Opponent</span>
-            </h1>
-            <p class="menu-subtitle" data-i18n="select_bot">Select a bot to play against</p>
-
-            <div class="bot-roster" id="bot-roster">
-                <!-- Populated dynamically by ui.js -->
-            </div>
-
-            <button class="btn-secondary" id="btn-diff-back" data-i18n="back_to_menu">← Back to Menu</button>
-        </div>
-    </div>
+    <!-- Removed standalone bot selector, now integrated into game-config-screen -->
 
     <!-- ===================== ONLINE SELECTION SCREEN ===================== -->
     <div id="online-selection-screen" class="screen">
@@ -135,13 +121,17 @@
             <p class="menu-subtitle" data-i18n="online_choice">Create a new game or join one</p>
 
             <div class="mode-cards">
-                <button class="mode-card" id="btn-create-room">
-                    <div class="mode-icon">➕</div>
-                    <div class="mode-info">
-                        <h2 data-i18n="create_game">Create Private Game</h2>
-                        <p data-i18n="create_desc">Get a code to share with a friend</p>
-                    </div>
-                </button>
+                <div class="mode-card-wrapper">
+                    <button class="mode-card" id="btn-create-room">
+                        <div class="mode-icon">➕</div>
+                        <div class="mode-info">
+                            <h2 data-i18n="create_game">Create Private Game</h2>
+                            <p data-i18n="create_desc">Get a code to share with a friend</p>
+                        </div>
+                    </button>
+                    <button class="config-gear-btn" id="config-online" data-target="online"
+                        title="Configure Game">⚙️</button>
+                </div>
 
                 <button class="mode-card" id="btn-join-room-ui">
                     <div class="mode-icon">🔑</div>
@@ -177,36 +167,50 @@
         </div>
     </div>
 
-    <!-- ===================== ONLINE CREATE SCREEN ===================== -->
-    <div id="online-create-screen" class="screen">
+    <!-- ===================== GAME CONFIG SCREEN ===================== -->
+    <div id="game-config-screen" class="screen">
         <div class="menu-container">
             <h1 class="menu-title">
                 <span class="title-icon">⚙️</span>
-                <span data-i18n="config_room">Room Config</span>
+                <span data-i18n="config_game">Game Config</span>
             </h1>
-            <p class="menu-subtitle" data-i18n="config_desc">Choose your side and game rules</p>
+            <p class="menu-subtitle" id="config-subtitle" data-i18n="config_desc">Choose your side and game rules</p>
 
-            <div class="settings-section">
+            <div class="settings-section" id="config-color-section">
                 <h3 class="settings-label" data-i18n="play_as">Play As</h3>
-                <div class="lang-toggle" id="online-color-select">
-                    <button class="lang-btn active" data-color="w" data-i18n="white">White</button>
-                    <button class="lang-btn" data-color="random" data-i18n="random">Random</button>
+                <div class="lang-toggle" id="config-color-select">
+                    <button class="lang-btn" data-color="w" data-i18n="white">White</button>
+                    <button class="lang-btn active" data-color="random" data-i18n="random">Random</button>
                     <button class="lang-btn" data-color="b" data-i18n="black">Black</button>
                 </div>
             </div>
 
-            <div class="settings-section" style="margin-top: 1.5rem">
+            <div class="settings-section" id="config-variant-section" style="margin-top: 1.5rem">
                 <h3 class="settings-label" data-i18n="variant">Variant</h3>
-                <select id="online-variant-select" class="dropdown-select">
+                <select id="config-variant-select" class="dropdown-select">
                     <option value="standard" data-i18n="standard_chess" selected>Standard Chess</option>
                     <option value="chess960" disabled>Chess960 (Soon)</option>
                 </select>
             </div>
 
-            <button class="btn-primary" id="btn-generate-room" style="width: 100%; margin-top: 2rem"
-                data-i18n="create_game">Create Private Game</button>
-            <button class="btn-secondary" id="btn-create-back" style="margin-top: 1rem"
-                data-i18n="cancel">Cancel</button>
+            <div class="settings-section bot-select-container" id="config-bot-section"
+                style="margin-top: 1.5rem; display: none;">
+                <h3 class="settings-label" data-i18n="select_bot">Select Bot</h3>
+                <div class="bot-roster" id="bot-roster" style="max-height: 40vh; overflow-y: auto;">
+                    <!-- Populated dynamically by ui.js -->
+                </div>
+            </div>
+
+            <div class="settings-section" id="config-spectator-section" style="margin-top: 1.5rem; display: none;">
+                <label class="toggle-label">
+                    <span data-i18n="allow_spectators">Allow Spectators</span>
+                    <input type="checkbox" id="config-allow-spectators" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <button class="btn-primary" id="btn-save-config" style="width: 100%; margin-top: 2rem"
+                data-i18n="save_btn">Save & Close</button>
         </div>
     </div>
 

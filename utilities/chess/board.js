@@ -74,7 +74,7 @@ const ChessBoard = (() => {
                 const rank = rankOrder[r];
                 const file = fileOrder[f];
                 const sqName = file + rank;
-                const isLight = (FILES.indexOf(file) + parseInt(rank)) % 2 === 1;
+                const isLight = (FILES.indexOf(file) + parseInt(rank)) % 2 === 0;
 
                 const sqEl = document.createElement('div');
                 sqEl.className = `square ${isLight ? 'light' : 'dark'}`;
@@ -108,14 +108,14 @@ const ChessBoard = (() => {
 
         fileOrder.forEach((file, i) => {
             const label = document.createElement('div');
-            label.className = `coord-label ${(i + 0) % 2 === 0 ? 'on-dark' : 'on-light'}`;
+            label.className = `coord-label ${(i + 1) % 2 === 0 ? 'on-dark' : 'on-light'}`;
             label.textContent = file;
             coordsFilesEl.appendChild(label);
         });
 
         rankOrder.forEach((rank, i) => {
             const label = document.createElement('div');
-            label.className = `coord-label ${(i + 0) % 2 === 0 ? 'on-light' : 'on-dark'}`;
+            label.className = `coord-label ${(i + 1) % 2 === 0 ? 'on-light' : 'on-dark'}`;
             label.textContent = rank;
             coordsRanksEl.appendChild(label);
         });
@@ -151,7 +151,16 @@ const ChessBoard = (() => {
 
         // Create ghost element
         const ghost = document.createElement('div');
-        ghost.className = 'drag-ghost';
+        ghost.className = `drag-ghost ${pieceEl.classList.contains('w') ? 'w' : 'b'}`;
+
+        // Pass the board's face-to-face class to the ghost so it rotates too if needed
+        if (boardEl.parentElement.classList.contains('face-to-face')) {
+            ghost.classList.add('face-to-face-ghost');
+        }
+        if (boardEl.parentElement.classList.contains('rotated')) {
+            ghost.classList.add('rotated-ghost');
+        }
+
         ghost.textContent = pieceEl.textContent;
         document.body.appendChild(ghost);
 
@@ -269,7 +278,7 @@ const ChessBoard = (() => {
                 if (newCell) {
                     const key = newCell.color + newCell.type.toUpperCase();
                     const pieceEl = document.createElement('span');
-                    pieceEl.className = 'piece';
+                    pieceEl.className = `piece ${newCell.color}`;
                     pieceEl.textContent = PIECE_SYMBOLS[key];
                     sqEl.appendChild(pieceEl);
                 }
@@ -295,7 +304,12 @@ const ChessBoard = (() => {
 
         if (symbol) {
             const pieceEl = document.createElement('span');
-            pieceEl.className = 'piece';
+            // Extract color from symbol using PIECE_SYMBOLS keys
+            let pColor = '';
+            for (const [k, v] of Object.entries(PIECE_SYMBOLS)) {
+                if (v === symbol) { pColor = k.charAt(0); break; }
+            }
+            pieceEl.className = `piece ${pColor}`;
             pieceEl.textContent = symbol;
             sqEl.appendChild(pieceEl);
         }
@@ -320,7 +334,7 @@ const ChessBoard = (() => {
             const dy = toRect.top - fromRect.top;
 
             // Apply transform
-            piece.style.transform = `translate(${dx}px, ${dy}px)`;
+            piece.style.transform = `translate(${dx}px, ${dy}px) rotate(var(--base-rotation, 0deg))`;
             piece.classList.add('animating');
 
             // Listen for end

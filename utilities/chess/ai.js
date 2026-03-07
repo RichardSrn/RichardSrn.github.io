@@ -42,7 +42,7 @@ const ChessAI = (() => {
         { id: 'viktor', name: 'Viktor', avatar: '⚔️', elo: 1600, tagline: 'Tactical and sharp', depth: 10, skillLevel: 13 },
         { id: 'athena', name: 'Athena', avatar: '🦉', elo: 1900, tagline: 'Strategic mastermind', depth: 13, skillLevel: 16 },
         { id: 'magnus', name: 'Magnus', avatar: '🏰', elo: 2200, tagline: 'Grandmaster-level play', depth: 16, skillLevel: 18 },
-        { id: 'titan', name: 'Titan', avatar: '💀', elo: 3000, tagline: 'Full engine strength — good luck', depth: 20, skillLevel: 20 }
+        { id: 'titan', name: 'Titan', avatar: '💀', elo: 3000, tagline: 'Full engine strength', depth: 20, skillLevel: 20 }
     ];
 
     /**

@@ -38,6 +38,7 @@ const ChessI18n = (() => {
             play_as: 'Play As',
             random: 'Random',
             variant: 'Variant',
+            save_btn: 'Save',
             standard_chess: 'Standard Chess',
 
             // Bot selector
@@ -112,6 +113,10 @@ const ChessI18n = (() => {
             move_not_understood: 'I didn\'t catch that',
             voice_not_supported: 'Voice input is not supported in your browser.',
             invalid_move: 'Invalid move',
+
+            // Spectator
+            allow_spectators: 'Allow Spectators',
+            spectating: 'Spectating',
         },
         fr: {
             // Main Menu
@@ -146,6 +151,7 @@ const ChessI18n = (() => {
             play_as: 'Jouer en tant que',
             random: 'Aléatoire',
             variant: 'Variante',
+            save_btn: 'Sauvegarder',
             standard_chess: 'Échecs Classiques',
 
             // Bot selector
@@ -220,6 +226,10 @@ const ChessI18n = (() => {
             move_not_understood: 'Je n\'ai pas compris le coup',
             voice_not_supported: 'L\'entrée vocale n\'est pas supportée sur ce navigateur.',
             invalid_move: 'Coup invalide',
+
+            // Spectator
+            allow_spectators: 'Autoriser les spectateurs',
+            spectating: 'En observation',
         }
     };
 

@@ -22,6 +22,12 @@
     let aiIsThinking = false;
     let historyViewIdx = -1; // current history browse index
 
+    let gameConfigs = {
+        pvp: { color: 'random', variant: 'standard' },
+        ai: { color: 'random', bot: 'sage' },
+        online: { color: 'random', variant: 'standard', allowSpectators: true }
+    };
+
     /* ===================== INIT ===================== */
     function init() {
         ChessBoard.init({
@@ -45,7 +51,9 @@
             onTextInput: handleTextInput,
             onReadHistory: handleReadHistory,
             onCreateRoom: handleCreateRoom,
-            onJoinRoom: handleJoinRoom
+            onJoinRoom: handleJoinRoom,
+            onSaveConfig: handleSaveConfig,
+            onEvalBarToggle: handleEvalBarToggle
         });
 
         ChessAI.setOnEvaluationUpdate((score, mate, depth) => {
@@ -53,17 +61,31 @@
         });
     }
 
+    function handleSaveConfig(config) {
+        if (config.mode) {
+            gameConfigs[config.mode] = config;
+            // update selectedBot if we configured ai
+            if (config.mode === 'ai') selectedBot = config.bot;
+        }
+    }
+
     function handleModeSelect(mode) {
         if (mode === 'pvp') {
             gameMode = 'pvp';
             startPvPGame();
+        } else if (mode === 'ai') {
+            gameMode = 'ai';
+            selectedBot = gameConfigs.ai.bot || 'sage';
+            startAIGame(selectedBot);
         } else if (mode === 'online') {
             gameMode = 'online';
             ChessUI.showScreen('online-selection');
         }
     }
 
-    async function handleCreateRoom(config) {
+    async function handleCreateRoom(customConfig = null) {
+        // Use provided config or the stored online config
+        const config = customConfig || gameConfigs.online;
         try {
             const roomId = await ChessMultiplayer.createRoom(config);
             ChessUI.showRoomCode(roomId);
@@ -99,40 +121,69 @@
     function startOnlineGame(roomData) {
         gameMode = 'online';
         ChessUI.showScreen('game');
-        ChessUI.showRotationToggle(false); // Online usually handles its own orientation
+        ChessUI.showRotationToggle(false);
         ChessUI.showEvalBar(false);
+        ChessUI.setFaceToFaceMode(false);
         ChessUI.hideGameOver();
 
-        playerColor = ChessMultiplayer.getRole(); // 'w' or 'b'
+        const isSpectator = ChessMultiplayer.isSpectator();
+        playerColor = isSpectator ? 'w' : ChessMultiplayer.getRole();
+
+        // Mark game as active when both players are present
+        if (!isSpectator) {
+            ChessMultiplayer.markGameActive();
+        }
 
         ChessGame.init({
             mode: 'online',
             playerColor: playerColor,
             onMove: (result, state) => {
-                // If it was OUR move, push to Firebase
-                if (state.turn !== playerColor) {
+                // Only push to Firebase if we are a player and it was OUR move
+                if (!isSpectator && state.turn !== playerColor) {
                     ChessMultiplayer.sendMove(state.fen, result.san);
                 }
                 handleMove(result, state);
             },
-            onGameOver: handleGameOver,
+            onGameOver: (state) => {
+                if (!isSpectator) {
+                    ChessMultiplayer.markGameFinished();
+                }
+                handleGameOver(state);
+            },
             onStateChange: renderFullState
         });
 
-        // Listen for moves from opponent
+        // Listen for moves from opponent (or updates for spectators)
         ChessMultiplayer.onRoomUpdate((data) => {
             if (!data) return;
             const state = ChessGame.getState();
 
-            // If the database has a newer state and it's our turn
-            if (data.fen !== state.fen && data.turn === playerColor) {
-                console.log("Opponent moved, updating board...");
-                ChessGame.loadFEN(data.fen);
+            if (isSpectator) {
+                // Spectators always sync the latest move
+                if (data.lastMove && data.fen !== state.fen) {
+                    ChessGame.applySAN(data.lastMove);
+                }
+            } else {
+                // Player: sync opponent's move
+                if (data.fen !== state.fen && data.turn === playerColor) {
+                    console.log("Opponent moved, updating board...");
+                    if (data.lastMove) {
+                        ChessGame.applySAN(data.lastMove);
+                    } else {
+                        ChessGame.loadFEN(data.fen);
+                    }
+                }
             }
         });
 
-        // Flip board if playing as black
+        // Flip board based on role
         ChessBoard.flipBoard(playerColor === 'b');
+
+        // Spectator UI adjustments
+        if (isSpectator) {
+            ChessUI.setSpectatorMode(true);
+            ChessUI.updateStatus({ spectating: true });
+        }
 
         ChessUI.toggleBlindMode(ChessUI.isBlindModeDefault());
         ChessUI.toggleScoreBar(ChessUI.isScoreBarDefault());
@@ -148,10 +199,12 @@
         ChessUI.showScreen('game');
         ChessUI.showRotationToggle(true);
         ChessUI.showEvalBar(false);
+        ChessUI.setFaceToFaceMode(true);
         ChessUI.hideGameOver();
 
         ChessGame.init({
             mode: 'pvp',
+            playerColor: 'w',
             onMove: handleMove,
             onGameOver: handleGameOver,
             onStateChange: renderFullState
@@ -164,9 +217,14 @@
     }
 
     async function startAIGame(botId) {
+        const config = gameConfigs.ai;
+        let pColor = config.color;
+        if (pColor === 'random') pColor = Math.random() > 0.5 ? 'w' : 'b';
+        playerColor = pColor;
         ChessUI.showScreen('game');
         ChessUI.showRotationToggle(false);
         ChessUI.showEvalBar(true);
+        ChessUI.setFaceToFaceMode(false);
         ChessUI.hideGameOver();
 
         const bot = ChessAI.getBotById(botId);
@@ -457,7 +515,33 @@
             const shouldFlip = state.turn === 'b';
             if (ChessBoard.isFlipped() !== shouldFlip) {
                 ChessBoard.flipBoard(shouldFlip);
+                ChessBoard.updatePosition(activeState.board);
             }
+        }
+
+        // Trigger background evaluation
+        maybeEvaluatePosition(activeState);
+    }
+
+    /* ===================== EVALUATION ===================== */
+    function maybeEvaluatePosition(state) {
+        if (!state) state = ChessGame.getState();
+        if (state.isGameOver) {
+            ChessAI.stopThinking();
+            return;
+        }
+
+        // Evaluate if score bar is visible and it's not the AI's core thinking turn
+        if (ChessUI.isScoreBarVisibleStatus() && !aiIsThinking) {
+            ChessAI.evaluatePosition(state.fen, 10); // cap depth for UI evaluation
+        }
+    }
+
+    function handleEvalBarToggle(isVisible) {
+        if (isVisible) {
+            maybeEvaluatePosition();
+        } else if (!aiIsThinking) {
+            ChessAI.stopThinking();
         }
     }
 
@@ -497,7 +581,11 @@
         historyViewIdx = -1;
         ChessUI.setHistoryMode(false);
         ChessUI.hideGameOver();
+        ChessUI.setSpectatorMode(false);
         ChessAI.stopThinking();
+        if (gameMode === 'online') {
+            ChessMultiplayer.leaveRoom();
+        }
         ChessUI.showScreen('menu');
     }
 
@@ -526,10 +614,12 @@
     }
 
     function handleFlip() {
-        const newFlipped = ChessBoard.flipBoard();
+        ChessBoard.flipBoard();
+        // Force full re-render of pieces after DOM recreation
         const state = ChessGame.isInHistoryMode()
             ? ChessGame.getHistoryState()
             : ChessGame.getState();
+        ChessBoard.updatePosition(state.board);
         ChessUI.updatePlayerBars(state);
     }
 
@@ -562,9 +652,20 @@
 
     function handleRotationToggle(checked) {
         ChessGame.setRotation(checked);
+        // When rotation is ON: all pieces face the current player (board flips per turn)
+        // When rotation is OFF: face-to-face mode (each player's pieces face them)
+        ChessUI.setFaceToFaceMode(!checked);
         const state = ChessGame.getState();
-        if (!checked) ChessBoard.flipBoard(false);
-        renderFullState(state);
+        if (checked) {
+            // Immediately flip to match current turn
+            const shouldFlip = state.turn === 'b';
+            ChessBoard.flipBoard(shouldFlip);
+            ChessBoard.updatePosition(state.board);
+        } else {
+            ChessBoard.flipBoard(false);
+            ChessBoard.updatePosition(state.board);
+        }
+        ChessUI.updatePlayerBars(state);
     }
 
     /* ===================== START ===================== */
