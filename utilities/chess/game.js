@@ -88,6 +88,30 @@ const ChessGame = (() => {
     }
 
     /**
+     * Apply a SAN string move (used for syncing opponent's move in online play)
+     */
+    function applySAN(san) {
+        if (isGameOver || !san) return null;
+
+        const result = game.move(san);
+        if (result) {
+            updateMoveHistory(result);
+            fullSANHistory = game.history();
+
+            // Check game state
+            const state = getState();
+            onMove(result, state);
+
+            if (state.isGameOver) {
+                isGameOver = true;
+                onGameOver(state);
+            }
+            return result;
+        }
+        return null;
+    }
+
+    /**
      * Check if a move is a pawn promotion
      */
     function isPromotionMove(from, to) {
@@ -349,6 +373,7 @@ const ChessGame = (() => {
     return {
         init,
         makeMove,
+        applySAN,
         getLegalMoves,
         getAllLegalMoves,
         undo,
