@@ -240,6 +240,7 @@ const ChessUI = (() => {
         });
 
         // Game over actions
+        els.btnGameoverRematch.addEventListener('click', () => { if (config.onRematch) config.onRematch(); });
         els.btnGameoverNew.addEventListener('click', () => { if (config.onNewGame) config.onNewGame(); });
         els.btnGameoverMenu.addEventListener('click', () => { if (config.onBackToMenu) config.onBackToMenu(); });
 
@@ -271,7 +272,6 @@ const ChessUI = (() => {
 
         els.gameStatus = document.getElementById('game-status');
         els.moveList = document.getElementById('move-list');
-        els.moveList = document.getElementById('move-list');
         els.boardWrapper = document.querySelector('.board-wrapper');
         els.boardContainer = document.getElementById('board-container'); // Need container for coords classes
 
@@ -288,9 +288,9 @@ const ChessUI = (() => {
         els.btnUndo = document.getElementById('btn-undo');
         els.btnFlip = document.getElementById('btn-flip');
         els.btnResign = document.getElementById('btn-resign');
-        els.btnResign = document.getElementById('btn-resign');
         els.btnHint = document.getElementById('btn-hint');
         els.btnCoords = document.getElementById('btn-coords');
+
 
         els.evalBarContainer = document.getElementById('eval-bar-container');
         els.evalBarFill = document.getElementById('eval-bar-fill');
@@ -336,7 +336,6 @@ const ChessUI = (() => {
         els.gameConfigScreen = document.getElementById('game-config-screen');
         els.configSubtitle = document.getElementById('config-subtitle');
         els.configColorSection = document.getElementById('config-color-section');
-        els.configVariantSection = document.getElementById('config-variant-section');
         els.configBotSection = document.getElementById('config-bot-section');
         els.configSpectatorSection = document.getElementById('config-spectator-section');
         els.configAllowSpectators = document.getElementById('config-allow-spectators');
@@ -354,6 +353,7 @@ const ChessUI = (() => {
         els.gameOverIcon = document.getElementById('game-over-icon');
         els.gameOverTitle = document.getElementById('game-over-title');
         els.gameOverReason = document.getElementById('game-over-reason');
+        els.btnGameoverRematch = document.getElementById('btn-gameover-rematch');
         els.btnGameoverNew = document.getElementById('btn-gameover-new');
         els.btnGameoverMenu = document.getElementById('btn-gameover-menu');
         els.confettiCanvas = document.getElementById('confetti-canvas');
@@ -454,19 +454,16 @@ const ChessUI = (() => {
         if (mode === 'pvp') {
             titleText = ChessI18n.t('pvp_title') || 'Player vs Player';
             els.configColorSection.style.display = 'block';
-            els.configVariantSection.style.display = 'block';
             els.configBotSection.style.display = 'none';
             els.configSpectatorSection.style.display = 'none';
         } else if (mode === 'ai') {
             titleText = ChessI18n.t('ai_title') || 'Player vs AI';
             els.configColorSection.style.display = 'block';
-            els.configVariantSection.style.display = 'none'; // No variants against AI
             els.configBotSection.style.display = 'block';
             els.configSpectatorSection.style.display = 'none';
         } else if (mode === 'online') {
             titleText = ChessI18n.t('config_room') || 'Room Config';
             els.configColorSection.style.display = 'block';
-            els.configVariantSection.style.display = 'block';
             els.configBotSection.style.display = 'none';
             els.configSpectatorSection.style.display = 'block';
         }
@@ -490,6 +487,8 @@ const ChessUI = (() => {
             els.settingScoreBar.checked = scoreSaved === 'true';
             isScoreBarVisible = els.settingScoreBar.checked;
         }
+        // Ensure UI matches loaded preference
+        toggleScoreBar(isScoreBarVisible);
     }
 
     function isBlindModeDefault() {
@@ -526,7 +525,12 @@ const ChessUI = (() => {
         if (els.evalBarContainer) {
             els.evalBarContainer.style.display = isScoreBarVisible ? 'flex' : 'none';
         }
-        els.btnToggleEval.style.color = isScoreBarVisible ? 'inherit' : 'var(--text-muted)';
+        
+        // Update button visual state
+        if (els.btnToggleEval) {
+            els.btnToggleEval.classList.toggle('active', isScoreBarVisible);
+            els.btnToggleEval.style.color = isScoreBarVisible ? 'var(--accent)' : 'inherit';
+        }
 
         if (_onEvalBarToggle) _onEvalBarToggle(isScoreBarVisible);
     }
@@ -621,6 +625,9 @@ const ChessUI = (() => {
     function setCurrentBot(bot) { currentBotInfo = bot; }
 
     function updatePlayerBars(state) {
+        if (els.playerBarTop) els.playerBarTop.style.display = 'flex';
+        if (els.playerBarBottom) els.playerBarBottom.style.display = 'flex';
+
         const isWhiteTurn = state.turn === 'w';
         const flipped = ChessBoard.isFlipped();
         const isAI = state.mode === 'ai';
@@ -708,8 +715,7 @@ const ChessUI = (() => {
             els.gameStatus.textContent = ChessI18n.t('check');
             els.gameStatus.classList.add('check');
         } else {
-            const turnStr = state.turn === 'w' ? ChessI18n.t('white_to_move') : ChessI18n.t('black_to_move');
-            els.gameStatus.textContent = turnStr;
+            els.gameStatus.textContent = state.turn === 'w' ? ChessI18n.t('white_to_move') : ChessI18n.t('black_to_move');
         }
     }
 
@@ -749,6 +755,12 @@ const ChessUI = (() => {
             icon = '🏳️';
             title = ChessI18n.t('checkmate'); // "Game Over"
             reason = ChessI18n.t('wins_resignation');
+        }
+
+        // Reset rematch button state securely
+        if (els.btnGameoverRematch) {
+            els.btnGameoverRematch.textContent = ChessI18n.t('rematch') || 'Rematch';
+            els.btnGameoverRematch.classList.remove('loading-state'); // in case we add one
         }
 
         els.gameOverIcon.textContent = icon;
@@ -919,9 +931,11 @@ const ChessUI = (() => {
 
     /* ===================== EVAL BAR (lerp) ===================== */
     function startEvalLerp() {
+        if (evalAnimFrame) return; // avoid multiple loops
         function lerp() {
-            evalCurrent += (evalTarget - evalCurrent) * 0.06;
-            if (Math.abs(evalTarget - evalCurrent) < 0.1) evalCurrent = evalTarget;
+            evalCurrent += (evalTarget - evalCurrent) * 0.08;
+            if (Math.abs(evalTarget - evalCurrent) < 0.01) evalCurrent = evalTarget;
+            
             if (els.evalBarFill) {
                 els.evalBarFill.style.height = `${evalCurrent}%`;
             }
@@ -931,6 +945,8 @@ const ChessUI = (() => {
     }
 
     function updateEvalBar(score, mate) {
+        if (!isScoreBarVisible) return;
+        
         let target = 50;
         let scoreText = '0.0';
 
@@ -947,14 +963,6 @@ const ChessUI = (() => {
         if (els.evalScoreText) els.evalScoreText.textContent = scoreText;
     }
 
-    function showEvalBar(show) {
-        isScoreBarVisible = show;
-        if (els.evalBarContainer) {
-            els.evalBarContainer.style.display = show ? 'flex' : 'none';
-            if (show) { evalTarget = 50; evalCurrent = 50; }
-        }
-        els.btnToggleEval.style.color = show ? 'inherit' : 'var(--text-muted)';
-    }
 
     function isScoreBarVisibleStatus() {
         return isScoreBarVisible;
@@ -991,6 +999,12 @@ const ChessUI = (() => {
         if (els.btnNewGame) els.btnNewGame.style.display = enabled ? 'none' : '';
     }
 
+    function setRematchWaiting() {
+        if (els.btnGameoverRematch) {
+            els.btnGameoverRematch.textContent = ChessI18n.t('waiting_rematch') || 'Waiting...';
+        }
+    }
+
     /* ===================== PUBLIC API ===================== */
     return {
         init,
@@ -1007,7 +1021,7 @@ const ChessUI = (() => {
         showEngineLoading,
         showHintLoading,
         updateEvalBar,
-        showEvalBar,
+        toggleScoreBar,
         isScoreBarVisibleStatus,
         isBlindModeDefault,
         isScoreBarDefault,
@@ -1021,6 +1035,7 @@ const ChessUI = (() => {
         hideGameOver,
         setFaceToFaceMode,
         setSpectatorMode,
+        setRematchWaiting,
         showRoomCode: (code) => {
             els.displayRoomCode.textContent = code;
             els.roomDisplayContainer.style.display = 'block';

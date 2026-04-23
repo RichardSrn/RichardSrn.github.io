@@ -19,6 +19,7 @@
     let gameMode = null;     // 'pvp' | 'ai' | 'online'
     let selectedBot = null;  // bot id string
     let playerColor = 'w';
+    let currentVariant = 'standard';
     let aiIsThinking = false;
     let historyViewIdx = -1; // current history browse index
 
@@ -45,6 +46,7 @@
             onResign: handleResign,
             onHint: handleHint,
             onRotationToggle: handleRotationToggle,
+            onRematch: handleRematch,
             onMoveClick: handleMoveClick,
             onHistoryBack: handleHistoryBack,
             onVoiceInput: handleVoiceInput,
@@ -93,7 +95,7 @@
             // Listen for opponent joining
             let gameStarted = false;
             ChessMultiplayer.onRoomUpdate((data) => {
-                const hasOpponent = data && data.players && data.players.w && data.players.b;
+                const hasOpponent = ChessMultiplayer.isRoomFull(data);
                 console.log("Firebase: Room update:", { hasOpponent, gameMode, gameStarted });
 
                 if (hasOpponent && gameMode === 'online' && !gameStarted) {
@@ -112,7 +114,24 @@
     async function handleJoinRoom(code) {
         try {
             const roomData = await ChessMultiplayer.joinRoom(code);
-            startOnlineGame(roomData);
+            
+            if (ChessMultiplayer.isRoomFull(roomData)) {
+                startOnlineGame(roomData);
+            } else {
+                gameMode = 'online';
+                ChessUI.showRoomCode(code);
+                
+                let gameStarted = false;
+                ChessMultiplayer.onRoomUpdate((data) => {
+                    const hasOpponent = ChessMultiplayer.isRoomFull(data);
+                    if (hasOpponent && gameMode === 'online' && !gameStarted) {
+                        console.info("Firebase: Room is full! Starting game...");
+                        gameStarted = true;
+                        ChessMultiplayer.stopListening();
+                        startOnlineGame(data);
+                    }
+                });
+            }
         } catch (err) {
             alert(err.message);
         }
@@ -122,12 +141,27 @@
         gameMode = 'online';
         ChessUI.showScreen('game');
         ChessUI.showRotationToggle(false);
-        ChessUI.showEvalBar(false);
         ChessUI.setFaceToFaceMode(false);
         ChessUI.hideGameOver();
 
+        const config = roomData;
+        currentVariant = config.variant || 'standard';
+
+        const evalBar = document.getElementById('eval-bar-container');
+        if (evalBar) evalBar.style.display = 'none'; // Always hide initially for online
+        
+        const moveHistoryPanel = document.getElementById('move-history-panel');
+        if (moveHistoryPanel) moveHistoryPanel.style.display = 'block';
+
+        const gameControls = document.querySelector('.game-controls');
+        if (gameControls) {
+            gameControls.style.display = 'flex';
+        }
+
         const isSpectator = ChessMultiplayer.isSpectator();
-        playerColor = isSpectator ? 'w' : ChessMultiplayer.getRole();
+        playerColor = isSpectator ? 'p1' : ChessMultiplayer.getRole();
+
+        // Sync UI for the first time
 
         // Mark game as active when both players are present
         if (!isSpectator) {
@@ -137,6 +171,7 @@
         ChessGame.init({
             mode: 'online',
             playerColor: playerColor,
+            variant: currentVariant,
             onMove: (result, state) => {
                 // Only push to Firebase if we are a player and it was OUR move
                 if (!isSpectator && state.turn !== playerColor) {
@@ -164,7 +199,28 @@
                     ChessGame.applySAN(data.lastMove);
                 }
             } else {
-                // Player: sync opponent's move
+                // Player handling
+                // 1. Check for rematch reset
+                if (state.isGameOver && data.fen === 'start' && data.status === 'active') {
+                    console.log("Room reset for rematch! Starting new game...");
+                    ChessUI.hideGameOver();
+                    ChessGame.loadFEN('start');
+                    return;
+                }
+
+                // 2. Check for opponent rematch request completions
+                if (state.isGameOver && data.rematch) {
+                    const maxPlayers = 2; // Always 2 for now
+                    if (Object.keys(data.rematch).length >= maxPlayers) {
+                        console.log("All players agreed to rematch. Resetting room...");
+                        // Only the host (first role in list) resets to prevent race conditions
+                        if (playerColor === 'w' || playerColor === 'p1') {
+                            ChessMultiplayer.resetRoomForRematch('w');
+                        }
+                    }
+                }
+
+                // 3. Sync opponent's move
                 if (data.fen !== state.fen && data.turn === playerColor) {
                     console.log("Opponent moved, updating board...");
                     if (data.lastMove) {
@@ -198,13 +254,17 @@
     function startPvPGame() {
         ChessUI.showScreen('game');
         ChessUI.showRotationToggle(true);
-        ChessUI.showEvalBar(false);
         ChessUI.setFaceToFaceMode(true);
         ChessUI.hideGameOver();
+
+        document.getElementById('chess-board').style.display = 'grid';
+        document.getElementById('coords-files').style.display = 'flex';
+        document.getElementById('coords-ranks').style.display = 'flex';
 
         ChessGame.init({
             mode: 'pvp',
             playerColor: 'w',
+            variant: currentVariant,
             onMove: handleMove,
             onGameOver: handleGameOver,
             onStateChange: renderFullState
@@ -223,7 +283,6 @@
         playerColor = pColor;
         ChessUI.showScreen('game');
         ChessUI.showRotationToggle(false);
-        ChessUI.showEvalBar(true);
         ChessUI.setFaceToFaceMode(false);
         ChessUI.hideGameOver();
 
@@ -255,7 +314,6 @@
     let selectedSquare = null;
 
     function handleSquareClick(sqName) {
-        // Ignore input while in history mode or AI is thinking
         if (ChessGame.isInHistoryMode()) return;
         if (aiIsThinking) return;
 
@@ -603,6 +661,19 @@
         }
     }
 
+    function handleRematch() {
+        if (gameMode === 'online') {
+            const isSpectator = ChessMultiplayer.isSpectator();
+            if (isSpectator) return;
+            
+            ChessMultiplayer.requestRematch();
+            ChessUI.setRematchWaiting();
+        } else {
+            // Local PvP or AI - instantiate new game directly
+            handleNewGame();
+        }
+    }
+
     function handleUndo() {
         if (ChessGame.isInHistoryMode()) {
             handleHistoryBack();
@@ -666,6 +737,83 @@
             ChessBoard.updatePosition(state.board);
         }
         ChessUI.updatePlayerBars(state);
+    }
+
+    /* ===================== VARIANT HANDLERS ===================== */
+    let variantSelectedSq = null;
+
+    function handleVariantSquareClick(sqName) {
+        if (ChessMultiplayer.isSpectator()) return;
+        const state = VariantGame.getState();
+        
+        // Ensure turn-based movement: only move if it's your turn
+        // In local PvP, we don't restrict, but in online we MUST
+        if (gameMode === 'online') {
+            if (state.turn !== playerColor) {
+                console.warn("Main: Not your turn!", { 
+                    currentTurn: state.turn, 
+                    myColor: playerColor,
+                    isSpectator: ChessMultiplayer.isSpectator(),
+                    sqClicked: sqName,
+                    pieceOnSq: state.nodes[sqName] ? state.nodes[sqName].piece : 'none'
+                });
+                return;
+            }
+        }
+        
+        console.log("Main: Click on ", sqName, {
+            turn: state.turn,
+            playerColor,
+            selected: variantSelectedSq,
+            piece: state.nodes[sqName] ? state.nodes[sqName].piece : null
+        });
+
+        if (variantSelectedSq === sqName) {
+            variantSelectedSq = null;
+            VariantBoard.setHighlights(null, []);
+            return;
+        }
+
+        // If we have a selection, try to move
+        if (variantSelectedSq) {
+            const moves = VariantGame.getLegalMoves(variantSelectedSq);
+            const move = moves.find(m => m.to === sqName);
+            if (move) {
+                VariantGame.makeMove(variantSelectedSq, sqName);
+                variantSelectedSq = null;
+                VariantBoard.setHighlights(null, []);
+                const newState = VariantGame.getState();
+                VariantBoard.updatePosition(newState);
+                ChessUI.updatePlayerBars(newState);
+                ChessUI.updateStatus(newState);
+                
+                // Online Sync: Push the whole serialized state for variants
+                if (gameMode === 'online' && !ChessMultiplayer.isSpectator()) {
+                    ChessMultiplayer.sendMove(null, null, newState.turn);
+                    // We use the roomRef directly because sendMove doesn't support custom objects well yet
+                    const roomId = ChessMultiplayer.getRoomId();
+                    if (roomId) {
+                        database.ref('rooms/' + roomId).update({
+                            variantState: VariantGame.serialize(),
+                            turn: newState.turn
+                        });
+                    }
+                }
+                
+                // TODO: Game over check
+                return;
+            }
+        }
+
+        // Otherwise select
+        const moves = VariantGame.getLegalMoves(sqName);
+        if (moves.length > 0) {
+            variantSelectedSq = sqName;
+            VariantBoard.setHighlights(sqName, moves);
+        } else {
+            variantSelectedSq = null;
+            VariantBoard.setHighlights(null, []);
+        }
     }
 
     /* ===================== START ===================== */

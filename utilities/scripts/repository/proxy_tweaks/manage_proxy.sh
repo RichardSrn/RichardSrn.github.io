@@ -2,6 +2,7 @@
 
 # Configuration
 PROXY_URL="http://cache.univ-st-etienne.fr:3128/"
+NO_PROXY_VAL="localhost,127.0.0.1,0.0.0.0,ujmse.local,univ-st-etienne.fr"
 ENV_FILE="/etc/environment"
 APT_FILE="/etc/apt/apt.conf.d/95proxies"
 SYSTEMD_CONF="/etc/systemd/system.conf.d/proxy.conf"
@@ -14,10 +15,24 @@ fi
 
 enable_proxy() {
     echo "Enabling proxy settings..."
-    # Uncomment lines in /etc/environment
-    sed -i 's/^#\(http_proxy=\)/\1/' $ENV_FILE
-    sed -i 's/^#\(https_proxy=\)/\1/' $ENV_FILE
-    sed -i 's/^#\(ftp_proxy=\)/\1/' $ENV_FILE
+    # Update /etc/environment
+    sed -i "/^#\?no_proxy=/d" $ENV_FILE
+    sed -i "/^#\?NO_PROXY=/d" $ENV_FILE
+    sed -i "/^#\?http_proxy=/d" $ENV_FILE
+    sed -i "/^#\?https_proxy=/d" $ENV_FILE
+    sed -i "/^#\?ftp_proxy=/d" $ENV_FILE
+    sed -i "/^#\?HTTP_PROXY=/d" $ENV_FILE
+    sed -i "/^#\?HTTPS_PROXY=/d" $ENV_FILE
+    sed -i "/^#\?FTP_PROXY=/d" $ENV_FILE
+
+    echo "http_proxy=\"$PROXY_URL\"" >> $ENV_FILE
+    echo "https_proxy=\"$PROXY_URL\"" >> $ENV_FILE
+    echo "ftp_proxy=\"$PROXY_URL\"" >> $ENV_FILE
+    echo "HTTP_PROXY=\"$PROXY_URL\"" >> $ENV_FILE
+    echo "HTTPS_PROXY=\"$PROXY_URL\"" >> $ENV_FILE
+    echo "FTP_PROXY=\"$PROXY_URL\"" >> $ENV_FILE
+    echo "no_proxy=\"$NO_PROXY_VAL\"" >> $ENV_FILE
+    echo "NO_PROXY=\"$NO_PROXY_VAL\"" >> $ENV_FILE
     
     # Update APT
     echo "Acquire::http::Proxy \"$PROXY_URL\";" > $APT_FILE
@@ -25,15 +40,20 @@ enable_proxy() {
     
     # Update Systemd
     mkdir -p $(dirname $SYSTEMD_CONF)
-    echo -e "[Manager]\nDefaultEnvironment=\"HTTP_PROXY=$PROXY_URL\" \"HTTPS_PROXY=$PROXY_URL\" \"FTP_PROXY=$PROXY_URL\"" > $SYSTEMD_CONF
+    echo -e "[Manager]\nDefaultEnvironment=\"HTTP_PROXY=$PROXY_URL\" \"HTTPS_PROXY=$PROXY_URL\" \"FTP_PROXY=$PROXY_URL\" \"NO_PROXY=$NO_PROXY_VAL\"" > $SYSTEMD_CONF
 }
 
 disable_proxy() {
     echo "Disabling proxy settings..."
-    # Comment lines in /etc/environment
-    sed -i 's/^\(http_proxy=\)/#\1/' $ENV_FILE
-    sed -i 's/^\(https_proxy=\)/#\1/' $ENV_FILE
-    sed -i 's/^\(ftp_proxy=\)/#\1/' $ENV_FILE
+    # Remove lines from /etc/environment
+    sed -i "/^#\?http_proxy=/d" $ENV_FILE
+    sed -i "/^#\?https_proxy=/d" $ENV_FILE
+    sed -i "/^#\?ftp_proxy=/d" $ENV_FILE
+    sed -i "/^#\?HTTP_PROXY=/d" $ENV_FILE
+    sed -i "/^#\?HTTPS_PROXY=/d" $ENV_FILE
+    sed -i "/^#\?FTP_PROXY=/d" $ENV_FILE
+    sed -i "/^#\?no_proxy=/d" $ENV_FILE
+    sed -i "/^#\?NO_PROXY=/d" $ENV_FILE
     
     # Remove APT and Systemd configs
     rm -f $APT_FILE

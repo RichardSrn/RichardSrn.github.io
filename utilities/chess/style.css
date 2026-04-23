@@ -24,10 +24,13 @@
     --success: #10b981;
     --danger: #ef4444;
     --warning: #f59e0b;
+    --variant-red: #ff4b4b;
 
     /* Board colors */
     --sq-light: #e8dcc8;
     --sq-dark: #b58863;
+    --sq-green-light: #eeeed2;
+    --sq-green-dark: #769656;
     --sq-light-highlight: #f7ec7d;
     --sq-dark-highlight: #dbc34d;
     --sq-legal-dot: rgba(0, 0, 0, 0.2);
@@ -43,6 +46,12 @@
     --radius: 12px;
     --radius-sm: 8px;
     --transition: 0.2s ease;
+}
+
+/* Green Theme Override */
+.theme-green {
+    --sq-light: var(--sq-green-light);
+    --sq-dark: var(--sq-green-dark);
 }
 
 /* ---------- Reset & Base ---------- */
@@ -339,38 +348,38 @@ body {
 /* Evaluation Bar */
 .eval-bar-container {
     position: absolute;
-    left: -28px;
+    left: -34px;
     top: 0;
     bottom: 0;
-    width: 18px;
-    background: #333;
+    width: 24px;
+    background: #262626;
     border-radius: 4px;
     overflow: hidden;
     display: flex;
     flex-direction: column-reverse;
     /* Fill from bottom */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .eval-bar-fill {
     width: 100%;
-    background: #f0f0f0;
+    background: #ffffff;
     /* White advantage color */
     height: 50%;
-    transition: height 0.5s ease;
 }
 
 .eval-score-text {
     position: absolute;
     width: 100%;
     text-align: center;
-    font-size: 0.55rem;
-    font-weight: 700;
-    color: #333;
-    /* Dark text usually against white fill, but we'll manage color dynamically */
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #000;
     z-index: 5;
-    bottom: 4px;
+    bottom: 6px;
     pointer-events: none;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
 .eval-bar-container.flipped {
@@ -1629,4 +1638,99 @@ body {
     .theme-swatches {
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+/* ---------- Variant Board (SVG) ---------- */
+#variant-board-container svg {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+}
+
+.variant-square {
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 0.5px;
+    transition: fill 0.2s ease, stroke 0.2s ease;
+    cursor: pointer;
+}
+
+.variant-square.light { fill: var(--sq-light); }
+.variant-square.dark { fill: var(--sq-dark); }
+
+.variant-square.selected {
+    fill: var(--sq-light-highlight) !important;
+}
+
+.variant-square.legal-move {
+    stroke: var(--accent);
+    stroke-width: 3px;
+}
+
+.variant-piece {
+    font-size: 28px;
+    pointer-events: none;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.variant-piece.p1 { fill: #fff; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); }
+.variant-piece.p2 { fill: #000; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.4)); }
+.variant-piece.p3 { fill: var(--variant-red); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); }
+
+.variant-square:hover {
+    filter: brightness(1.1);
+}
+
+/* Variant Turn Indicator */
+.variant-turn-ui {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--glass-border);
+    margin-top: auto;
+}
+
+.v-turn-slot {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+.v-turn-slot.active-turn {
+    opacity: 1;
+    background: #769656;
+    border-color: #eeeed2;
+    box-shadow: 0 0 15px rgba(118, 150, 86, 0.5);
+    transform: scale(1.1);
+}
+
+.v-turn-icon {
+    pointer-events: none;
+    user-select: none;
+}
+
+#v-turn-p1 .v-turn-icon { color: white; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+#v-turn-p2 .v-turn-icon { color: black; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.3)); }
+#v-turn-p3 .v-turn-icon { color: var(--variant-red); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+
+.variant-coord-label {
+    font-size: 8px;
+    fill: var(--text-muted);
+    opacity: 0.6;
+    font-weight: 500;
+    pointer-events: none;
+    user-select: none;
+    font-family: var(--font-main);
 }

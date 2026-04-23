@@ -29,6 +29,9 @@ const translations = {
         "scripts_title": "Scripts Repo",
         "scripts_desc": "Browse, view, edit, and download a collection of useful scripts.",
 
+        "resume_title": "Digital Resume",
+        "resume_desc": "A brief overview of my PhD research, publications, and education.",
+
         "boids_title": "Boids Simulation",
         "boids_desc": "Flocking simulation demonstrating separation, alignment, and cohesion behaviors.",
         "fractal_title": "Fractal Explorer",
@@ -101,6 +104,9 @@ const translations = {
         "qrcode_desc": "Générez et personnalisez des codes QR avec logos, couleurs et options de style.",
         "scripts_title": "Dépôt de Scripts",
         "scripts_desc": "Parcourez, visualisez, éditez et téléchargez une collection de scripts utiles.",
+
+        "resume_title": "CV Numérique",
+        "resume_desc": "Un aperçu concis de mes recherches de doctorat, de mes publications et de mon parcours.",
 
         "boids_title": "Simulation de Boids",
         "boids_desc": "Simulation de vol en groupe démontrant les comportements de séparation, d'alignement et de cohésion.",
