@@ -3,3 +3,10 @@
 __pycache__/
 .DS_Store
 .gemini/
+
+# Python environment
+venv/
+env/
+.env
+.ipynb_checkpoints/
+*.pyc
