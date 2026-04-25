@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script data-goatcounter="https://richardsrn.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -55,7 +55,13 @@
                     <p class="lab">Hubert Curien Laboratory · St-Étienne, France</p>
                     <p class="timeline">2022 — 2026</p>
                     <div class="supervisors">
-                        <strong>Supervision:</strong> Christine Largeron, Baptiste Jeudy, Charlotte Laclau
+                        <strong>Supervision:</strong> Christine Largeron (LaHC), Baptiste Jeudy (LaHC), Charlotte Laclau (Télécom Paris)
+                    </div>
+                    <div class="supervisor-affiliations">
+                        <div class="aff-label"><strong>LaHC:</strong></div>
+                        <div class="aff-value">Laboratoire Hubert Curien, Saint-Étienne 42000, France</div>
+                        <div class="aff-label"><strong>Télécom Paris:</strong></div>
+                        <div class="aff-value">Télécom Paris, Institut Polytechnique de Paris, France</div>
                     </div>
                 </div>
             </div>
@@ -150,115 +156,146 @@
             <h2 class="section-title">Scientific Engagement</h2>
             <div class="engagement-list glass">
                 <div class="engagement-item">
+                    <span class="year">LERI²</span>
+                    <p><strong>Junior Laboratory (2025 - 2027)</strong>: Co-founder of the <em>Laboratoire Expérimental de Recherche Interdisciplinaire sur l’Ignorance</em>. Collaborative initiative between <strong>LaHC</strong>, <strong>ECLLA</strong>, and <strong>ACCRA</strong> (Strasbourg) focused on agnotology and scientific mediation.</p>
+                </div>
+                <div class="engagement-item">
                     <span class="year">Events</span>
-                    <p>Regular attendee and contributor at <strong>ECMLPKDD</strong> (2022, 2024), <strong>EGC</strong> (2023, 2025), and <strong>PFIA</strong> (2023, 2024).</p>
+                    <p>Regular attendee and contributor at <strong>ECMLPKDD</strong> (2022, 2024), <strong>EGC</strong> (2023, 2025), <strong>PFIA</strong> (2023, 2024), <strong>IDA</strong> (2026)</p>
                 </div>
                 <div class="engagement-item">
                     <span class="year">Reviewing</span>
-                    <p>Active participant in double-blind peer review processes for major AI/ML conferences.</p>
+                    <p>Participant in double-blind peer review processes for major ML conferences: <strong> ECML-PKDD, EGC, IDA </strong>.</p>
                 </div>
             </div>
         </section>
 
-        <div class="row">
-            <!-- Education -->
-            <section class="section fade-in" id="education">
-                <h2 class="section-title">Education</h2>
-                <div class="timeline-list">
-                    <div class="timeline-item glass">
-                        <div class="time">2022 — 2026</div>
-                        <div class="detail">
+        <!-- Unified Timeline Section -->
+        <section class="section fade-in" id="trajectory">
+            <div class="trajectory-header">
+                <h2 class="section-title">Academic & Professional Trajectory</h2>
+                <button class="view-toggle" id="viewToggle" title="Toggle timeline view">
+                    <span class="toggle-icon timeline-icon">&#9678;</span>
+                    <span class="toggle-icon list-icon">&#9776;</span>
+                </button>
+            </div>
+            <div class="timeline-container" id="timelineContainer">
+                <div class="timeline-headers">
+                    <span class="header-academic">ACADEMIC</span>
+                    <span class="header-right">
+                        <span class="legend-professional">Research</span> & <span class="legend-teaching">TEACHING</span>
+                    </span>
+                </div>
+                <div class="timeline-axis"></div>
+                
+
+                <div class="timeline-years">
+                    <span style="--year: 2027">2027</span>
+                    <span style="--year: 2026">2026</span>
+                    <span style="--year: 2025">2025</span>
+                    <span style="--year: 2024">2024</span>
+                    <span style="--year: 2023">2023</span>
+                    <span style="--year: 2022">2022</span>
+                    <span style="--year: 2021">2021</span>
+                    <span style="--year: 2020">2020</span>
+                    <span style="--year: 2019">2019</span>
+                    <span style="--year: 2018">2018</span>
+                    <span style="--year: 2017">2017</span>
+                </div>
+
+                <!-- List column headers (hidden in timeline view) -->
+                <div class="list-col-header list-col-academic">Academic</div>
+                <div class="list-col-header list-col-research">Research</div>
+                <div class="list-col-header list-col-teaching">Teaching</div>
+
+                <!-- EDUCATION (Left Side) -->
+                <div class="timeline-side education-side">
+                    <div class="trajectory-item education" style="--start: 2022; --end: 2026;">
+                        <div class="content glass">
+                            <span class="date-range">2022 – 2026</span>
                             <h4>Ph.D. in Machine Learning</h4>
-                            <p>Hubert Curien Laboratory · St-Étienne, France</p>
+                            <p>Hubert Curien Laboratory</p>
                         </div>
                     </div>
-                    <div class="timeline-item glass">
-                        <div class="time">2020 — 2022</div>
-                        <div class="detail">
+                    <div class="trajectory-item education" style="--start: 2020; --end: 2022;">
+                        <div class="content glass">
+                            <span class="date-range">2020 – 2022</span>
                             <h4>Master's in Machine Learning</h4>
-                            <p>J. Monnet University · Major</p>
-                            <ul class="mini-list">
-                                <li>Weather Forecasting Competition (MétéoFrance)</li>
-                                <li>NLI Competition (Contradiction My Dear Watson)</li>
-                                <li>Passive Aggressive & OPA-Active classification</li>
-                            </ul>
+                            <p>Jean Monnet University (FR)</p>
                         </div>
                     </div>
-                    <div class="timeline-item glass">
-                        <div class="time">2017 — 2020</div>
-                        <div class="detail">
+                    <div class="trajectory-item education" style="--start: 2017; --end: 2020;">
+                        <div class="content glass">
+                            <span class="date-range">2017 – 2020</span>
                             <h4>Bachelor's in Mathematics</h4>
-                            <p>J. Monnet University · Distinction</p>
-                            <ul class="mini-list">
-                                <li>RSA cryptosystem & Quadratic Sieve implementation</li>
-                                <li>Study of polyominos & plane tiling</li>
-                            </ul>
+                            <p>Jean Monnet University (FR)</p>
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- Experience/Internships -->
-            <section class="section fade-in" id="experience">
-                <h2 class="section-title">Professional Experience</h2>
-                <div class="timeline-list">
-                    <div class="timeline-item glass">
-                        <div class="time">2025 — 2026</div>
-                        <div class="detail">
-                            <h4>ATER (Teaching & Research Fellow)</h4>
-                            <p>Jean Monnet University · Saint-Étienne</p>
-                            <span class="sub-detail">Full-time teaching and research position following the PhD.</span>
+                <!-- RESEARCH & TEACHING (Right Side) -->
+                <div class="timeline-right-col">
+                    <div class="timeline-side research-side">
+                        <div class="trajectory-item research" style="--start: 2025; --end: 2027;">
+                            <div class="content glass">
+                                <span class="date-range">2025 – 2027</span>
+                                <h4>LERI² Laboratory (co-founder)</h4>
+                                <p>Interdisciplinary Research on Ignorance</p>
+                            </div>
+                        </div>
+                        <div class="trajectory-item research" style="--start: 2025; --end: 2026;">
+                            <div class="content glass">
+                                <span class="date-range">2025 – 2026</span>
+                                <h4>ATER (Research Fellow)</h4>
+                                <p>Jean Monnet University (FR)</p>
+                            </div>
+                        </div>
+                        <div class="trajectory-item research" style="--start: 2022; --end: 2022.6;">
+                            <div class="content glass">
+                                <span class="date-range">2022</span>
+                                <h4>Research Intern</h4>
+                                <p>LIP6 / IRIT</p>
+                            </div>
+                        </div>
+                        <div class="trajectory-item research" style="--start: 2021.3; --end: 2021.7;">
+                            <div class="content glass">
+                                <span class="date-range">2021</span>
+                                <h4>Research Intern</h4>
+                                <p>LaHC / INT</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="timeline-item glass">
-                        <div class="time">2022</div>
-                        <div class="detail">
-                            <h4>LIP6 / IRIT · Research Intern</h4>
-                            <p>Data-to-text generation for complex information needs.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item glass">
-                        <div class="time">2021</div>
-                        <div class="detail">
-                            <h4>LaHC · Research Intern</h4>
-                            <p>Robustness of OT-based averaging in fMRI.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
 
-        <!-- Teaching & Tutoring -->
-        <section class="section fade-in" id="teaching">
-            <h2 class="section-title">Teaching & Academic Service</h2>
-            <div class="teaching-grid">
-                <div class="teaching-item glass">
-                    <strong>Machine Learning II - Deep Learning</strong>
-                    <span>M2 DSMI (2025-2026) · CM, TD, TP</span>
-                </div>
-                <div class="teaching-item glass">
-                    <strong>Research Methodology</strong>
-                    <span>M1 MLDM / M2 DSC (2025-2026) · CM, TD</span>
-                </div>
-                <div class="teaching-item glass">
-                    <strong>Informatique 1</strong>
-                    <span>L1 Science & Tech (2025-2026) · CM, TD</span>
-                </div>
-                <div class="teaching-item glass">
-                    <strong>Outils Informatiques</strong>
-                    <span>L1/L2 Maths, Physics, Chemistry (2025-2026) · CM, TD, TP</span>
-                </div>
-                <div class="teaching-item glass">
-                    <strong>Machine Learning Fundamentals</strong>
-                    <span>M1 Int. Students (2023-2025) · CM, TD, TP</span>
-                </div>
-                <div class="teaching-item glass">
-                    <strong>Introduction to Python</strong>
-                    <span>L1 Students (2022-2026) · TD, TP</span>
-                </div>
-                <div class="teaching-item glass">
-                    <strong>Mathematics Tutoring</strong>
-                    <span>Undergraduate Tutoring (Linear Algebra, Analysis)</span>
+                    <div class="timeline-side teaching-side">
+                        <div class="trajectory-item teaching" style="--start: 2025; --end: 2026.5;">
+                            <div class="content glass">
+                                <span class="date-range">2025 – 2026</span>
+                                <h4>Teaching: ML II & Res. Meth.</h4>
+                                <p>M2 DSMI / M1 MLDM</p>
+                            </div>
+                        </div>
+                        <div class="trajectory-item teaching" style="--start: 2022; --end: 2026;">
+                            <div class="content glass">
+                                <span class="date-range">2022 – 2026</span>
+                                <h4>Teaching: Python & Info 1</h4>
+                                <p>L1 Students</p>
+                            </div>
+                        </div>
+                        <div class="trajectory-item teaching" style="--start: 2023; --end: 2025;">
+                            <div class="content glass">
+                                <span class="date-range">2023 – 2025</span>
+                                <h4>Teaching: ML Fundamentals</h4>
+                                <p>M1 Int. Students</p>
+                            </div>
+                        </div>
+                        <div class="trajectory-item teaching" style="--start: 2018; --end: 2021;">
+                            <div class="content glass">
+                                <span class="date-range">2018 – 2021</span>
+                                <h4>Mathematics Tutoring</h4>
+                                <p>Undergraduate level</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

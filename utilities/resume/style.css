@@ -200,6 +200,21 @@ body {
 .supervisors {
     font-size: 0.95rem;
     color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.supervisor-affiliations {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 15px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+    margin-top: 15px;
+}
+
+.supervisor-affiliations strong {
+    color: var(--text-secondary);
 }
 
 /* Contributions Grid */
@@ -277,6 +292,428 @@ body {
     background: var(--accent-primary);
     border-color: var(--accent-primary);
     color: white;
+}
+
+/* Unified Trajectory Timeline */
+.timeline-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 250px 40px 100px; /* Added bottom padding */
+    height: 2320px; /* More space for the bottom 2017 marker with 2027 at top */
+    display: flex;
+    justify-content: center;
+    --year-h: 220px;
+    --base-year: 2017;
+    --max-year: 2027;
+}
+
+.timeline-headers {
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 30;
+    pointer-events: none;
+}
+
+.header-academic, .header-right {
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.header-academic {
+    color: var(--accent-primary);
+}
+
+.header-right {
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+.legend-professional {
+    color: var(--accent-secondary);
+    text-shadow: 0 0 20px rgba(188, 140, 255, 0.2);
+}
+
+.legend-teaching {
+    color: #f39c12;
+    text-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+}
+
+.timeline-axis {
+    position: absolute;
+    left: 50%;
+    top: -20px;
+    bottom: 20px; /* Stop exactly at the bottom of the 2017 mark */
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--accent-primary), var(--accent-secondary), transparent);
+    transform: translateX(-50%);
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+}
+
+.timeline-years {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; /* Width for labels */
+    height: 100%;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.timeline-years span {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfectly centered on the mathematical year point */
+    background: #0b0e14;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0,0,0,0.7);
+    /* Individual year positions */
+    --top: calc((var(--max-year) - var(--year)) * var(--year-h));
+    top: var(--top);
+    z-index: 30;
+}
+
+.timeline-side {
+    position: relative;
+    width: 50%;
+    height: 1980px; /* Match years */
+}
+
+.education-side {
+    padding-right: 30px;
+}
+
+.timeline-right-col {
+    position: relative;
+    width: 50%;
+    height: 1980px;
+}
+
+.timeline-right-col .timeline-side {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-left: 30px;
+    box-sizing: border-box;
+}
+
+/* Individual Items */
+.trajectory-item {
+    position: absolute;
+    width: 90%;
+    --top: calc((var(--max-year) - var(--end)) * var(--year-h));
+    --height: calc((var(--end) - var(--start)) * var(--year-h));
+    top: calc(var(--top) + var(--shift, 0px));
+    height: var(--height);
+    min-height: 60px;
+    transition: z-index 0s;
+    display: flex;
+    align-items: center;
+}
+
+.timeline-right-col .trajectory-item {
+    width: 90%;
+}
+
+.trajectory-item.education { 
+    z-index: 5;
+    right: 30px;
+}
+.trajectory-item.research { z-index: 6; }
+.trajectory-item.teaching { z-index: 4; }
+
+.trajectory-item .content {
+    position: relative; /* Changed from absolute to work with flex centering */
+    width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-primary);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.trajectory-item.education .content {
+    border-left: none;
+    border-right: 4px solid var(--accent-primary);
+    text-align: right;
+}
+
+.trajectory-item .date-range {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.6;
+}
+
+.trajectory-item.research .date-range { color: var(--accent-secondary); }
+.trajectory-item.teaching .date-range { color: #f39c12; }
+.trajectory-item.education .date-range { color: var(--accent-primary); }
+
+.trajectory-item.research .content {
+    border-left-color: var(--accent-secondary);
+}
+
+.trajectory-item.teaching .content {
+    border-left-color: #f39c12;
+    background: rgba(243, 156, 18, 0.05);
+}
+
+/* Duration Span Lines */
+.trajectory-item::before {
+    content: '';
+    position: absolute;
+    top: calc(15px - var(--shift, 0px));
+    bottom: calc(15px + var(--shift, 0px));
+    width: 2px;
+    background: currentColor;
+    opacity: 0.25;
+    transition: all 0.4s ease;
+}
+
+.education-side .trajectory-item::before {
+    right: -30px;
+    color: var(--accent-primary);
+}
+
+.timeline-right-col .trajectory-item::before {
+    left: -30px;
+}
+
+.trajectory-item.research::before { color: var(--accent-secondary); }
+.trajectory-item.teaching::before { color: #f39c12; }
+
+/* Hover Effects */
+.trajectory-item:hover {
+    z-index: 25;
+}
+
+.trajectory-item:hover .content {
+    transform: scale(1.05) translateY(-5px);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.trajectory-item:hover::before {
+    opacity: 1;
+    width: 4px;
+    transform: scaleX(1.5);
+    box-shadow: 0 0 15px currentColor;
+}
+
+/* View Toggle Button */
+.trajectory-header .section-title::after {
+    display: none;
+}
+
+.trajectory-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.trajectory-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    position: relative;
+}
+
+.view-toggle {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-secondary);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.view-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: scale(1.08);
+}
+
+.view-toggle .toggle-icon {
+    display: none;
+}
+
+.view-toggle.timeline-active .list-icon { display: inline-block; }
+.view-toggle.list-active .timeline-icon { display: inline-block; }
+
+/* List View (three-column layout) */
+.list-col-header {
+    display: none;
+}
+
+.timeline-container.list-view {
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 30px 0;
+}
+
+.timeline-container.list-view .timeline-axis,
+.timeline-container.list-view .timeline-years,
+.timeline-container.list-view .timeline-headers {
+    display: none;
+}
+
+.timeline-container.list-view .list-col-header {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 4px;
+}
+
+.list-col-academic { color: var(--accent-primary); }
+.list-col-research { color: var(--accent-secondary); }
+.list-col-teaching { color: #f39c12; }
+
+.timeline-container.list-view .education-side {
+    grid-column: 1;
+    padding-right: 0;
+}
+
+.timeline-container.list-view .timeline-right-col {
+    display: contents;
+}
+
+.timeline-container.list-view .research-side {
+    grid-column: 2;
+}
+
+.timeline-container.list-view .teaching-side {
+    grid-column: 3;
+}
+
+.timeline-container.list-view .timeline-side {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 0;
+}
+
+.timeline-container.list-view .trajectory-item {
+    position: relative;
+    top: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-bottom: 14px !important;
+    min-height: unset;
+}
+
+.timeline-container.list-view .trajectory-item.education {
+    right: auto;
+}
+
+.timeline-container.list-view .trajectory-item::before {
+    display: none;
+}
+
+.timeline-container.list-view .trajectory-item.education .content {
+    text-align: left;
+    border-right: none;
+    border-left: 4px solid var(--accent-primary);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .timeline-container {
+        height: auto;
+        flex-direction: column;
+        padding-left: 60px;
+        display: block;
+    }
+
+    .timeline-axis {
+        left: 20px;
+        transform: none;
+    }
+
+    .timeline-years {
+        display: none;
+    }
+
+    .timeline-right-col {
+        width: 100%;
+        height: auto;
+        position: static;
+    }
+
+    .timeline-right-col .timeline-side {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 0;
+    }
+
+    .timeline-side {
+        width: 100%;
+        padding: 0;
+        margin-bottom: 40px;
+        position: static;
+    }
+
+    .trajectory-item {
+        position: relative;
+        top: auto !important;
+        height: auto !important;
+        margin-bottom: 20px !important;
+        width: 100% !important;
+    }
+
+    .trajectory-item .content {
+        text-align: left !important;
+        border-left: 4px solid var(--accent-primary) !important;
+        border-right: none !important;
+    }
+
+    .trajectory-item::before {
+        left: -42px !important;
+        right: auto !important;
+    }
+
+    .list-col-header {
+        display: none !important;
+    }
+
+    .timeline-container.list-view {
+        display: block;
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 .status-note {
