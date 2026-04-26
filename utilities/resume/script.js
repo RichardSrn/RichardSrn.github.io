@@ -115,10 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Add click listener for mobile items to expand
+        // Add click listener for items to expand (works on both desktop and mobile)
         container.addEventListener('click', (e) => {
-            if (window.innerWidth > 768) return;
-            
             const item = e.target.closest('.trajectory-item');
             if (item) {
                 const isExpanded = item.classList.contains('expanded');
@@ -127,8 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Toggle clicked one
                 if (!isExpanded) item.classList.add('expanded');
                 
-                // Recalculate overlaps to push items down
-                requestAnimationFrame(resolveOverlaps);
+                // On mobile, recalculate overlaps to push items down
+                if (window.innerWidth <= 768) {
+                    requestAnimationFrame(resolveOverlaps);
+                }
             }
         });
     }
@@ -360,4 +360,38 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(resolveOverlaps, 150);
     });
+
+    // Interactive hint: breathe animation + hint fade-out
+    const trajectorySection = document.getElementById('trajectory');
+    const timelineHint = document.getElementById('timelineHint');
+    let inviteTriggered = false;
+
+    if (trajectorySection) {
+        const inviteObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !inviteTriggered) {
+                    inviteTriggered = true;
+                    inviteObserver.unobserve(entry.target);
+
+                    const items = container ? container.querySelectorAll('.trajectory-item .content') : [];
+                    items.forEach((el, i) => {
+                        setTimeout(() => {
+                            el.classList.add('invite');
+                            el.addEventListener('animationend', () => {
+                                el.classList.remove('invite');
+                            }, { once: true });
+                        }, i * 120);
+                    });
+
+                    if (timelineHint) {
+                        setTimeout(() => {
+                            timelineHint.classList.add('hidden');
+                        }, 4000);
+                    }
+                }
+            });
+        }, { threshold: 0.2 });
+
+        inviteObserver.observe(trajectorySection);
+    }
 });
