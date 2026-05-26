@@ -685,6 +685,30 @@ function updateInfoOverlay(graphInfo) {
     const overlay = document.getElementById('info-overlay');
     if (!overlay) return;
 
+    const classLabels = graphInfo.classLabels || [];
+
+    // Build class legend HTML
+    let legendHtml = '';
+    if (classLabels.length > 0) {
+        const anyUnsure = classLabels.some(cls => !cls.confirmed);
+        legendHtml = `<div id="class-legend" style="margin-top:8px; border-top: 1px solid rgba(128,128,128,0.3); padding-top:6px;">
+            <b style="font-size:11px; display:block; margin-bottom:4px;">Classes (click to highlight):</b>`;
+        classLabels.forEach(cls => {
+            legendHtml += `<div class="legend-item" data-class="${cls.class}" style="
+                display:flex; align-items:center; gap:6px;
+                margin: 2px 0; padding: 3px 6px; border-radius: 6px;
+                cursor:pointer; font-size:11px; border: 1px solid transparent;
+                transition: border-color 0.15s, background 0.15s; user-select:none;">
+                <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${cls.color};flex-shrink:0;"></span>
+                <span>${cls.name}</span>
+            </div>`;
+        });
+        if (anyUnsure) {
+            legendHtml += `<div style="font-size:9px; opacity:0.55; margin-top:4px; font-style:italic;">⚠ unsure of class mapping</div>`;
+        }
+        legendHtml += `</div>`;
+    }
+
     overlay.innerHTML = `
         <b>Graph Info:</b><br>
         Nodes: ${graphInfo.num_nodes || 'N/A'}<br>
@@ -693,7 +717,47 @@ function updateInfoOverlay(graphInfo) {
         Avg Degree: ${graphInfo.avg_degree || 'N/A'}<br>
         Density: ${graphInfo.density || 'N/A'}<br>
         Adj. Homophily: ${graphInfo.adj_homophily || 'N/A'}
+        ${legendHtml}
     `;
+
+    // Legend click logic — must run after innerHTML is set
+    let activeClass = null;
+    const legendItems = overlay.querySelectorAll('.legend-item');
+    legendItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const cls = parseInt(item.dataset.class);
+
+            if (activeClass === cls) {
+                // Deselect — reset all nodes
+                activeClass = null;
+                legendItems.forEach(li => {
+                    li.style.borderColor = 'transparent';
+                    li.style.background = '';
+                });
+                if (window.ACTIVE_VIEWER && window.ACTIVE_VIEWER.node) {
+                    window.ACTIVE_VIEWER.node
+                        .attr('opacity', 1)
+                        .attr('stroke', document.body.classList.contains('dark') ? '#333' : '#fff')
+                        .attr('stroke-width', 1.5);
+                }
+            } else {
+                // Select this class — highlight matching nodes, dim others
+                activeClass = cls;
+                legendItems.forEach(li => {
+                    const liCls = parseInt(li.dataset.class);
+                    li.style.borderColor = liCls === cls ? '#6366f1' : 'transparent';
+                    li.style.background = liCls === cls ? 'rgba(99,102,241,0.12)' : '';
+                });
+                if (window.ACTIVE_VIEWER && window.ACTIVE_VIEWER.node) {
+                    window.ACTIVE_VIEWER.node
+                        .attr('opacity', d => d.group === cls ? 1 : 0.06)
+                        .attr('stroke', d => d.group === cls ? '#fff' : (document.body.classList.contains('dark') ? '#333' : '#fff'))
+                        .attr('stroke-width', d => d.group === cls ? 2.5 : 1.5);
+                }
+            }
+        });
+    });
 }
 
 // --- SBM SLIDER (LEGACY - SBM EXPLORER USES INLINE JS) ---

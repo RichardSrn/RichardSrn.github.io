@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tableData = [];
     let sortState = { column: null, direction: 'asc' };
     let isFullTable = false; // State for table truncation toggle
+    let sbmExpanded = false; // State for SBM expansion
 
     // Load Configuration
     fetch('config.json')
@@ -310,6 +311,11 @@ document.addEventListener('DOMContentLoaded', () => {
             graphFrame.style.opacity = '1';
             syncThemeToIframe();
 
+            // Inject class labels into the iframe's info overlay
+            setTimeout(() => {
+                injectClassLegendToIframe();
+            }, 300); // Small delay to ensure iframe JS is initialized
+
             // If it is SBM, set initial value because resource defaults to 0.5
             if (isSBMExplorer) {
                 const hVal = parseFloat(sbmSlider.value);
@@ -320,6 +326,52 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function injectClassLegendToIframe() {
+        try {
+            const dataset = datasetSelect.value;
+            if (!dataset || !config.stats) return;
+
+            const tab10Colors = [
+                "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+                "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+            ];
+
+            let statsEntry = null;
+            if (dataset === 'SBM') {
+                const hVal = parseFloat(sbmSlider.value).toFixed(2);
+                statsEntry = config.stats['SBM']?.[`h=${hVal}`];
+            } else {
+                statsEntry = config.stats[dataset];
+            }
+
+            if (!statsEntry) return;
+
+            const classLabelsStr = statsEntry['Class Labels'] || '';
+            const classesCount = parseInt(statsEntry['Classes'] || '0');
+            const isConfirmed = classLabelsStr.startsWith('{');
+
+            const classLabels = [];
+            for (let i = 0; i < classesCount; i++) {
+                let name = `Class ${i}`;
+                if (isConfirmed) {
+                    const m = classLabelsStr.match(new RegExp(`${i}:\\s*"([^"]+)"`));
+                    if (m) name = m[1];
+                }
+                classLabels.push({ class: i, name, color: tab10Colors[i % 10], confirmed: isConfirmed });
+            }
+
+            if (graphFrame.contentWindow && graphFrame.contentWindow.ACTIVE_VIEWER) {
+                const existingInfo = graphFrame.contentWindow.ACTIVE_VIEWER.data?.graphInfo || {};
+                existingInfo.classLabels = classLabels;
+                if (graphFrame.contentWindow.updateInfoOverlay) {
+                    graphFrame.contentWindow.updateInfoOverlay(existingInfo);
+                }
+            }
+        } catch (e) {
+            // iframe cross-origin restrictions, silently ignore
+        }
+    }
+
     // Data Table Logic
     function initTableData(stats) {
         if (!stats) return;
@@ -327,12 +379,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
         Object.keys(stats).forEach(key => {
             if (key === 'SBM') {
+                // Add SBM Parent Row with constant SBM fields
+                tableData.push({
+                    Dataset: 'SBM',
+                    Description: 'Stochastic Block Model synthetic community graph',
+                    'Edge Meaning': 'Probabilistic connection based on community membership',
+                    Nodes: '2000',
+                    Edges: '-',
+                    Feats: '10',
+                    Classes: '4',
+                    'Class Sizes': '[500, 500, 500, 500]',
+                    'Class Labels': '{0: "Community 0", 1: "Community 1", 2: "Community 2", 3: "Community 3"}',
+                    Comp: '-',
+                    'Avg Deg': '-',
+                    Dens: '-',
+                    H_obs: '-',
+                    H_exp: '0.25',
+                    H_adj: '-',
+                    'Inertia ratio within': '0.816',
+                    'Inertia ratio between': '0.184',
+                    Mod: '-',
+                    Clust: '-',
+                    Diam: '-',
+                    Article: 'Stochastic Block Model Generation Script',
+                    Authors: 'Serrano, R. et al.',
+                    Link: 'generate_datasets.py',
+                    _id: 'SBM_parent',
+                    _dataset: 'SBM',
+                    _isParent: true
+                });
+
                 Object.keys(stats[key]).forEach(hKey => {
                     tableData.push({
                         ...stats[key][hKey],
                         Dataset: `SBM (${hKey})`,
                         _id: `SBM_${hKey}`,
                         _dataset: 'SBM',
+                        _isChild: true,
                         _sbmVal: parseFloat(hKey.split('=')[1])
                     });
                 });
@@ -349,11 +432,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const columnTooltips = {
         'Dataset': 'Name of the graph dataset',
+        'Description': 'Semantic description of what the dataset represents',
+        'Edge Meaning': 'Explanation of what the links/edges represent',
         'Nodes': 'Number of vertices in the graph (|V|)',
         'Edges': 'Number of undirected edges (|E|)',
         'Feats': 'Dimensionality of per-node feature vectors (d)',
         'Classes': 'Number of distinct categories in the labels (C)',
         'Class Sizes': 'Sizes of the classes',
+        'Class Labels': 'Semantic meaning of each class label',
         'Comp': 'Number of connected groups of nodes (Connected Components)',
         'Avg Deg': 'Average number of connections per node',
         'Dens': 'Graph density',
@@ -380,15 +466,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Headers
         // Get generic headers excluding internal fields starting with _
-        const headers = Object.keys(tableData[0]).filter(k => !k.startsWith('_'));
-        // Move Dataset to front and Class Sizes next to Classes
-        let sortedHeaders = ['Dataset', ...headers.filter(h => h !== 'Dataset' && h !== 'Class Sizes')];
+        const headers = Object.keys(tableData.find(r => !r._isParent && !r._isChild) || tableData[0]).filter(k => !k.startsWith('_'));
+        
+        // Move Dataset to front, Description and Edge Meaning right after it, Class Sizes and Class Labels next to Classes, and Authors, Article, Link to the far right.
+        const rightmostHeaders = ['Authors', 'Article', 'Link'];
+        let filteredHeaders = headers.filter(h => h !== 'Dataset' && h !== 'Description' && h !== 'Edge Meaning' && h !== 'Class Sizes' && h !== 'Class Labels' && !rightmostHeaders.includes(h));
+        
+        let sortedHeaders = ['Dataset'];
+        if (headers.includes('Description')) sortedHeaders.push('Description');
+        if (headers.includes('Edge Meaning')) sortedHeaders.push('Edge Meaning');
+        sortedHeaders.push(...filteredHeaders);
         const classesIdx = sortedHeaders.indexOf('Classes');
         if (classesIdx !== -1) {
             sortedHeaders.splice(classesIdx + 1, 0, 'Class Sizes');
+            if (headers.includes('Class Labels')) {
+                sortedHeaders.splice(classesIdx + 2, 0, 'Class Labels');
+            }
         } else {
             sortedHeaders.push('Class Sizes');
+            if (headers.includes('Class Labels')) {
+                sortedHeaders.push('Class Labels');
+            }
         }
+        
+        rightmostHeaders.forEach(h => {
+            if (headers.includes(h)) {
+                sortedHeaders.push(h);
+            }
+        });
 
         const trHead = document.createElement('tr');
         sortedHeaders.forEach(h => {
@@ -406,10 +511,27 @@ document.addEventListener('DOMContentLoaded', () => {
         thead.appendChild(trHead);
 
         // Body
-        tableData.forEach(row => {
+        // peerRows are sorted, but we want to render the SBM children directly under the SBM parent.
+        const peerRows = tableData.filter(row => !row._isChild);
+        const sbmChildren = tableData.filter(row => row._isChild);
+
+        peerRows.forEach(row => {
             const tr = document.createElement('tr');
             tr.dataset.id = row._id;
-            tr.addEventListener('click', () => handleRowClick(row));
+            tr.addEventListener('click', (e) => {
+                // Expand all truncated cells on row click (toggle)
+                const tds = tr.querySelectorAll('.truncate-cell');
+                const anyExpanded = [...tds].some(td => td.classList.contains('expanded-cell'));
+                tds.forEach(td => {
+                    if (anyExpanded) td.classList.remove('expanded-cell');
+                    else td.classList.add('expanded-cell');
+                });
+                handleRowClick(row);
+            });
+
+            if (row._isParent) {
+                tr.classList.add('sbm-parent-row');
+            }
 
             sortedHeaders.forEach(h => {
                 const td = document.createElement('td');
@@ -421,7 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Display domain name
                     try {
                         const url = new URL(row[h]);
-                        // Remove www. and get the first part of the hostname
                         const domain = url.hostname.replace('www.', '').split('.')[0];
                         a.textContent = `[${domain}]`;
                     } catch (e) {
@@ -436,26 +557,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     td.textContent = row[h] || '-';
 
                     // Truncation Logic for specific columns
-                    const truncationCols = ['Article', 'Authors', 'Class Sizes'];
+                    const truncationCols = ['Article', 'Authors', 'Class Sizes', 'Class Labels', 'Description', 'Edge Meaning'];
                     if (truncationCols.includes(h)) {
                         td.classList.add('truncate-cell');
                         if (h === 'Article') td.classList.add('col-article');
                         if (h === 'Authors') td.classList.add('col-authors');
                         if (h === 'Class Sizes') td.classList.add('col-class-sizes');
+                        if (h === 'Class Labels') td.classList.add('col-class-labels');
+                        if (h === 'Description') td.classList.add('col-description');
+                        if (h === 'Edge Meaning') td.classList.add('col-edge-meaning');
 
                         td.title = row[h]; // Tooltip
-
-                        // Click to expand
-                        td.addEventListener('click', (e) => {
-                            e.stopPropagation(); // Prevent row selection
-                            td.classList.toggle('expanded-cell');
-                        });
                     }
                 }
 
                 // Add classes for specific columns
                 if (h === 'Dataset') {
                     td.classList.add('col-dataset');
+                    if (row._isParent) {
+                        td.innerHTML = ''; // clear text
+                        const toggleBtn = document.createElement('span');
+                        toggleBtn.className = 'sbm-toggle-btn';
+                        toggleBtn.innerHTML = sbmExpanded ? '▼ ' : '▶ ';
+                        toggleBtn.style.cursor = 'pointer';
+                        toggleBtn.style.marginRight = '8px';
+                        toggleBtn.style.userSelect = 'none';
+                        toggleBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            sbmExpanded = !sbmExpanded;
+                            renderStatsTable();
+                        });
+                        td.appendChild(toggleBtn);
+                        const nameSpan = document.createElement('span');
+                        nameSpan.textContent = 'SBM';
+                        td.appendChild(nameSpan);
+                    }
                 } else if (h.includes('Inertia')) {
                     td.classList.add('col-inertia');
                 }
@@ -463,6 +599,72 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
+
+            // If SBM parent is expanded, render SBM child rows immediately below it
+            if (row._isParent && sbmExpanded) {
+                sbmChildren.forEach(childRow => {
+                    const childTr = document.createElement('tr');
+                    childTr.dataset.id = childRow._id;
+                    childTr.classList.add('sbm-child-row');
+                    childTr.addEventListener('click', (e) => {
+                        const childTds = childTr.querySelectorAll('.truncate-cell');
+                        const anyExpanded = [...childTds].some(td => td.classList.contains('expanded-cell'));
+                        childTds.forEach(td => {
+                            if (anyExpanded) td.classList.remove('expanded-cell');
+                            else td.classList.add('expanded-cell');
+                        });
+                        handleRowClick(childRow);
+                    });
+
+                    sortedHeaders.forEach(h => {
+                        const childTd = document.createElement('td');
+
+                        if (h === 'Link' && childRow[h] && childRow[h] !== '-') {
+                            const a = document.createElement('a');
+                            a.href = childRow[h];
+                            try {
+                                const url = new URL(childRow[h]);
+                                const domain = url.hostname.replace('www.', '').split('.')[0];
+                                a.textContent = `[${domain}]`;
+                            } catch (e) {
+                                a.textContent = '[link]';
+                            }
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.addEventListener('click', (e) => e.stopPropagation());
+                            childTd.appendChild(a);
+                        } else {
+                            childTd.textContent = childRow[h] || '-';
+
+                            // Truncation Logic for specific columns
+                            const truncationCols = ['Article', 'Authors', 'Class Sizes', 'Class Labels', 'Description', 'Edge Meaning'];
+                            if (truncationCols.includes(h)) {
+                                childTd.classList.add('truncate-cell');
+                                if (h === 'Article') childTd.classList.add('col-article');
+                                if (h === 'Authors') childTd.classList.add('col-authors');
+                                if (h === 'Class Sizes') childTd.classList.add('col-class-sizes');
+                                if (h === 'Class Labels') childTd.classList.add('col-class-labels');
+                                if (h === 'Description') childTd.classList.add('col-description');
+                                if (h === 'Edge Meaning') childTd.classList.add('col-edge-meaning');
+
+                                childTd.title = childRow[h];
+                            }
+                        }
+
+                        if (h === 'Dataset') {
+                            childTd.classList.add('col-dataset');
+                            childTd.style.paddingLeft = '28px';
+                            childTd.style.fontSize = '0.92em';
+                            childTd.style.opacity = '0.9';
+                        } else if (h.includes('Inertia')) {
+                            childTd.classList.add('col-inertia');
+                        }
+
+                        childTr.appendChild(childTd);
+                    });
+                    tbody.appendChild(childTr);
+                });
+            }
         });
     }
 
@@ -475,9 +677,16 @@ document.addEventListener('DOMContentLoaded', () => {
             sortState.direction = 'desc'; // Default Descending for new sort
         }
 
-        tableData.sort((a, b) => {
+        const peers = tableData.filter(row => !row._isChild);
+        const children = tableData.filter(row => row._isChild);
+
+        peers.sort((a, b) => {
             let valA = a[column];
             let valB = b[column];
+
+            // If a value is '-', treat it as very low or high to sort to the end
+            if (valA === '-') valA = sortState.direction === 'asc' ? 99999999 : -99999999;
+            if (valB === '-') valB = sortState.direction === 'asc' ? 99999999 : -99999999;
 
             // Try number conversion
             const numA = parseFloat(valA);
@@ -493,6 +702,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return 0;
         });
 
+        // Also sort the children by homophily value
+        children.sort((a, b) => {
+            return sortState.direction === 'asc' ? a._sbmVal - b._sbmVal : b._sbmVal - a._sbmVal;
+        });
+
+        // Rebuild tableData with SBM children grouped directly under SBM parent
+        tableData = [];
+        peers.forEach(p => {
+            tableData.push(p);
+            if (p._isParent) {
+                children.forEach(c => tableData.push(c));
+            }
+        });
+
         renderStatsTable();
         // Re-highlight if a dataset selected
         const currentDataset = datasetSelect.value;
@@ -500,6 +723,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleRowClick(row) {
+        if (row._isParent) {
+            sbmExpanded = !sbmExpanded;
+            renderStatsTable();
+            
+            // Highlight current SBM selection
+            if (datasetSelect.value !== 'SBM') {
+                datasetSelect.value = 'SBM';
+                datasetSelect.dispatchEvent(new Event('change'));
+            } else {
+                highlightStatsRow('SBM');
+            }
+            return;
+        }
+
         // Selection Logic
         if (row._dataset === 'SBM') {
             sbmSlider.dataset.manualSet = 'true'; // Signal to keep value
@@ -521,18 +758,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function highlightStatsRow(dataset) {
-        // Remove old highlight
-        const rows = statsTable.querySelectorAll('tr');
-        rows.forEach(r => r.classList.remove('highlighted'));
-
         if (dataset === 'SBM') {
             const hVal = parseFloat(sbmSlider.value).toFixed(2);
             const rowId = `SBM_h=${hVal}`;
+            
             const row = statsTable.querySelector(`tr[data-id="${rowId}"]`);
+            if (!row && !sbmExpanded) {
+                sbmExpanded = true;
+                renderStatsTable(); // This will trigger highlightStatsRow again which will highlight correctly
+                return;
+            }
+
+            // Remove old highlight
+            const rows = statsTable.querySelectorAll('tr');
+            rows.forEach(r => r.classList.remove('highlighted'));
+
             if (row) {
                 row.classList.add('highlighted');
             }
         } else {
+            // Remove old highlight
+            const rows = statsTable.querySelectorAll('tr');
+            rows.forEach(r => r.classList.remove('highlighted'));
+
             const row = statsTable.querySelector(`tr[data-id="${dataset}"]`);
             if (row) {
                 row.classList.add('highlighted');
@@ -571,7 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function updateThemeIcon(theme) {
-        themeToggle.querySelector('.icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeToggle.querySelector('.icon').textContent = theme === 'dark' ? '🌙' : '☀️';
     }
 
     function syncThemeToIframe() {

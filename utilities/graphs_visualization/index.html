@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/icon/favicon_32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/icon/favicon_16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/icon/favicon_128.png">
@@ -34,7 +34,13 @@
     <main class="visualization-container">
         <header class="utility-header">
             <h1>Graph Visualization</h1>
-            <p class="subtitle">Explore interactive visualizations of various graph datasets.</p>
+            <p class="subtitle">
+                Explore interactive visualizations of various graph datasets. 
+            </p>
+            <p class="subtitle">
+                The generation script for downloading the datasets and generating the SBM artificial benchmark is open source and it is available here:
+                <a href="generate_datasets.py" download class="script-link" style="color: var(--primary-color); text-decoration: underline; font-weight: 600;">generate_datasets.py</a>.
+            </p>
         </header>
 
         <!-- Control Panel -->
@@ -116,7 +122,7 @@
 
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=6"></script>
 </body>
 
 </html>

@@ -1,127 +1,81 @@
 {
     "graphs": {
         "SBM": {
-            "h=0.40": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.20": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.90": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.50": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.30": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.80": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=1.00": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.60": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
             "h=0.00": [
                 {
                     "type": "full",
                     "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
-                }
-            ],
-            "h=0.70": [
-                {
-                    "type": "full",
-                    "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
+                    "size_mb": 1.85
                 }
             ],
             "h=0.10": [
                 {
                     "type": "full",
                     "path": "resources/SBM/SBM_explorer.html",
-                    "size_mb": 0.19
+                    "size_mb": 1.85
                 }
-            ]
-        },
-        "Texas": {
-            "Standard": [
+            ],
+            "h=0.20": [
                 {
                     "type": "full",
-                    "path": "resources/Texas/Texas_full_interactive.html",
-                    "size_mb": 5.21
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
                 }
-            ]
-        },
-        "Chameleon": {
-            "Standard": [
+            ],
+            "h=0.30": [
                 {
                     "type": "full",
-                    "path": "resources/Chameleon/Chameleon_full_interactive.html",
-                    "size_mb": 89.84
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
                 }
-            ]
-        },
-        "PubMed": {
-            "Standard": [
-                {
-                    "type": "full_sample_2500",
-                    "path": "resources/PubMed/PubMed_full_sample_2500_interactive.html",
-                    "size_mb": 1.03
-                },
+            ],
+            "h=0.40": [
                 {
                     "type": "full",
-                    "path": "resources/PubMed/PubMed_full_interactive.html",
-                    "size_mb": 9.44
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
                 }
-            ]
-        },
-        "Tolokers": {
-            "Standard": [
-                {
-                    "type": "full_sample_2500",
-                    "path": "resources/Tolokers/Tolokers_full_sample_2500_interactive.html",
-                    "size_mb": 1.48
-                },
+            ],
+            "h=0.50": [
                 {
                     "type": "full",
-                    "path": "resources/Tolokers/Tolokers_full_interactive.html",
-                    "size_mb": 22.13
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
+                }
+            ],
+            "h=0.60": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
+                }
+            ],
+            "h=0.70": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
+                }
+            ],
+            "h=0.80": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
+                }
+            ],
+            "h=0.90": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
+                }
+            ],
+            "h=1.00": [
+                {
+                    "type": "full",
+                    "path": "resources/SBM/SBM_explorer.html",
+                    "size_mb": 1.85
                 }
             ]
         },
@@ -130,49 +84,35 @@
                 {
                     "type": "full",
                     "path": "resources/Actor/Actor_full_interactive.html",
-                    "size_mb": 115.8
+                    "size_mb": 2.4
                 },
                 {
                     "type": "full_sample_2500",
                     "path": "resources/Actor/Actor_full_sample_2500_interactive.html",
-                    "size_mb": 37.89
-                }
-            ]
-        },
-        "Questions": {
-            "Standard": [
-                {
-                    "type": "full_sample_2500",
-                    "path": "resources/Questions/Questions_full_sample_2500_interactive.html",
-                    "size_mb": 1.02
-                },
-                {
-                    "type": "full",
-                    "path": "resources/Questions/Questions_full_interactive.html",
-                    "size_mb": 25.25
-                }
-            ]
-        },
-        "Cornell": {
-            "Standard": [
-                {
-                    "type": "full",
-                    "path": "resources/Cornell/Cornell_full_interactive.html",
-                    "size_mb": 5.21
+                    "size_mb": 0.57
                 }
             ]
         },
         "Amazon-ratings": {
             "Standard": [
                 {
-                    "type": "full_sample_2500",
-                    "path": "resources/Amazon-ratings/Amazon-ratings_full_sample_2500_interactive.html",
-                    "size_mb": 1.05
-                },
-                {
                     "type": "full",
                     "path": "resources/Amazon-ratings/Amazon-ratings_full_interactive.html",
-                    "size_mb": 13.14
+                    "size_mb": 13.12
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Amazon-ratings/Amazon-ratings_full_sample_2500_interactive.html",
+                    "size_mb": 1.03
+                }
+            ]
+        },
+        "Chameleon": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Chameleon/Chameleon_full_interactive.html",
+                    "size_mb": 1.84
                 }
             ]
         },
@@ -181,68 +121,17 @@
                 {
                     "type": "full",
                     "path": "resources/CiteSeer/CiteSeer_full_interactive.html",
-                    "size_mb": 208.49
-                },
-                {
-                    "type": "lcc",
-                    "path": "resources/CiteSeer/CiteSeer_lcc_interactive.html",
-                    "size_mb": 132.88
+                    "size_mb": 2.28
                 },
                 {
                     "type": "full_sample_2500",
                     "path": "resources/CiteSeer/CiteSeer_full_sample_2500_interactive.html",
-                    "size_mb": 156.64
-                }
-            ]
-        },
-        "Wisconsin": {
-            "Standard": [
-                {
-                    "type": "full",
-                    "path": "resources/Wisconsin/Wisconsin_full_interactive.html",
-                    "size_mb": 7.14
-                }
-            ]
-        },
-        "Squirrel": {
-            "Standard": [
-                {
-                    "type": "full",
-                    "path": "resources/Squirrel/Squirrel_full_interactive.html",
-                    "size_mb": 188.7
+                    "size_mb": 1.69
                 },
                 {
-                    "type": "full_sample_2500",
-                    "path": "resources/Squirrel/Squirrel_full_sample_2500_interactive.html",
-                    "size_mb": 87.9
-                }
-            ]
-        },
-        "Minesweeper": {
-            "Standard": [
-                {
-                    "type": "full",
-                    "path": "resources/Minesweeper/Minesweeper_full_interactive.html",
-                    "size_mb": 3.46
-                },
-                {
-                    "type": "full_sample_2500",
-                    "path": "resources/Minesweeper/Minesweeper_full_sample_2500_interactive.html",
-                    "size_mb": 0.87
-                }
-            ]
-        },
-        "Roman-empire": {
-            "Standard": [
-                {
-                    "type": "full",
-                    "path": "resources/Roman-empire/Roman-empire_full_interactive.html",
-                    "size_mb": 10.19
-                },
-                {
-                    "type": "full_sample_2500",
-                    "path": "resources/Roman-empire/Roman-empire_full_sample_2500_interactive.html",
-                    "size_mb": 1.14
+                    "type": "lcc",
+                    "path": "resources/CiteSeer/CiteSeer_lcc_interactive.html",
+                    "size_mb": 1.49
                 }
             ]
         },
@@ -251,17 +140,128 @@
                 {
                     "type": "full",
                     "path": "resources/Cora/Cora_full_interactive.html",
-                    "size_mb": 64.23
+                    "size_mb": 1.28
                 },
                 {
                     "type": "full_sample_2500",
                     "path": "resources/Cora/Cora_full_sample_2500_interactive.html",
-                    "size_mb": 59.3
+                    "size_mb": 1.19
                 },
                 {
                     "type": "lcc",
                     "path": "resources/Cora/Cora_lcc_interactive.html",
-                    "size_mb": 58.95
+                    "size_mb": 1.19
+                }
+            ]
+        },
+        "Cornell": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Cornell/Cornell_full_interactive.html",
+                    "size_mb": 0.32
+                }
+            ]
+        },
+        "Minesweeper": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Minesweeper/Minesweeper_full_interactive.html",
+                    "size_mb": 3.45
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Minesweeper/Minesweeper_full_sample_2500_interactive.html",
+                    "size_mb": 0.85
+                }
+            ]
+        },
+        "PubMed": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/PubMed/PubMed_full_interactive.html",
+                    "size_mb": 9.42
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/PubMed/PubMed_full_sample_2500_interactive.html",
+                    "size_mb": 1.01
+                }
+            ]
+        },
+        "Questions": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Questions/Questions_full_interactive.html",
+                    "size_mb": 25.23
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Questions/Questions_full_sample_2500_interactive.html",
+                    "size_mb": 1.01
+                }
+            ]
+        },
+        "Roman-empire": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Roman-empire/Roman-empire_full_interactive.html",
+                    "size_mb": 10.18
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Roman-empire/Roman-empire_full_sample_2500_interactive.html",
+                    "size_mb": 1.12
+                }
+            ]
+        },
+        "Squirrel": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Squirrel/Squirrel_full_interactive.html",
+                    "size_mb": 9.24
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Squirrel/Squirrel_full_sample_2500_interactive.html",
+                    "size_mb": 1.63
+                }
+            ]
+        },
+        "Texas": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Texas/Texas_full_interactive.html",
+                    "size_mb": 0.29
+                }
+            ]
+        },
+        "Tolokers": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Tolokers/Tolokers_full_interactive.html",
+                    "size_mb": 22.11
+                },
+                {
+                    "type": "full_sample_2500",
+                    "path": "resources/Tolokers/Tolokers_full_sample_2500_interactive.html",
+                    "size_mb": 1.46
+                }
+            ]
+        },
+        "Wisconsin": {
+            "Standard": [
+                {
+                    "type": "full",
+                    "path": "resources/Wisconsin/Wisconsin_full_interactive.html",
+                    "size_mb": 0.44
                 }
             ]
         }
@@ -269,32 +269,42 @@
     "stats": {
         "Cora": {
             "Dataset": "Cora",
+            "Description": "Academic paper citation network of machine learning publications",
+            "Edge Meaning": "Citation from one academic paper to another",
+            "Article": "Revisiting semi-supervised learning with graph embeddings",
+            "Authors": "Yang, Z. et al. (2016)",
+            "Link": "https://arxiv.org/abs/1603.08861",
             "Nodes": "2708",
             "Edges": "5278",
             "Feats": "1433",
             "Classes": "7",
+            "Class Sizes": "[351, 217, 418, 818, 426, 298, 180]",
+            "Class Labels": "{0: \"Case Based\", 1: \"Genetic Algorithms\", 2: \"Neural Networks\", 3: \"Probabilistic Methods\", 4: \"Reinforcement Learning\", 5: \"Rule Learning\", 6: \"Theory\"}",
             "Comp": "78",
             "Avg Deg": "3.9",
-            "Dens": "0.0014",
+            "Dens": "0.00144",
             "H_obs": "0.81",
             "H_exp": "0.18",
             "H_adj": "0.768",
             "Inertia ratio within": "0.974",
             "Inertia ratio between": "0.026",
             "Mod": "0.64",
-            "Clust": "0.257",
-            "Diam": "inf",
-            "Article": "Revisiting semi-supervised learning with graph embeddings",
-            "Authors": "Yang, Z. et al. (2016)",
-            "Link": "https://arxiv.org/abs/1603.08861",
-            "Class Sizes": "[351, 217, 418, 818, 426, 298, 180]"
+            "Clust": "0.241",
+            "Diam": "inf"
         },
         "CiteSeer": {
             "Dataset": "CiteSeer",
+            "Description": "Academic paper citation network of computer science publications",
+            "Edge Meaning": "Citation from one academic paper to another",
+            "Article": "Revisiting semi-supervised learning with graph embeddings",
+            "Authors": "Yang, Z. et al. (2016)",
+            "Link": "https://arxiv.org/abs/1603.08861",
             "Nodes": "3327",
             "Edges": "4552",
             "Feats": "3703",
             "Classes": "6",
+            "Class Sizes": "[264, 590, 668, 701, 596, 508]",
+            "Class Labels": "[\"Agents\", \"AI\", \"DB\", \"IR\", \"ML\", \"HCI\"] unsure of class mapping",
             "Comp": "438",
             "Avg Deg": "2.74",
             "Dens": "0.0008227",
@@ -304,19 +314,22 @@
             "Inertia ratio within": "0.983",
             "Inertia ratio between": "0.017",
             "Mod": "0.539",
-            "Clust": "0.122",
-            "Diam": "inf",
-            "Article": "Revisiting semi-supervised learning with graph embeddings",
-            "Authors": "Yang, Z. et al. (2016)",
-            "Link": "https://arxiv.org/abs/1603.08861",
-            "Class Sizes": "[264, 590, 668, 701, 596, 508]"
+            "Clust": "0.141",
+            "Diam": "inf"
         },
         "PubMed": {
             "Dataset": "PubMed",
+            "Description": "Academic paper citation network of publications related to diabetes",
+            "Edge Meaning": "Citation from one academic paper to another",
+            "Article": "Revisiting semi-supervised learning with graph embeddings",
+            "Authors": "Yang, Z. et al. (2016)",
+            "Link": "https://arxiv.org/abs/1603.08861",
             "Nodes": "19717",
             "Edges": "44324",
             "Feats": "500",
             "Classes": "3",
+            "Class Sizes": "[4103, 7739, 7875]",
+            "Class Labels": "{0: \"Diabetes Mellitus (Experimental)\", 1: \"Diabetes Mellitus Type 1\", 2: \"Diabetes Mellitus Type 2\"}",
             "Comp": "1",
             "Avg Deg": "4.5",
             "Dens": "0.000228",
@@ -326,195 +339,172 @@
             "Inertia ratio within": "0.982",
             "Inertia ratio between": "0.018",
             "Mod": "0.432",
-            "Clust": "0.054",
-            "Diam": "18",
-            "Article": "Revisiting semi-supervised learning with graph embeddings",
-            "Authors": "Yang, Z. et al. (2016)",
-            "Link": "https://arxiv.org/abs/1603.08861",
-            "Class Sizes": "[4103, 7739, 7875]"
+            "Clust": "0.06",
+            "Diam": "17"
         },
         "Cornell": {
             "Dataset": "Cornell",
+            "Description": "CS department web pages from Cornell University",
+            "Edge Meaning": "Hyperlink from one web page to another",
+            "Article": "Learning to extract symbolic knowledge from the World Wide Web",
+            "Authors": "Craven, M. et al. (1998)",
+            "Link": "http://www.cs.cmu.edu/~webkb/",
             "Nodes": "183",
-            "Edges": "149",
+            "Edges": "280",
             "Feats": "1703",
             "Classes": "5",
+            "Class Sizes": "[38, 16, 30, 82, 17]",
+            "Class Labels": "[\"student\", \"project\", \"course\", \"staff\", \"faculty\"] unsure of class mapping",
             "Comp": "1",
-            "Avg Deg": "1.63",
-            "Dens": "0.0089",
-            "H_obs": "0.131",
+            "Avg Deg": "3.06",
+            "Dens": "0.0168138",
+            "H_obs": "0.123",
             "H_exp": "0.287",
-            "H_adj": "-0.219",
+            "H_adj": "-0.23",
             "Inertia ratio within": "0.93",
             "Inertia ratio between": "0.07",
             "Mod": "-0.146",
-            "Clust": "0.158",
-            "Diam": "8",
-            "Article": "Learning to extract symbolic knowledge from the World Wide Web",
-            "Authors": "Craven, M. et al. (1998)",
-            "Link": "http://www.cs.cmu.edu/~webkb/",
-            "Class Sizes": "[38, 16, 30, 82, 17]"
+            "Clust": "0.167",
+            "Diam": "8"
         },
         "Texas": {
             "Dataset": "Texas",
-            "Nodes": "182",
-            "Edges": "161",
-            "Feats": "1703",
-            "Classes": "4",
-            "Comp": "1",
-            "Avg Deg": "1.77",
-            "Dens": "0.0098",
-            "H_obs": "0.108",
-            "H_exp": "0.378",
-            "H_adj": "-0.433",
-            "Inertia ratio within": "0.94",
-            "Inertia ratio between": "0.06",
-            "Mod": "-0.166",
-            "Clust": "0.25",
-            "Diam": "8",
+            "Description": "CS department web pages from University of Texas",
+            "Edge Meaning": "Hyperlink from one web page to another",
             "Article": "Learning to extract symbolic knowledge from the World Wide Web",
             "Authors": "Craven, M. et al. (1998)",
             "Link": "http://www.cs.cmu.edu/~webkb/",
-            "Class Sizes": "[33, 18, 101, 30]"
+            "Nodes": "183",
+            "Edges": "295",
+            "Feats": "1703",
+            "Classes": "5",
+            "Class Sizes": "[33, 1, 18, 101, 30]",
+            "Class Labels": "[\"student\", \"project\", \"course\", \"staff\", \"faculty\"] unsure of class mapping",
+            "Comp": "1",
+            "Avg Deg": "3.22",
+            "Dens": "0.0177145",
+            "H_obs": "0.061",
+            "H_exp": "0.374",
+            "H_adj": "-0.499",
+            "Inertia ratio within": "0.939",
+            "Inertia ratio between": "0.061",
+            "Mod": "-0.164",
+            "Clust": "0.198",
+            "Diam": "8"
         },
         "Wisconsin": {
             "Dataset": "Wisconsin",
-            "Nodes": "251",
-            "Edges": "257",
-            "Feats": "1703",
-            "Classes": "5",
-            "Comp": "1",
-            "Avg Deg": "2.05",
-            "Dens": "0.0082",
-            "H_obs": "0.196",
-            "H_exp": "0.324",
-            "H_adj": "-0.189",
-            "Inertia ratio within": "0.911",
-            "Inertia ratio between": "0.089",
-            "Mod": "-0.093",
-            "Clust": "0.222",
-            "Diam": "8",
+            "Description": "CS department web pages from University of Wisconsin",
+            "Edge Meaning": "Hyperlink from one web page to another",
             "Article": "Learning to extract symbolic knowledge from the World Wide Web",
             "Authors": "Craven, M. et al. (1998)",
             "Link": "http://www.cs.cmu.edu/~webkb/",
-            "Class Sizes": "[10, 70, 118, 32, 21]"
-        },
-        "Chameleon": {
-            "Dataset": "Chameleon",
-            "Nodes": "2277",
-            "Edges": "18050",
-            "Feats": "2325",
+            "Nodes": "251",
+            "Edges": "466",
+            "Feats": "1703",
             "Classes": "5",
+            "Class Sizes": "[10, 70, 118, 32, 21]",
+            "Class Labels": "[\"student\", \"project\", \"course\", \"staff\", \"faculty\"] unsure of class mapping",
             "Comp": "1",
-            "Avg Deg": "15.85",
-            "Dens": "0.007",
-            "H_obs": "0.235",
-            "H_exp": "0.202",
-            "H_adj": "0.042",
-            "Inertia ratio within": "0.993",
-            "Inertia ratio between": "0.007",
-            "Mod": "0.027",
-            "Clust": "0.488",
-            "Diam": "11",
-            "Article": "Multi-scale attributed node embedding",
-            "Authors": "Rozemberczki, B. et al. (2021)",
-            "Link": "https://arxiv.org/abs/1909.13021",
-            "Class Sizes": "[456, 460, 453, 521, 387]"
+            "Avg Deg": "3.71",
+            "Dens": "0.0148526",
+            "H_obs": "0.178",
+            "H_exp": "0.324",
+            "H_adj": "-0.216",
+            "Inertia ratio within": "0.911",
+            "Inertia ratio between": "0.089",
+            "Mod": "-0.093",
+            "Clust": "0.208",
+            "Diam": "8"
         },
         "Squirrel": {
             "Dataset": "Squirrel",
-            "Nodes": "5201",
-            "Edges": "108536",
-            "Feats": "2089",
-            "Classes": "5",
-            "Comp": "1",
-            "Avg Deg": "41.74",
-            "Dens": "0.008",
-            "H_obs": "0.224",
-            "H_exp": "0.2",
-            "H_adj": "0.03",
-            "Inertia ratio within": "0.995",
-            "Inertia ratio between": "0.005",
-            "Mod": "0.006",
-            "Clust": "0.415",
-            "Diam": "10",
+            "Description": "Wikipedia pages related to Squirrels",
+            "Edge Meaning": "Hyperlink from one Wikipedia article to another",
             "Article": "Multi-scale attributed node embedding",
             "Authors": "Rozemberczki, B. et al. (2021)",
             "Link": "https://arxiv.org/abs/1909.13021",
-            "Class Sizes": "[1042, 1040, 1039, 1040, 1040]"
+            "Nodes": "5201",
+            "Edges": "198493",
+            "Feats": "2089",
+            "Classes": "5",
+            "Class Sizes": "[1042, 1040, 1039, 1040, 1040]",
+            "Class Labels": "[\"Traffic quintile 0 (lowest)\", \"Quintile 1\", \"Quintile 2\", \"Quintile 3\", \"Quintile 4 (highest)\"] unsure of class mapping",
+            "Comp": "1",
+            "Avg Deg": "76.33",
+            "Dens": "0.0146786",
+            "H_obs": "0.222",
+            "H_exp": "0.2",
+            "H_adj": "0.028",
+            "Inertia ratio within": "0.995",
+            "Inertia ratio between": "0.005",
+            "Mod": "0.006",
+            "Clust": "0.422",
+            "Diam": "10"
+        },
+        "Chameleon": {
+            "Dataset": "Chameleon",
+            "Description": "Wikipedia pages related to Chameleons",
+            "Edge Meaning": "Hyperlink from one Wikipedia article to another",
+            "Article": "Multi-scale attributed node embedding",
+            "Authors": "Rozemberczki, B. et al. (2021)",
+            "Link": "https://arxiv.org/abs/1909.13021",
+            "Nodes": "2277",
+            "Edges": "31421",
+            "Feats": "2325",
+            "Classes": "5",
+            "Class Sizes": "[456, 460, 453, 521, 387]",
+            "Class Labels": "[\"Traffic quintile 0 (lowest)\", \"Quintile 1\", \"Quintile 2\", \"Quintile 3\", \"Quintile 4 (highest)\"] unsure of class mapping",
+            "Comp": "1",
+            "Avg Deg": "27.6",
+            "Dens": "0.0121259",
+            "H_obs": "0.23",
+            "H_exp": "0.202",
+            "H_adj": "0.035",
+            "Inertia ratio within": "0.993",
+            "Inertia ratio between": "0.007",
+            "Mod": "0.027",
+            "Clust": "0.481",
+            "Diam": "11"
         },
         "Actor": {
             "Dataset": "Actor",
-            "Nodes": "7600",
-            "Edges": "15009",
-            "Feats": "932",
-            "Classes": "5",
-            "Comp": "1",
-            "Avg Deg": "3.95",
-            "Dens": "0.0005198",
-            "H_obs": "0.219",
-            "H_exp": "0.213",
-            "H_adj": "0.007",
-            "Inertia ratio within": "0.994",
-            "Inertia ratio between": "0.006",
-            "Mod": "0.005",
-            "Clust": "0.084",
-            "Diam": "12",
+            "Description": "Actor co-occurrence network from film/genre Wikipedia articles",
+            "Edge Meaning": "Co-occurrence on the same Wikipedia article page",
             "Article": "Social influence analysis in large-scale networks",
             "Authors": "Tang, J. et al. (2009)",
             "Link": "https://dl.acm.org/doi/10.1145/1557019.1557108",
-            "Class Sizes": "[853, 1337, 1630, 1815, 1965]"
-        },
-        "Minesweeper": {
-            "Dataset": "Minesweeper",
-            "Nodes": "10000",
-            "Edges": "39402",
-            "Feats": "7",
-            "Classes": "2",
+            "Nodes": "7600",
+            "Edges": "26752",
+            "Feats": "932",
+            "Classes": "5",
+            "Class Sizes": "[853, 1337, 1630, 1815, 1965]",
+            "Class Labels": "[\"Topic 0\", \"Topic 1\", \"Topic 2\", \"Topic 3\", \"Topic 4\"] unsure of class mapping",
             "Comp": "1",
-            "Avg Deg": "7.88",
-            "Dens": "0.0007881",
-            "H_obs": "0.683",
-            "H_exp": "0.68",
-            "H_adj": "0.009",
-            "Inertia ratio within": "1",
-            "Inertia ratio between": "0.0001318",
-            "Mod": "0.003",
-            "Clust": "0.434",
-            "Diam": "99",
-            "Article": "A critical look at the evaluation of GNNs under heterophily",
-            "Authors": "Platonov, O. et al. (2023)",
-            "Link": "https://arxiv.org/abs/2302.11640",
-            "Class Sizes": "[8000, 2000]"
-        },
-        "Tolokers": {
-            "Dataset": "Tolokers",
-            "Nodes": "11758",
-            "Edges": "519000",
-            "Feats": "10",
-            "Classes": "2",
-            "Comp": "1",
-            "Avg Deg": "88.28",
-            "Dens": "0.0075",
-            "H_obs": "0.595",
-            "H_exp": "0.659",
-            "H_adj": "-0.188",
-            "Inertia ratio within": "0.973",
-            "Inertia ratio between": "0.027",
-            "Mod": "0.041",
-            "Clust": "0.534",
-            "Diam": "11",
-            "Article": "A critical look at the evaluation of GNNs under heterophily",
-            "Authors": "Platonov, O. et al. (2023)",
-            "Link": "https://arxiv.org/abs/2302.11640",
-            "Class Sizes": "[9192, 2566]"
+            "Avg Deg": "7.04",
+            "Dens": "0.0009264",
+            "H_obs": "0.217",
+            "H_exp": "0.213",
+            "H_adj": "0.004",
+            "Inertia ratio within": "0.994",
+            "Inertia ratio between": "0.006",
+            "Mod": "0.005",
+            "Clust": "0.08",
+            "Diam": "12"
         },
         "Roman-empire": {
             "Dataset": "Roman-empire",
+            "Description": "Linguistic word dependency graph of the Roman Empire Wikipedia page",
+            "Edge Meaning": "Syntactic dependency or word adjacency in text",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
             "Nodes": "22662",
             "Edges": "32927",
             "Feats": "300",
             "Classes": "18",
+            "Class Sizes": "[944, 3163, 3133, 2502, 2487, 1359, 1244, 1080, 852, 789, 717, 445, 428, 365, 329, 319, 312, 2194]",
+            "Class Labels": "[\"Role 0\", \"Role 1\", ..., \"Role 16\", \"Other roles\"] unsure of class mapping",
             "Comp": "1",
             "Avg Deg": "2.91",
             "Dens": "0.0001282",
@@ -524,19 +514,22 @@
             "Inertia ratio within": "0.839",
             "Inertia ratio between": "0.161",
             "Mod": "-0.043",
-            "Clust": "0.394",
-            "Diam": "6824",
-            "Article": "A critical look at the evaluation of GNNs under heterophily",
-            "Authors": "Platonov, O. et al. (2023)",
-            "Link": "https://arxiv.org/abs/2302.11640",
-            "Class Sizes": "[944, 3163, 3133, 2502, 2487, 1359, 1244, 1080, 852, 789, 717, 445, 428, 365, 329, 319, 312, 2194]"
+            "Clust": "0.386",
+            "Diam": "6824"
         },
         "Amazon-ratings": {
             "Dataset": "Amazon-ratings",
+            "Description": "Product co-purchasing network based on Amazon ratings",
+            "Edge Meaning": "Products frequently co-purchased together",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
             "Nodes": "24492",
             "Edges": "93050",
             "Feats": "300",
             "Classes": "5",
+            "Class Sizes": "[6560, 9010, 5678, 2183, 1061]",
+            "Class Labels": "[\"Rating bin 0 (lowest)\", \"Bin 1\", \"Bin 2\", \"Bin 3\", \"Bin 4 (highest)\"] unsure of class mapping",
             "Comp": "1",
             "Avg Deg": "7.6",
             "Dens": "0.0003103",
@@ -544,21 +537,74 @@
             "H_exp": "0.271",
             "H_adj": "0.15",
             "Inertia ratio within": "0.999",
-            "Inertia ratio between": "0.0009036",
+            "Inertia ratio between": "0.001",
             "Mod": "0.101",
-            "Clust": "0.589",
-            "Diam": "46",
+            "Clust": "0.582",
+            "Diam": "45"
+        },
+        "Minesweeper": {
+            "Dataset": "Minesweeper",
+            "Description": "Synthetic grid dataset inspired by the Minesweeper game",
+            "Edge Meaning": "Grid-based adjacency (connected to 8 neighboring cells)",
             "Article": "A critical look at the evaluation of GNNs under heterophily",
             "Authors": "Platonov, O. et al. (2023)",
             "Link": "https://arxiv.org/abs/2302.11640",
-            "Class Sizes": "[6560, 9010, 5678, 2183, 1061]"
+            "Nodes": "10000",
+            "Edges": "39402",
+            "Feats": "7",
+            "Classes": "2",
+            "Class Sizes": "[8000, 2000]",
+            "Class Labels": "{0: \"No mine (safe)\", 1: \"Mine\"}",
+            "Comp": "1",
+            "Avg Deg": "7.88",
+            "Dens": "0.0007881",
+            "H_obs": "0.683",
+            "H_exp": "0.68",
+            "H_adj": "0.009",
+            "Inertia ratio within": "1",
+            "Inertia ratio between": "0",
+            "Mod": "0.003",
+            "Clust": "0.436",
+            "Diam": "99"
+        },
+        "Tolokers": {
+            "Dataset": "Tolokers",
+            "Description": "Crowdsourcing worker interaction network from Toloka platform",
+            "Edge Meaning": "Workers who worked on the same crowdsourcing task",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
+            "Nodes": "11758",
+            "Edges": "519000",
+            "Feats": "10",
+            "Classes": "2",
+            "Class Sizes": "[9192, 2566]",
+            "Class Labels": "{0: \"Not banned\", 1: \"Banned\"}",
+            "Comp": "1",
+            "Avg Deg": "88.28",
+            "Dens": "0.0075087",
+            "H_obs": "0.595",
+            "H_exp": "0.659",
+            "H_adj": "-0.188",
+            "Inertia ratio within": "0.973",
+            "Inertia ratio between": "0.027",
+            "Mod": "0.041",
+            "Clust": "0.533",
+            "Diam": "11"
         },
         "Questions": {
             "Dataset": "Questions",
+            "Description": "User interaction network from Yandex Q question-answering platform",
+            "Edge Meaning": "One user answered another user's question",
+            "Article": "A critical look at the evaluation of GNNs under heterophily",
+            "Authors": "Platonov, O. et al. (2023)",
+            "Link": "https://arxiv.org/abs/2302.11640",
             "Nodes": "48921",
             "Edges": "153540",
             "Feats": "301",
             "Classes": "2",
+            "Class Sizes": "[47461, 1460]",
+            "Class Labels": "[\"Deleted/Blocked\", \"Active user\"] unsure of class mapping",
             "Comp": "1",
             "Avg Deg": "6.28",
             "Dens": "0.0001283",
@@ -568,89 +614,226 @@
             "Inertia ratio within": "0.998",
             "Inertia ratio between": "0.002",
             "Mod": "0.003",
-            "Clust": "0.026",
-            "Diam": "16",
-            "Article": "A critical look at the evaluation of GNNs under heterophily",
-            "Authors": "Platonov, O. et al. (2023)",
-            "Link": "https://arxiv.org/abs/2302.11640",
-            "Class Sizes": "[47461, 1460]"
+            "Clust": "0.031",
+            "Diam": "16"
         },
         "SBM": {
             "h=0.00": {
                 "Dataset": "SBM (h=0.0)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
                 "Nodes": "2000",
                 "Edges": "10003",
                 "Feats": "10",
                 "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
                 "Comp": "1",
                 "Avg Deg": "10",
-                "Dens": "0.005",
+                "Dens": "0.005004",
                 "H_obs": "0",
                 "H_exp": "0.25",
                 "H_adj": "-0.333",
                 "Inertia ratio within": "0.816",
                 "Inertia ratio between": "0.184",
                 "Mod": "-0.25",
-                "Clust": "0.003",
-                "Diam": "6",
-                "Article": "-",
-                "Authors": "-",
-                "Link": "-",
-                "Class Sizes": "[500, 500, 500, 500]"
+                "Clust": "0.005",
+                "Diam": "6"
+            },
+            "h=0.10": {
+                "Dataset": "SBM (h=0.1)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
+                "Nodes": "2000",
+                "Edges": "10059",
+                "Feats": "10",
+                "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
+                "Comp": "1",
+                "Avg Deg": "10.06",
+                "Dens": "0.005032",
+                "H_obs": "0.1",
+                "H_exp": "0.25",
+                "H_adj": "-0.2",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "-0.15",
+                "Clust": "0.006",
+                "Diam": "6"
             },
             "h=0.20": {
                 "Dataset": "SBM (h=0.2)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
                 "Nodes": "2000",
                 "Edges": "10070",
                 "Feats": "10",
                 "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
                 "Comp": "1",
                 "Avg Deg": "10.07",
-                "Dens": "0.005",
+                "Dens": "0.0050375",
                 "H_obs": "0.197",
                 "H_exp": "0.25",
                 "H_adj": "-0.071",
                 "Inertia ratio within": "0.816",
                 "Inertia ratio between": "0.184",
                 "Mod": "-0.053",
-                "Clust": "0.004",
-                "Diam": "6",
-                "Article": "-",
-                "Authors": "-",
-                "Link": "-",
-                "Class Sizes": "[500, 500, 500, 500]"
+                "Clust": "0.006",
+                "Diam": "6"
+            },
+            "h=0.30": {
+                "Dataset": "SBM (h=0.3)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
+                "Nodes": "2000",
+                "Edges": "10215",
+                "Feats": "10",
+                "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
+                "Comp": "1",
+                "Avg Deg": "10.21",
+                "Dens": "0.0051101",
+                "H_obs": "0.295",
+                "H_exp": "0.25",
+                "H_adj": "0.06",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.045",
+                "Clust": "0.005",
+                "Diam": "6"
+            },
+            "h=0.40": {
+                "Dataset": "SBM (h=0.4)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
+                "Nodes": "2000",
+                "Edges": "10108",
+                "Feats": "10",
+                "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
+                "Comp": "1",
+                "Avg Deg": "10.11",
+                "Dens": "0.0050565",
+                "H_obs": "0.398",
+                "H_exp": "0.25",
+                "H_adj": "0.197",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.147",
+                "Clust": "0.005",
+                "Diam": "6"
             },
             "h=0.50": {
                 "Dataset": "SBM (h=0.5)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
                 "Nodes": "2000",
                 "Edges": "10119",
                 "Feats": "10",
                 "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
                 "Comp": "1",
                 "Avg Deg": "10.12",
-                "Dens": "0.0051",
+                "Dens": "0.005062",
                 "H_obs": "0.493",
                 "H_exp": "0.25",
                 "H_adj": "0.324",
                 "Inertia ratio within": "0.816",
                 "Inertia ratio between": "0.184",
                 "Mod": "0.243",
-                "Clust": "0.004",
-                "Diam": "6",
-                "Article": "-",
-                "Authors": "-",
-                "Link": "-",
-                "Class Sizes": "[500, 500, 500, 500]"
+                "Clust": "0.006",
+                "Diam": "6"
+            },
+            "h=0.60": {
+                "Dataset": "SBM (h=0.6)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
+                "Nodes": "2000",
+                "Edges": "10127",
+                "Feats": "10",
+                "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
+                "Comp": "2",
+                "Avg Deg": "10.13",
+                "Dens": "0.005066",
+                "H_obs": "0.593",
+                "H_exp": "0.25",
+                "H_adj": "0.458",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.343",
+                "Clust": "0.006",
+                "Diam": "inf"
+            },
+            "h=0.70": {
+                "Dataset": "SBM (h=0.7)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
+                "Nodes": "2000",
+                "Edges": "10084",
+                "Feats": "10",
+                "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
+                "Comp": "1",
+                "Avg Deg": "10.08",
+                "Dens": "0.0050445",
+                "H_obs": "0.691",
+                "H_exp": "0.25",
+                "H_adj": "0.587",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.441",
+                "Clust": "0.007",
+                "Diam": "6"
             },
             "h=0.80": {
                 "Dataset": "SBM (h=0.8)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
                 "Nodes": "2000",
                 "Edges": "9920",
                 "Feats": "10",
                 "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
                 "Comp": "1",
                 "Avg Deg": "9.92",
-                "Dens": "0.005",
+                "Dens": "0.0049625",
                 "H_obs": "0.802",
                 "H_exp": "0.25",
                 "H_adj": "0.735",
@@ -658,33 +841,57 @@
                 "Inertia ratio between": "0.184",
                 "Mod": "0.552",
                 "Clust": "0.01",
-                "Diam": "7",
-                "Article": "-",
-                "Authors": "-",
-                "Link": "-",
-                "Class Sizes": "[500, 500, 500, 500]"
+                "Diam": "7"
+            },
+            "h=0.90": {
+                "Dataset": "SBM (h=0.9)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
+                "Nodes": "2000",
+                "Edges": "9934",
+                "Feats": "10",
+                "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
+                "Comp": "1",
+                "Avg Deg": "9.93",
+                "Dens": "0.0049695",
+                "H_obs": "0.894",
+                "H_exp": "0.25",
+                "H_adj": "0.859",
+                "Inertia ratio within": "0.816",
+                "Inertia ratio between": "0.184",
+                "Mod": "0.644",
+                "Clust": "0.015",
+                "Diam": "6"
             },
             "h=1.00": {
                 "Dataset": "SBM (h=1.0)",
+                "Description": "Stochastic Block Model synthetic community graph",
+                "Edge Meaning": "Probabilistic connection based on community membership",
+                "Article": "Stochastic Block Model Generation Script",
+                "Authors": "RichardSrn",
+                "Link": "generate_datasets.py",
                 "Nodes": "2000",
                 "Edges": "9912",
                 "Feats": "10",
                 "Classes": "4",
+                "Class Sizes": "[500, 500, 500, 500]",
+                "Class Labels": "{0: \"Community 0\", 1: \"Community 1\", 2: \"Community 2\", 3: \"Community 3\"}",
                 "Comp": "4",
                 "Avg Deg": "9.91",
-                "Dens": "0.005",
+                "Dens": "0.0049585",
                 "H_obs": "1",
                 "H_exp": "0.25",
                 "H_adj": "1",
                 "Inertia ratio within": "0.816",
                 "Inertia ratio between": "0.184",
                 "Mod": "0.75",
-                "Clust": "0.021",
-                "Diam": "inf",
-                "Article": "-",
-                "Authors": "-",
-                "Link": "-",
-                "Class Sizes": "[500, 500, 500, 500]"
+                "Clust": "0.019",
+                "Diam": "inf"
             }
         }
     }
