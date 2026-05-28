@@ -5,7 +5,7 @@
 
 const translations = {
     en: {
-        "hero_greeting_prefix": "Hi, I'm ",
+        "hero_greeting_prefix": "Hi there! I'm ",
         "hero_greeting_suffix": ".",
         "hero_subtitle": "Machine Learning PhD Student · Python & Math Enthusiast",
         "hero_intro": "Welcome to my collection of interactive web utilities and simulations.",
@@ -83,7 +83,7 @@ const translations = {
         "clock_per_minute": "per minute"
     },
     fr: {
-        "hero_greeting_prefix": "Bonjour, je suis ",
+        "hero_greeting_prefix": "Salut ! Moi c'est ",
         "hero_greeting_suffix": ".",
         "hero_subtitle": "Doctorant en Machine Learning (Apprentissage Automatique) · Passionné de Python & de Mathématiques",
         "hero_intro": "Bienvenue sur ma collection d'utilitaires et de simulations.",
