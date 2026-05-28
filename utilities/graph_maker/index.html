@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Maker - Richard's Utilities</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/icon/favicon_32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/icon/favicon_16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/icon/favicon_128.png">
+    <link rel="icon" type="image/svg+xml" href="../../assets/images/icon/icon.svg">
+    <script data-goatcounter="https://richardsrn-graphmaker.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+
+<body>
+    <div id="app">
+    <header id="top-bar">
+      <div class="topbar-section">
+        <button id="btn-import" class="btn btn-accent">Import JSON</button>
+        <button id="btn-export" class="btn btn-accent" disabled>Export JSON</button>
+        <label class="tb-checkbox"><input type="checkbox" id="chk-export-pos">Positions</label>
+        <label class="tb-checkbox"><input type="checkbox" id="chk-export-params">Parameters</label>
+        <button id="btn-export-gephi" class="btn btn-accent" disabled>Gephi</button>
+        <button id="btn-export-svg" class="btn btn-accent" disabled>SVG</button>
+        <button id="btn-export-pdf" class="btn btn-accent" disabled>PDF</button>
+        <button id="btn-undo" class="btn" disabled style="font-variant-numeric:tabular-nums">Undo</button>
+        <input type="file" id="file-input" accept=".json" style="display:none">
+      </div>
+
+      <div class="topbar-sep"></div>
+
+      <div class="topbar-section">
+        <button id="tool-add-node" class="btn tool-btn">Add Nodes</button>
+        <button id="tool-add-edge" class="btn tool-btn">Add Edges</button>
+        <button id="tool-set-node-attrs" class="btn tool-btn">Add Node Attributes</button>
+        <button id="tool-set-edge-attrs" class="btn tool-btn">Add Edge Attributes</button>
+        <button id="tool-connect-all" class="btn tool-btn">Connect Group</button>
+        <button id="tool-select-box" class="btn tool-btn">Select Box</button>
+      </div>
+
+      <div style="flex:1"></div>
+
+      <div class="topbar-section">
+        <button id="btn-add-node" class="btn" disabled>+ Node</button>
+        <button id="btn-add-edge" class="btn" disabled>+ Edge</button>
+      </div>
+    </header>
+
+    <div id="tool-panel" class="hidden">
+      <div id="tool-panel-content"></div>
+    </div>
+
+    <div id="main">
+      <aside id="sidebar">
+        <div id="sidebar-empty" class="sidebar-state">
+          <p class="sidebar-hint" id="sidebar-hint-text">Select an element to edit or add nodes using the tools above</p>
+        </div>
+        <div id="sidebar-content" class="sidebar-state hidden">
+          <div class="sidebar-header">
+            <h3 id="sidebar-title"></h3>
+            <button id="btn-delete" class="btn btn-danger">Delete</button>
+          </div>
+          <div id="attrs-container"></div>
+          <button id="btn-add-attr" class="btn btn-small" style="margin-top:12px">+ Add Attribute</button>
+          <div id="sidebar-connections" class="hidden">
+            <h4 class="conn-heading">Connections</h4>
+            <div id="sidebar-conn-list"></div>
+          </div>
+        </div>
+      </aside>
+
+      <main id="graph-container">
+        <div id="graph-loading" class="graph-overlay hidden">
+          <div class="loading-spinner"></div>
+          <p>Applying layout...</p>
+        </div>
+        <div id="graph-empty" class="graph-overlay">
+          <div class="empty-message">
+            <h2>Social Graph Editor</h2>
+            <p>Create, edit, and visualize your social network</p>
+            <div class="empty-actions" style="display:flex; flex-direction:column; gap:10px; max-width:280px; margin:0 auto;">
+              <button id="btn-scratch" class="btn btn-primary btn-large">Start from Scratch</button>
+              <button id="btn-random-graph" class="btn btn-accent btn-large" style="background:#8b5cf6; border-color:#8b5cf6; color:#fff;">Generate Random Graph</button>
+              <button id="btn-import-big" class="btn btn-accent btn-large">Import JSON File</button>
+            </div>
+          </div>
+        </div>
+        <div id="graph-cy"></div>
+
+        <div id="vis-panel">
+          <div id="vis-panel-header">
+            <span>⑂ Visualization</span>
+            <button id="vis-panel-toggle" class="btn-icon" title="Minimize">−</button>
+          </div>
+          <div id="vis-panel-body">
+            <!-- SECTION 1: Layout & Spacing -->
+            <div class="vp-section">
+              <span class="vp-title">Layout &amp; Spacing</span>
+              <span class="vp-subtitle">Position nodes and control spacing</span>
+              
+              <div class="vp-row">
+                <label for="layout-select">Algorithm</label>
+                <select id="layout-select" disabled>
+                  <option value="cose">Organic</option>
+                  <option value="organic-deep">Organic Deep</option>
+                  <option value="euler">Spring Elegance</option>
+                  <option value="concentric">Concentric</option>
+                  <option value="circle">Circle</option>
+                  <option value="breadthfirst">Breadth-first</option>
+                  <option value="grid">Grid</option>
+                  <option value="random">Random</option>
+                </select>
+                <button id="btn-layout" class="btn btn-small" disabled>Apply</button>
+              </div>
+
+              <div class="vp-row">
+                <label>Repulsion</label>
+                <input type="range" class="vis-slider" data-key="repulsion" min="1000" max="50000" step="500" value="8000">
+                <span class="slider-val" data-key="repulsion">8000</span>
+              </div>
+              
+              <div class="vp-row">
+                <label>Edge Length</label>
+                <input type="range" class="vis-slider" data-key="idealEdgeLength" min="30" max="500" step="10" value="100">
+                <span class="slider-val" data-key="idealEdgeLength">100</span>
+              </div>
+            </div>
+
+            <div id="spring-physics-sep" class="vp-sep hidden"></div>
+
+            <!-- SECTION 2: Physics Parameters (Spring Layout) -->
+            <div id="spring-physics-section" class="vp-section hidden">
+              <span class="vp-title">Spring Physics</span>
+              <span class="vp-subtitle">Tuning parameters for Spring layout</span>
+              
+              <div class="vp-row">
+                <label>Tension</label>
+                <input type="range" class="vis-slider" data-key="springCoeff" min="0.0001" max="0.01" step="0.0001" value="0.0004">
+                <span class="slider-val" data-key="springCoeff">0.0004</span>
+              </div>
+              
+              <div class="vp-row">
+                <label>Mass</label>
+                <input type="range" class="vis-slider" data-key="springMass" min="0.5" max="20" step="0.5" value="8">
+                <span class="slider-val" data-key="springMass">8</span>
+              </div>
+              
+              <div class="vp-row">
+                <label>Damping</label>
+                <input type="range" class="vis-slider" data-key="springDamping" min="0.01" max="0.5" step="0.01" value="0.1">
+                <span class="slider-val" data-key="springDamping">0.1</span>
+              </div>
+            </div>
+
+            <div class="vp-sep"></div>
+
+            <!-- SECTION 3: Node Appearance -->
+            <div class="vp-section">
+              <span class="vp-title">Nodes &amp; Canvas</span>
+              <span class="vp-subtitle">Configure node sizes and styles</span>
+              
+              <div class="vp-row">
+                <label>Node Size</label>
+                <input type="range" class="vis-slider" data-key="nodeSize" min="15" max="90" value="45">
+                <span class="slider-val" data-key="nodeSize">45</span>
+              </div>
+              
+              <div class="vp-row">
+                <label>Border W.</label>
+                <input type="range" class="vis-slider" data-key="nodeBorderWidth" min="0" max="8" step="0.5" value="2">
+                <span class="slider-val" data-key="nodeBorderWidth">2</span>
+              </div>
+              
+              <div class="vp-row" style="gap: 12px; margin-top: 4px;">
+                <div style="flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                  <label style="flex: 0 0 auto; margin: 0; font-size: 10px; color: var(--text-dim); text-transform: uppercase;">Border Color</label>
+                  <input type="color" id="vis-border-color" value="#1e3a5f" title="Border color" style="width: 32px; height: 18px; padding: 0; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; background: none;">
+                </div>
+                <div style="flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                  <label style="flex: 0 0 auto; margin: 0; font-size: 10px; color: var(--text-dim); text-transform: uppercase;">Canvas Bg</label>
+                  <input type="color" id="vis-bg-color" value="#0f172a" title="Background color" style="width: 32px; height: 18px; padding: 0; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; background: none;">
+                </div>
+              </div>
+            </div>
+
+            <div class="vp-sep"></div>
+
+            <!-- SECTION 4: Labels & Text -->
+            <div class="vp-section">
+              <span class="vp-title">Labels &amp; Typography</span>
+              <span class="vp-subtitle">Edit fonts, sizes, and behaviors</span>
+              
+              <div class="vp-row">
+                <label for="label-attr">Attribute</label>
+                <select id="label-attr" disabled></select>
+              </div>
+              
+              <div class="vp-row">
+                <label>Font Size</label>
+                <input type="range" class="vis-slider" data-key="labelSize" min="6" max="24" value="12">
+                <span class="slider-val" data-key="labelSize">12</span>
+              </div>
+              <div class="vp-row">
+                <label for="vis-font-family">Font Family</label>
+                <select id="vis-font-family">
+                  <option value="-apple-system, BlinkMacSystemFont, sans-serif" selected>System</option>
+                  <option value="Arial, Helvetica, sans-serif">Arial</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="'Courier New', monospace">Courier</option>
+                  <option value="Verdana, sans-serif">Verdana</option>
+                  <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+                </select>
+              </div>
+              
+              <div class="vp-columns" style="display: flex; gap: 15px; margin-top: 6px;">
+                <!-- Nodes Column -->
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 8.5px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; margin-bottom: 2px;">Nodes</span>
+                  
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="toggle-node-labels">Show</label>
+                    <input type="checkbox" id="toggle-node-labels" checked style="cursor:pointer; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="toggle-node-font-bold">Bold</label>
+                    <input type="checkbox" id="toggle-node-font-bold" style="cursor:pointer; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="toggle-node-label-bg">Bg Box</label>
+                    <input type="checkbox" id="toggle-node-label-bg" style="cursor:pointer; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="vis-node-label-color">Color</label>
+                    <input type="color" id="vis-node-label-color" value="#000000" title="Node label color" style="width: 24px; height: 16px; padding: 0; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; background: none; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="vis-node-label-bg-color">Bg Color</label>
+                    <input type="color" id="vis-node-label-bg-color" value="#ffffff" title="Node label background color" style="width: 24px; height: 16px; padding: 0; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; background: none; margin: 0;">
+                  </div>
+                </div>
+
+                <!-- Edges Column -->
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 8.5px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; margin-bottom: 2px;">Edges</span>
+                  
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="toggle-edge-labels">Show</label>
+                    <input type="checkbox" id="toggle-edge-labels" style="cursor:pointer; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="toggle-edge-font-bold">Bold</label>
+                    <input type="checkbox" id="toggle-edge-font-bold" style="cursor:pointer; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="toggle-edge-label-bg">Bg Box</label>
+                    <input type="checkbox" id="toggle-edge-label-bg" style="cursor:pointer; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="vis-edge-label-color">Color</label>
+                    <input type="color" id="vis-edge-label-color" value="#777788" title="Edge label color" style="width: 24px; height: 16px; padding: 0; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; background: none; margin: 0;">
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; min-height: 18px;">
+                    <label style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin: 0; cursor: pointer; flex: none;" for="vis-edge-label-bg-color">Bg Color</label>
+                    <input type="color" id="vis-edge-label-bg-color" value="#0f172a" title="Edge label background color" style="width: 24px; height: 16px; padding: 0; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; background: none; margin: 0;">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="vp-sep"></div>
+
+            <!-- SECTION 5: Edges & Curvature -->
+            <div class="vp-section">
+              <span class="vp-title">Edges &amp; Curves</span>
+              <span class="vp-subtitle">Set line styles and thickness</span>
+              
+              <div class="vp-row">
+                <label>Line Width</label>
+                <input type="range" class="vis-slider" data-key="edgeWidth" min="0.5" max="8" step="0.5" value="2">
+                <span class="slider-val" data-key="edgeWidth">2</span>
+              </div>
+              
+              <div class="vp-row">
+                <label>Opacity</label>
+                <input type="range" class="vis-slider" data-key="edgeOpacity" min="0.1" max="1" step="0.05" value="1">
+                <span class="slider-val" data-key="edgeOpacity">1</span>
+              </div>
+              
+              <div class="vp-row">
+                <label for="vis-curve-style">Curve Type</label>
+                <select id="vis-curve-style">
+                  <option value="unbundled-bezier" selected>Curved</option>
+                  <option value="haystack">Straight</option>
+                </select>
+              </div>
+              
+              <div id="curve-params">
+                <div class="vp-row">
+                  <label for="vis-curve-step">Separation</label>
+                  <input type="range" id="vis-curve-step" min="2" max="50" value="10" title="Parallel edge separation" class="vis-slider">
+                  <span class="slider-val" id="vis-curve-step-val">10</span>
+                </div>
+                <div class="vp-row">
+                  <label for="vis-curve-dist">Connection</label>
+                  <select id="vis-curve-dist">
+                    <option value="intersection">At Border</option>
+                    <option value="node-position">From Center</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="vp-row vp-toggles" style="margin-top:4px;">
+                <label class="toggle-label"><input type="checkbox" id="toggle-edge-weight">Scale Width by Weight</label>
+                <label class="toggle-label"><input type="checkbox" id="toggle-edge-arrows">Arrows</label>
+              </div>
+            </div>
+
+            <div class="vp-sep"></div>
+
+            <!-- SECTION 6: Colors & Communities -->
+            <div class="vp-section">
+              <span class="vp-title">Colors &amp; Grouping</span>
+              <span class="vp-subtitle">Color nodes by groups or communities</span>
+              <div class="vp-row vp-toggles">
+                <label class="toggle-label"><input type="checkbox" id="toggle-node-colors" checked>Show Nodes Color</label>
+              </div>
+
+              <div class="vp-row">
+                <label for="color-mode">Color Mode</label>
+                <select id="color-mode" disabled>
+                  <option value="attribute">By Attribute</option>
+                  <option value="community">By Community</option>
+                </select>
+              </div>
+              
+              <div class="vp-row">
+                <label for="color-attr">Color Attr</label>
+                <select id="color-attr" disabled></select>
+              </div>
+
+              <div class="vp-row vp-toggles" style="margin-top:4px; justify-content: space-between;">
+                <button id="btn-detect-communities" class="btn btn-small" disabled style="flex:1;">Detect Communities</button>
+              </div>
+              
+              <div class="vp-row">
+                <label>Palette</label>
+                <select id="vis-palette">
+                  <option value="default">Default</option>
+                  <option value="pastel">Pastel</option>
+                  <option value="vibrant">Vibrant</option>
+                  <option value="warm">Warm</option>
+                  <option value="cool">Cool</option>
+                </select>
+              </div>
+
+              <div class="vp-section">
+                <div class="vp-row vp-toggles">
+                  <label class="toggle-label"><input type="checkbox" id="toggle-manual-colors">Enable Manual Colors</label>
+                </div>
+              <div id="manual-color-list"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title"></h2>
+          <button id="modal-close" class="btn-icon">&times;</button>
+        </div>
+        <div id="modal-body"></div>
+        <div class="modal-footer">
+          <button id="modal-cancel" class="btn">Cancel</button>
+          <button id="modal-save" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+  <script src="https://unpkg.com/cytoscape-euler@1.2.2/cytoscape-euler.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cytoscape-svg@0.4.0/cytoscape-svg.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

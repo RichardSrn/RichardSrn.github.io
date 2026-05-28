@@ -18,6 +18,8 @@ const translations = {
         // Utilities
         "graphs_title": "Graph Visualization",
         "graphs_desc": "Interactive exploration of graph datasets used in my research.",
+        "graphmaker_title": "Graph Maker",
+        "graphmaker_desc": "Interactive social graph creator and editor with community detection and visualization options.",
         "chess_title": "Chess",
         "chess_desc": "Play against a friend, challenge the AI, or analyze positions.",
         "clock_title": "Clock",
@@ -94,6 +96,8 @@ const translations = {
         // Utilities
         "graphs_title": "Visualisation de Graphes",
         "graphs_desc": "Exploration interactive des jeux de données de graphes utilisés dans mes recherches.",
+        "graphmaker_title": "Créateur de Graphes",
+        "graphmaker_desc": "Créateur et éditeur interactif de graphes sociaux avec détection de communautés et options de visualisation.",
         "chess_title": "Échecs",
         "chess_desc": "Jouez contre un ami, défiez l'IA ou analysez des positions.",
         "clock_title": "Horloge",
