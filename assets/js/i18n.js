@@ -87,7 +87,7 @@ const translations = {
         "hero_greeting_suffix": ".",
         "hero_subtitle": "Doctorant en Machine Learning (Apprentissage Automatique) · Passionné de Python & de Mathématiques",
         "hero_intro": "Bienvenue sur ma collection d'utilitaires et de simulations.",
-        "disclaimer_text": "Note de transparence : Je ne suis pas développeur web. Ce site et ses utilitaires ont été principalement codés par une IA générative, puis etaffinés par mes soins. Cependant, les projets présentés ici restent utiles et/ou amusants, et j'espère que vous leur trouverez une utilité !",
+        "disclaimer_text": "Note de transparence : Je ne suis pas développeur web. La creation de ce site et de ses utilitaires a été assistée par une IA générative. J'espère que vous les trouverez utile et/ou amusant !",
         "nav_tools": "<span class=\"icon\">🛠️</span> Outils",
         "nav_simulations": "<span class=\"icon\">✨</span> Simulations",
         "nav_games": "<span class=\"icon\">🎮</span> Jeux",

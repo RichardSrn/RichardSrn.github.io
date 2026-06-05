@@ -51,6 +51,8 @@ let totalDuration = 0;
 let lastWarnedMinute = -1;
 let currentInputMode = 'duration'; // 'duration' or 'endtime'
 let endTime = null; // Stores the computed end time after startTimer()
+let hasWarnedHalfTime = false;
+let hasWarnedLong = false;
 
 // Sync breath duration with CSS
 function updateBreathDuration() {
@@ -283,6 +285,10 @@ function startTimer() {
         endTime = new Date(now.getTime() + durationMs);
     } else {
         const parts = endTimeInput.value.split(':').map(Number);
+        if (parts.some(isNaN) || parts.length < 2 || parts.length > 3) {
+            alert('Invalid time format. Use e.g. 14:30 or 14:30:00');
+            return;
+        }
         endTime = new Date();
         if (parts.length === 3) {
             endTime.setHours(parts[0], parts[1], parts[2], 0);
@@ -294,6 +300,15 @@ function startTimer() {
 
     totalDuration = endTime - now;
     lastWarnedMinute = -1;
+
+    // Initialize warning flags based on initial duration to prevent starting with elapsed warnings
+    const initialDiffSeconds = Math.floor(totalDuration / 1000);
+    const halfDurationSeconds = Math.floor(totalDuration / 2000);
+    const longWarnMin = parseInt(warnLongMin.value) || 10;
+    const longWarnSeconds = longWarnMin * 60;
+
+    hasWarnedHalfTime = initialDiffSeconds <= halfDurationSeconds;
+    hasWarnedLong = initialDiffSeconds <= longWarnSeconds;
 
     // Show the time display and start the timers
     timeDisplay.classList.remove('hidden');
@@ -413,7 +428,7 @@ function updateNegativePoints() {
 
 function handleWarnings(diffSeconds, diffMinutes) {
     if (!masterWarningToggle.checked) {
-        document.body.classList.remove('warning-slow', 'warning-blink-double', 'inverted');
+        document.body.classList.remove('warning-blink-single', 'warning-blink-double', 'inverted');
         return;
     }
 
@@ -424,31 +439,31 @@ function handleWarnings(diffSeconds, diffMinutes) {
         } else {
             document.body.classList.remove('inverted');
         }
-        document.body.classList.remove('warning-slow', 'warning-blink-double');
+        document.body.classList.remove('warning-blink-single', 'warning-blink-double');
         // Removed `return;` so updateTime() continues executing and counts up
     } else {
         document.body.classList.remove('inverted');
     }
 
-    // Slow blink at half time or configured long warning
+    // Single Breath warnings (Half-Time and Long warning)
     const halfDurationSeconds = Math.floor(totalDuration / 2000);
     const longWarnMin = parseInt(warnLongMin.value) || 10;
     const longWarnSeconds = longWarnMin * 60;
 
-    let shouldSlowWarn = false;
+    let shouldTriggerSingleBreath = false;
 
-    if (warnHalfTime.checked && diffSeconds <= halfDurationSeconds) {
-        shouldSlowWarn = true;
+    if (warnHalfTime.checked && !hasWarnedHalfTime && diffSeconds <= halfDurationSeconds) {
+        shouldTriggerSingleBreath = true;
+        hasWarnedHalfTime = true;
     }
 
-    if (warnLong.checked && diffSeconds <= longWarnSeconds) {
-        shouldSlowWarn = true;
+    if (warnLong.checked && !hasWarnedLong && diffSeconds <= longWarnSeconds) {
+        shouldTriggerSingleBreath = true;
+        hasWarnedLong = true;
     }
 
-    if (shouldSlowWarn) {
-        document.body.classList.add('warning-slow');
-    } else {
-        document.body.classList.remove('warning-slow');
+    if (shouldTriggerSingleBreath) {
+        triggerBreathing(1);
     }
 
     // Check granular countdown warnings
@@ -457,7 +472,7 @@ function handleWarnings(diffSeconds, diffMinutes) {
             if (config.checkbox.checked) {
                 const threshold = parseInt(config.input.value);
                 if (diffMinutes === threshold) {
-                    triggerBreathing();
+                    triggerBreathing(2);
                     lastWarnedMinute = diffMinutes;
                     break;
                 }
@@ -466,16 +481,18 @@ function handleWarnings(diffSeconds, diffMinutes) {
     }
 }
 
-function triggerBreathing() {
-    document.body.classList.remove('warning-blink-double');
+function triggerBreathing(count = 2) {
+    const className = count === 1 ? 'warning-blink-single' : 'warning-blink-double';
+    
+    document.body.classList.remove('warning-blink-single', 'warning-blink-double');
     // Force reflow
     void document.body.offsetWidth;
-    document.body.classList.add('warning-blink-double');
+    document.body.classList.add(className);
 
-    // Duration is 2 breaths, so 2 * breathDuration
-    const duration = (parseFloat(breathDurationInput.value) || 1) * 2000;
+    // Duration is count * breathDuration
+    const duration = (parseFloat(breathDurationInput.value) || 1) * count * 1000;
     setTimeout(() => {
-        document.body.classList.remove('warning-blink-double');
+        document.body.classList.remove(className);
     }, duration);
 }
 
@@ -567,7 +584,7 @@ function updateDigits(container, newTimeString) {
 function initializeTimeDisplay() {
     // Initial setup for time displays with placeholder values
     updateDigits(currentTimeValue, '--:--');
-    updateDigits(endTimeValue, '--:--:--');
+    updateDigits(endTimeValue, '--:--');
     updateDigits(remainingTimeValue, '00:00:00');
 }
 
